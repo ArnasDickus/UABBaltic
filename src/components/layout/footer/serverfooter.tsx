@@ -1,3 +1,5 @@
+"server-only";
+
 import { FC } from "react";
 import { FooterBase } from "./footerbase";
 import { useTranslation } from "@/app/i18n";
