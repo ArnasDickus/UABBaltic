@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] });
 export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
 }
-
+// TODO improve SEO
 export const metadata: Metadata = {
   title: "UAB Baltic",
   description: "The only portfolio you need to see",
