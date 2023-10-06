@@ -1,3 +1,4 @@
+"use-client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dir } from "i18next";
@@ -26,6 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lng: string };
 }) {
+  console.log("lng", lng);
   return (
     <html lang={lng} dir={dir(lng)}>
       <body className={inter.className}>{children}</body>
