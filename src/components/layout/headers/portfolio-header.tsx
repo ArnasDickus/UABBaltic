@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "@/app/i18n/client";
 import LogoIcon from "@/styles/icons/logo-icon";
 import HamburgerButton from "./hamburger-button/hamburger-button";
@@ -14,7 +14,9 @@ interface INavItems {
   link: string;
 }
 
-const PortfolioHeader = ({ language }: IPortfolioHeader) => {
+const PortfolioHeader = ({ language }: IPortfolioHeader): JSX.Element => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+
   const navItems: INavItems[] = [
     {
       title: "Home",
@@ -34,12 +36,12 @@ const PortfolioHeader = ({ language }: IPortfolioHeader) => {
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <HamburgerButton
                 onClick={() => {
-                  //
+                  setMenuOpen(!isMenuOpen);
                 }}
               />
             </div>
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex flex-shrink-0 items-center">
+              <div className="flex isMenuOpenflex-shrink-0 items-center">
                 <LogoIcon />
               </div>
               <div className="hidden sm:ml-6 sm:block">
@@ -49,7 +51,7 @@ const PortfolioHeader = ({ language }: IPortfolioHeader) => {
                       key={item.title}
                       // @ts-ignore
                       href={item.link}
-                      className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium "
+                      className="hover:bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
                       aria-current="page">
                       {item.title}
                     </Link>
@@ -59,20 +61,21 @@ const PortfolioHeader = ({ language }: IPortfolioHeader) => {
             </div>
           </div>
         </div>
-
-        <div className="sm:hidden" id="mobile-menu">
-          <div className="space-y-1 px-2 pb-3 pt-2">
-            {navItems.map((item) => (
-              <a
-                key={item.title}
-                href="#"
-                className="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-                aria-current="page">
-                {item.title}
-              </a>
-            ))}
+        {isMenuOpen && (
+          <div className="sm:hidden" id="mobile-menu">
+            <div className="space-y-1 px-2 pb-3 pt-2">
+              {navItems.map((item) => (
+                <a
+                  key={item.title}
+                  href="#"
+                  className="hover:bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
+                  aria-current="page">
+                  {item.title}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </nav>
     </header>
   );
