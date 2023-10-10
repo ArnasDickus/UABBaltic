@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { UseTranslationOptions } from "react-i18next";
 
 export interface IPageParamProps {
@@ -11,4 +12,8 @@ export interface IUseTranslation {
   language: string;
   ns?: string;
   options?: UseTranslationOptions<undefined> | undefined;
+}
+
+export interface IPageParamsLayout extends IPageParamProps {
+  children: ReactNode;
 }
