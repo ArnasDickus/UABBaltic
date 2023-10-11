@@ -5,6 +5,7 @@ import LogoIcon from "@/styles/icons/logo-icon";
 import Link from "next/link";
 import { Fragment, ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import PortfolioIcon from "@/styles/icons/portfolio-icon";
 
 interface IMenuItems {
   title: string;
@@ -26,8 +27,13 @@ const SideMenu = ({ language }: { language: string }) => {
       icon: <FilmsIcon />,
       link: `/${language}/portfolio/projects/swapi/films`,
     },
+    {
+      title: "Portfolio",
+      icon: <PortfolioIcon />,
+      link: `/${language}/portfolio`,
+    },
   ];
-  console.log("language", language);
+
   return (
     <>
       <div className="fixed top-0 left-0 z-40 w-16 h-screen overflow-hidden text-gray-400 bg-gray-900 sm:w-40">
