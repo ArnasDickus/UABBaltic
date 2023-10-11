@@ -1,7 +1,10 @@
 const PageAbout = () => {
   return (
     <div>
-      <p>Swapi Page About</p>
+      <p>
+        This task was inspired by all the practical tasks I did regarding Swap
+        Api
+      </p>
     </div>
   );
 };
