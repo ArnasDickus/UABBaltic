@@ -11,6 +11,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { IPageParamsLayout } from "@/constants/interfaces";
 import ReduxProvider from "../providers/redux-provider";
+import MainHeader from "@/components/layout/headers/main-header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,10 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <MainHeader />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

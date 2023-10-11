@@ -17,3 +17,8 @@ export interface IUseTranslation {
 export interface IPageParamsLayout extends IPageParamProps {
   children: ReactNode;
 }
+
+export interface INavItems {
+  title: string;
+  link: string;
+}

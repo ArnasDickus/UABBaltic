@@ -1,7 +1,22 @@
+"use client";
 import LogoIcon from "@/styles/icons/logo-icon";
 import HamburgerButton from "./hamburger-button/hamburger-button";
+import { INavItems } from "@/constants/interfaces";
+import { useState } from "react";
+import Link from "next/link";
 
 const MainHeader = () => {
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const navItems: INavItems[] = [
+    {
+      title: "About",
+      link: "#hero-section",
+    },
+    {
+      title: "Experience",
+      link: "#experience-section",
+    },
+  ];
   return (
     <header>
       <nav className="bg-gray-800">
@@ -10,7 +25,7 @@ const MainHeader = () => {
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <HamburgerButton
                 onClick={() => {
-                  //
+                  setMenuOpen(!isMenuOpen);
                 }}
               />
             </div>
@@ -20,27 +35,16 @@ const MainHeader = () => {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                    aria-current="page">
-                    Dashboard
-                  </a>
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                    Team
-                  </a>
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                    Projects
-                  </a>
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                    Calendar
-                  </a>
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.title}
+                      // @ts-ignore
+                      href={item.link}
+                      className="hover:bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                      aria-current="page">
+                      {item.title}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

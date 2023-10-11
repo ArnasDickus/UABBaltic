@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 const PortfolioLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
-      <PortfolioHeader language="lng" />
+      <PortfolioHeader />
       {children}
     </>
   );

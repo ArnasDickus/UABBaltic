@@ -4,17 +4,9 @@ import { useTranslation } from "@/app/i18n/client";
 import LogoIcon from "@/styles/icons/logo-icon";
 import HamburgerButton from "./hamburger-button/hamburger-button";
 import Link from "next/link";
+import { INavItems } from "@/constants/interfaces";
 
-interface IPortfolioHeader {
-  language: string;
-}
-
-interface INavItems {
-  title: string;
-  link: string;
-}
-
-const PortfolioHeader = ({ language }: IPortfolioHeader): JSX.Element => {
+const PortfolioHeader = (): JSX.Element => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const navItems: INavItems[] = [
@@ -65,13 +57,14 @@ const PortfolioHeader = ({ language }: IPortfolioHeader): JSX.Element => {
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.title}
-                  href="#"
+                  // @ts-ignore
+                  href={item.link}
                   className="hover:bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
                   aria-current="page">
                   {item.title}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
