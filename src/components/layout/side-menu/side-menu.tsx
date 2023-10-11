@@ -30,7 +30,7 @@ const SideMenu = ({ language }: { language: string }) => {
   console.log("language", language);
   return (
     <>
-      <div className="fixed top-15 left-0 z-40 w-16 h-screen overflow-hidden text-gray-400 bg-gray-900 sm:w-40">
+      <div className="fixed top-0 left-0 z-40 w-16 h-screen overflow-hidden text-gray-400 bg-gray-900 sm:w-40">
         <Link
           className="flex items-center w-full px-3 mt-3"
           // @ts-ignore
