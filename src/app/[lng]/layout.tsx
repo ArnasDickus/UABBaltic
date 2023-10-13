@@ -32,7 +32,7 @@ export default function RootLayout({
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
         <ReduxProvider>
-          <MainHeader />
+          <MainHeader language={lng} />
           {children}
         </ReduxProvider>
       </body>
