@@ -1,5 +1,4 @@
 "use client";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
@@ -19,11 +18,6 @@ const inter = Inter({ subsets: ["latin"] });
 export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
 }
-// TODO improve SEO
-export const metadata: Metadata = {
-  title: "UAB Baltic",
-  description: "The only portfolio you need to see",
-};
 
 interface IGetNavigationItems {
   leftNavItems: INavItems[];

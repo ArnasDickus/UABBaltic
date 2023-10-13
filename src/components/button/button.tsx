@@ -1,15 +1,17 @@
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
 interface IButton {
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-const Button = ({ onClick, children }: IButton) => {
+const Button = ({ onClick, children, buttonProps }: IButton) => {
   return (
     <button
       onClick={onClick}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      {...buttonProps}>
       {children}
     </button>
   );
