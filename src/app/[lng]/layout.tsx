@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dir } from "i18next";
@@ -9,9 +9,10 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import { IPageParamsLayout } from "@/constants/interfaces";
+import { INavItems, IPageParamsLayout } from "@/constants/interfaces";
 import ReduxProvider from "../providers/redux-provider";
 import MainHeader from "@/components/layout/headers/main-header";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,15 +25,70 @@ export const metadata: Metadata = {
   description: "The only portfolio you need to see",
 };
 
+interface IGetNavigationItems {
+  leftNavItems: INavItems[];
+  rightNavItems: INavItems[];
+}
+
 export default function RootLayout({
   children,
   params: { lng },
 }: IPageParamsLayout) {
+  const pathname = usePathname();
+
+  const getNavigationItems = (): IGetNavigationItems => {
+    let leftNavItems: INavItems[] = [];
+    let rightNavItems: INavItems[] = [];
+
+    if (pathname.includes("portfolio")) {
+      leftNavItems = [
+        {
+          title: "Home",
+          link: "#hero-section",
+        },
+        {
+          title: "Experience",
+          link: "#experience-section",
+        },
+      ];
+    } else {
+      leftNavItems = [
+        {
+          title: "About",
+          link: `/${lng}/about`,
+        },
+        {
+          title: "Documentation",
+          link: `/${lng}/documentation`,
+        },
+      ];
+
+      rightNavItems = [
+        {
+          title: "Login",
+          link: `/${lng}/login`,
+        },
+        {
+          title: "Sign Up",
+          link: `/${lng}/register`,
+        },
+      ];
+    }
+
+    return { leftNavItems, rightNavItems };
+  };
+
+  const navigationItems: IGetNavigationItems = getNavigationItems();
+
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
         <ReduxProvider>
-          <MainHeader language={lng} />
+          <MainHeader
+            language={lng}
+            leftNavItems={navigationItems.leftNavItems}
+            rightNavItems={navigationItems.rightNavItems}
+          />
           {children}
         </ReduxProvider>
       </body>

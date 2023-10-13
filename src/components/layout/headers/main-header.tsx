@@ -6,33 +6,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const MainHeader = ({ language }: { language: string }) => {
+interface IMainHeader {
+  language: string;
+  leftNavItems: INavItems[];
+  rightNavItems: INavItems[];
+}
+
+const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
-
-  const leftNavItems: INavItems[] = [
-    {
-      title: "About",
-      link: `/${language}/about`,
-    },
-    {
-      title: "Documentation",
-      link: `/${language}/documentation`,
-    },
-  ];
-
-  const rightNavItems: INavItems[] = [
-    {
-      title: "Login",
-      link: `/${language}/login`,
-    },
-    {
-      title: "Sign Up",
-      link: `/${language}/register`,
-    },
-  ];
 
   const isRouteActive = (route: string) => {
     if (route === pathname) {
