@@ -2,7 +2,7 @@ import { HTMLProps } from "react";
 
 interface ITailwindInput {
   name: string;
-  errorText: string;
+  errorText?: string;
   labelProps?: HTMLProps<HTMLLabelElement>;
   inputProps?: HTMLProps<HTMLInputElement>;
 }

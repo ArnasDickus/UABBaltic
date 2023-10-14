@@ -5,6 +5,8 @@ import LinkButton from "@/components/link-button/link-button";
 import { IPageParamProps } from "@/constants/interfaces";
 import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 type IPageRegisterInputs = {
   name: string;
@@ -14,12 +16,23 @@ type IPageRegisterInputs = {
 };
 
 const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Privaloma"),
+    email: Yup.string().required("Privaloma"),
+    username: Yup.string().required("Privaloma"),
+    password: Yup.string()
+      .required("No password provided.")
+      .min(8, "Password is too short - should be 8 chars minimum.")
+      .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
+  });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPageRegisterInputs>();
-  console.log("errors", errors);
+  } = useForm<IPageRegisterInputs>({
+    resolver: yupResolver(validationSchema),
+  });
+
   const onSubmit: SubmitHandler<IPageRegisterInputs> = (data) => {
     console.log("data", data);
   };
@@ -32,7 +45,7 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
         <div className="mb-4">
           <TailwindInput
             name="Name"
-            errorText=""
+            errorText={errors.name?.message}
             inputProps={{
               type: "text",
               ...register("name"),
@@ -42,31 +55,31 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
         <div className="mb-4">
           <TailwindInput
             name="Username"
-            errorText=""
-            inputProps={{
-              type: "text",
-              ...register("email"),
-            }}
-          />
-        </div>
-        <div className="mb-4">
-          <TailwindInput
-            name="Email"
-            errorText=""
+            errorText={errors.username?.message}
             inputProps={{
               type: "text",
               ...register("username"),
             }}
           />
         </div>
+        <div className="mb-4">
+          <TailwindInput
+            name="Email"
+            errorText={errors.email?.message}
+            inputProps={{
+              type: "text",
+              ...register("email"),
+            }}
+          />
+        </div>
         <div className="mb-6">
           <TailwindInput
             name="Password"
+            errorText={errors.password?.message}
             inputProps={{
               type: "password",
               ...register("password"),
             }}
-            errorText=""
           />
         </div>
         <div className="flex items-center justify-between">
