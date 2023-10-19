@@ -18,7 +18,7 @@ type IPageRegisterInputs = {
 const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Privaloma"),
-    email: Yup.string().required("Privaloma"),
+    email: Yup.string().email().required("Privaloma"),
     username: Yup.string().required("Privaloma"),
     password: Yup.string()
       .required("No password provided.")
