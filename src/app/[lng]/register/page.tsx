@@ -7,6 +7,8 @@ import { FC } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@apollo/client";
+import { ADD_USER } from "@/app/store/modules/user/query";
 
 type IPageRegisterInputs = {
   name: string;
@@ -33,8 +35,21 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<IPageRegisterInputs> = (data) => {
-    console.log("data", data);
+  const [addUser] = useMutation(ADD_USER);
+
+  const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
+    await addUser({
+      variables: {
+        addUserObject: [
+          {
+            name: data.name,
+            password: data.password,
+            email: data.email,
+            username: data.username,
+          },
+        ],
+      },
+    });
   };
 
   return (

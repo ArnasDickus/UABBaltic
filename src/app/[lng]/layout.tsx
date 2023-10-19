@@ -12,6 +12,8 @@ import { INavItems, IPageParamsLayout } from "@/constants/interfaces";
 import ReduxProvider from "../providers/redux-provider";
 import MainHeader from "@/components/layout/headers/main-header";
 import { usePathname } from "next/navigation";
+import { ApolloProvider } from "@apollo/client";
+import client from "../../../apollo-client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -77,14 +79,16 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
-        <ReduxProvider>
-          <MainHeader
-            language={lng}
-            leftNavItems={navigationItems.leftNavItems}
-            rightNavItems={navigationItems.rightNavItems}
-          />
-          <div>{children}</div>
-        </ReduxProvider>
+        <ApolloProvider client={client}>
+          <ReduxProvider>
+            <MainHeader
+              language={lng}
+              leftNavItems={navigationItems.leftNavItems}
+              rightNavItems={navigationItems.rightNavItems}
+            />
+            {children}
+          </ReduxProvider>
+        </ApolloProvider>
       </body>
     </html>
   );
