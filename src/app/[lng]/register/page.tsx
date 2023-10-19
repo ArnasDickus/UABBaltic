@@ -38,9 +38,9 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
   };
 
   return (
-    <div className="w-full max-w-lg ml-auto mr-auto">
+    <div className="w-full justify-center flex items-center h-screen ml-auto mr-auto">
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
