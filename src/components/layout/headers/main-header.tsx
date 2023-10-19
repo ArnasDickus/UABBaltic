@@ -8,15 +8,62 @@ import { usePathname } from "next/navigation";
 
 interface IMainHeader {
   language: string;
+}
+
+interface IGetNavigationItems {
   leftNavItems: INavItems[];
   rightNavItems: INavItems[];
 }
 
-const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
+const MainHeader = ({ language }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
+
+  const getNavigationItems = (): IGetNavigationItems => {
+    let leftNavItems: INavItems[] = [];
+    let rightNavItems: INavItems[] = [];
+
+    if (pathname.includes("portfolio")) {
+      leftNavItems = [
+        {
+          title: "Home",
+          link: "#hero-section",
+        },
+        {
+          title: "Experience",
+          link: "#experience-section",
+        },
+      ];
+    } else {
+      leftNavItems = [
+        {
+          title: "About",
+          link: `/${language}/about`,
+        },
+        {
+          title: "Documentation",
+          link: `/${language}/documentation`,
+        },
+      ];
+
+      rightNavItems = [
+        {
+          title: "Login",
+          link: `/${language}/login`,
+        },
+        {
+          title: "Sign Up",
+          link: `/${language}/register`,
+        },
+      ];
+    }
+
+    return { leftNavItems, rightNavItems };
+  };
+
+  const navigationItems: IGetNavigationItems = getNavigationItems();
 
   const isRouteActive = (route: string) => {
     if (route === pathname) {
@@ -46,7 +93,7 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {leftNavItems.map((item) => (
+                    {navigationItems.leftNavItems.map((item) => (
                       <Link
                         key={item.title}
                         // @ts-ignore
@@ -63,7 +110,7 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
               </div>
               <div>
                 <div className="sm:flex hidden space-x-4">
-                  {rightNavItems.map((item) => (
+                  {navigationItems.rightNavItems.map((item) => (
                     <Link
                       key={item.title}
                       className={`${isRouteActive(
@@ -82,18 +129,20 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
         {isMenuOpen && (
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {leftNavItems.concat(rightNavItems).map((item) => (
-                <Link
-                  className={`${isRouteActive(
-                    item.link
-                  )} ${linkClassNames} block`}
-                  key={item.title}
-                  onClick={() => setMenuOpen(false)}
-                  // @ts-ignore
-                  href={item.link}>
-                  {item.title}
-                </Link>
-              ))}
+              {navigationItems.leftNavItems
+                .concat(navigationItems.rightNavItems)
+                .map((item) => (
+                  <Link
+                    className={`${isRouteActive(
+                      item.link
+                    )} ${linkClassNames} block`}
+                    key={item.title}
+                    onClick={() => setMenuOpen(false)}
+                    // @ts-ignore
+                    href={item.link}>
+                    {item.title}
+                  </Link>
+                ))}
             </div>
           </div>
         )}
