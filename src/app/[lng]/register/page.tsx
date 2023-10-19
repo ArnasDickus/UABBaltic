@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/button/button";
-import TailwindInput from "@/components/input/input";
+import Input from "@/components/input/input";
 import LinkButton from "@/components/link-button/link-button";
 import { IPageParamProps } from "@/constants/interfaces";
 import { FC } from "react";
@@ -38,12 +38,12 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
   };
 
   return (
-    <div className="w-full max-w-lg ml-auto mr-auto mt-32">
+    <div className="w-full max-w-lg ml-auto mr-auto">
       <form
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
-          <TailwindInput
+          <Input
             name="Name"
             errorText={errors.name?.message}
             inputProps={{
@@ -53,7 +53,7 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
           />
         </div>
         <div className="mb-4">
-          <TailwindInput
+          <Input
             name="Username"
             errorText={errors.username?.message}
             inputProps={{
@@ -63,7 +63,7 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
           />
         </div>
         <div className="mb-4">
-          <TailwindInput
+          <Input
             name="Email"
             errorText={errors.email?.message}
             inputProps={{
@@ -73,7 +73,7 @@ const PageRegister: FC<IPageParamProps> = ({ params: { lng } }) => {
           />
         </div>
         <div className="mb-6">
-          <TailwindInput
+          <Input
             name="Password"
             errorText={errors.password?.message}
             inputProps={{

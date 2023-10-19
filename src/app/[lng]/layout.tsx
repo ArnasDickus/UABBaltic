@@ -83,7 +83,7 @@ export default function RootLayout({
             leftNavItems={navigationItems.leftNavItems}
             rightNavItems={navigationItems.rightNavItems}
           />
-          {children}
+          <div>{children}</div>
         </ReduxProvider>
       </body>
     </html>
