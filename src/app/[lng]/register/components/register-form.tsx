@@ -5,13 +5,16 @@ import LinkButton from "@/components/link-button/link-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AddUser, isEmailExist, isUsernameExist } from "../api/route";
+import { isEmailExist, isUsernameExist } from "../api/route";
 import { IPageRegisterInputs } from "./interfaces";
 import debounce from "lodash/debounce";
+import { apiRoutes } from "@/constants/routes";
+import { NCreateUser } from "@/app/api/create-user/route";
 
 const RegisterForm = ({ language }: { language: string }) => {
-  const debouncedCheckEmail = debounce(isEmailExist, 300);
+  const debouncedCheckEmail = debounce(isEmailExist, 1500);
   const debouncedCheckUsername = debounce(isUsernameExist, 1500);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Privaloma"),
     email: Yup.string()
@@ -19,7 +22,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       .required("Privaloma")
       .test("checkEmailUnique", "This Email already in use", async (email) => {
         const uniqueEmail = await debouncedCheckEmail(email);
-        return !uniqueEmail as boolean;
+        return uniqueEmail as boolean;
       }),
     username: Yup.string()
       .required("Privaloma")
@@ -45,7 +48,15 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    await AddUser(data);
+    const response: NCreateUser.IResponse = await fetch(
+      apiRoutes["create-user"],
+      {
+        method: "POST",
+        body: JSON.stringify({ formData: data }),
+      }
+    );
+
+    console.log("response", response);
   };
   return (
     <form

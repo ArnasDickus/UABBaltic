@@ -41,6 +41,16 @@ export const isUsernameExist = async (username: string) => {
 };
 
 export const AddUser = async (formData: IPageRegisterInputs) => {
+  // const bcrypt = require("bcrypt");
+  // const saltRounds = 10;
+  // let passwordHash = "";
+
+  // bcrypt.genSalt(saltRounds, function (err, salt) {
+  //   bcrypt.hash(formData.password, salt, function (err, hash) {
+  //     passwordHash = hash;
+  //   });
+  // });
+
   client
     .mutate({
       mutation: ADD_USER,
