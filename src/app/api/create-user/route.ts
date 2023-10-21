@@ -13,8 +13,7 @@ interface CustomNextApiRequest extends NextApiRequest {
 export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NCreateUser.IRequest["body"] = await req.json();
   const saltRounds = 10;
-  console.log(process.env.EMAIL_USERNAME);
-  console.log(process.env.EMAIL_PASSWORD);
+
   bcrypt.genSalt(saltRounds, function (error, salt: string) {
     bcrypt.hash(
       requestData.formData.password,

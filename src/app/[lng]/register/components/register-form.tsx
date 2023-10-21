@@ -9,7 +9,6 @@ import { isEmailExist, isUsernameExist } from "../api/route";
 import { IPageRegisterInputs } from "./interfaces";
 import debounce from "lodash/debounce";
 import { apiRoutes } from "@/constants/routes";
-import { NCreateUser } from "@/app/api/create-user/route";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const debouncedCheckEmail = debounce(isEmailExist, 1500);
@@ -48,15 +47,10 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    const response: NCreateUser.IResponse = await fetch(
-      apiRoutes["create-user"],
-      {
-        method: "POST",
-        body: JSON.stringify({ formData: data }),
-      }
-    );
-
-    console.log("response", response);
+    await fetch(apiRoutes["create-user"], {
+      method: "POST",
+      body: JSON.stringify({ formData: data }),
+    });
   };
   return (
     <form
@@ -91,7 +85,6 @@ const RegisterForm = ({ language }: { language: string }) => {
           inputProps={{
             type: "text",
             disabled: isSubmitting,
-            // disabled
             ...register("email"),
           }}
         />
@@ -117,7 +110,6 @@ const RegisterForm = ({ language }: { language: string }) => {
         </Button>
         <LinkButton
           linkProps={{
-            disabled: isSubmitting,
             // @ts-ignore
             href: `/${language}/forgot-password`,
           }}>
