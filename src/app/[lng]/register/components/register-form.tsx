@@ -22,7 +22,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       .required("Privaloma")
       .test("checkEmailUnique", "This Email already in use", async (email) => {
         const uniqueEmail = await debouncedCheckEmail(email);
-        return uniqueEmail as boolean;
+        return !uniqueEmail as boolean;
       }),
     username: Yup.string()
       .required("Privaloma")
@@ -42,7 +42,7 @@ const RegisterForm = ({ language }: { language: string }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isLoading, isSubmitting },
   } = useForm<IPageRegisterInputs>({
     resolver: yupResolver(validationSchema),
   });
@@ -68,6 +68,7 @@ const RegisterForm = ({ language }: { language: string }) => {
           errorText={errors.name?.message}
           inputProps={{
             type: "text",
+            disabled: isSubmitting,
             ...register("name"),
           }}
         />
@@ -78,6 +79,7 @@ const RegisterForm = ({ language }: { language: string }) => {
           errorText={errors.username?.message}
           inputProps={{
             type: "text",
+            disabled: isSubmitting,
             ...register("username"),
           }}
         />
@@ -88,6 +90,8 @@ const RegisterForm = ({ language }: { language: string }) => {
           errorText={errors.email?.message}
           inputProps={{
             type: "text",
+            disabled: isSubmitting,
+            // disabled
             ...register("email"),
           }}
         />
@@ -98,6 +102,7 @@ const RegisterForm = ({ language }: { language: string }) => {
           errorText={errors.password?.message}
           inputProps={{
             type: "password",
+            disabled: isSubmitting,
             ...register("password"),
           }}
         />
@@ -105,12 +110,14 @@ const RegisterForm = ({ language }: { language: string }) => {
       <div className="flex items-center justify-between">
         <Button
           buttonProps={{
+            disabled: isSubmitting,
             type: "submit",
           }}>
           Register
         </Button>
         <LinkButton
           linkProps={{
+            disabled: isSubmitting,
             // @ts-ignore
             href: `/${language}/forgot-password`,
           }}>
