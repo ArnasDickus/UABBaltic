@@ -9,3 +9,11 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const GET_USER = gql`
+  query GetUser($whereUser: user_bool_exp) {
+    user(where: $whereUser) {
+      id
+    }
+  }
+`;

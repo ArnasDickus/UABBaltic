@@ -2,24 +2,35 @@
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
 import LinkButton from "@/components/link-button/link-button";
-import { useMutation } from "@apollo/client";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ADD_USER } from "@/app/store/modules/user/query";
-
-type IPageRegisterInputs = {
-  name: string;
-  email: string;
-  username: string;
-  password: string;
-};
+import { AddUser, isEmailExist, isUsernameExist } from "../api/route";
+import { IPageRegisterInputs } from "./interfaces";
+import debounce from "lodash/debounce";
 
 const RegisterForm = ({ language }: { language: string }) => {
+  const debouncedCheckEmail = debounce(isEmailExist, 300);
+  const debouncedCheckUsername = debounce(isUsernameExist, 1500);
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Privaloma"),
-    email: Yup.string().email().required("Privaloma"),
-    username: Yup.string().required("Privaloma"),
+    email: Yup.string()
+      .email()
+      .required("Privaloma")
+      .test("checkEmailUnique", "This Email already in use", async (email) => {
+        const uniqueEmail = await debouncedCheckEmail(email);
+        return !uniqueEmail as boolean;
+      }),
+    username: Yup.string()
+      .required("Privaloma")
+      .test(
+        "checkUsernameUnique",
+        "This Username already in use",
+        async (username) => {
+          const uniqueUsername = await debouncedCheckUsername(username);
+          return !uniqueUsername as boolean;
+        }
+      ),
     password: Yup.string()
       .required("No password provided.")
       .min(8, "Password is too short - should be 8 chars minimum.")
@@ -33,21 +44,8 @@ const RegisterForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const [addUser] = useMutation(ADD_USER);
-
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    await addUser({
-      variables: {
-        addUserObject: [
-          {
-            name: data.name,
-            password: data.password,
-            email: data.email,
-            username: data.username,
-          },
-        ],
-      },
-    });
+    await AddUser(data);
   };
   return (
     <form
