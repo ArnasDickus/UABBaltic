@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "emails": "email dev"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
@@ -17,6 +18,11 @@
     "@hookform/resolvers": "^3.3.2",
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.9",
+    "@react-email/button": "0.0.11",
+    "@react-email/container": "0.0.10",
+    "@react-email/html": "0.0.6",
+    "@react-email/section": "0.0.10",
+    "@react-email/text": "0.0.6",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.5",
@@ -38,6 +44,7 @@
     "react": "18.2.0",
     "react-cookie": "^6.1.1",
     "react-dom": "18.2.0",
+    "react-email": "1.9.5",
     "react-hook-form": "^7.47.0",
     "react-i18next": "^13.2.2",
     "react-redux": "^8.1.3",
