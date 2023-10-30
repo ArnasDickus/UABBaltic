@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { ADD_USER } from "@/components/store/modules/user/query";
 import { transporter } from "@/app/providers/email";
+import { StatusCodes } from "@/constants/status-code";
 
 interface CustomNextApiRequest extends NextApiRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -33,22 +34,36 @@ export const POST = async (req: CustomNextApiRequest) => {
           })
           .catch((error) => {
             console.error("ADD_USER", error);
-            return NextResponse.json({ message: "Failed to create user" });
+            return NextResponse.json(
+              { error: "Internal Server Error" },
+              { status: StatusCodes.internalServerError }
+            );
           });
       }
     );
   });
 
   // Send Email
-  await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
-    to: requestData.formData.email, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
+  await transporter
+    .sendMail({
+      from: `Fred Foo 👻 <${process.env.EMAIL_USERNAME}>`, // sender address
+      to: requestData.formData.email, // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // html body
+    })
+    .catch((error) => {
+      console.error("Send_MAIL", error);
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: StatusCodes.internalServerError }
+      );
+    });
 
-  return NextResponse.json({ message: "User created successfully" });
+  return NextResponse.json(
+    { error: "User created successfully" },
+    { status: StatusCodes.okStatus }
+  );
 };
 
 export namespace NCreateUser {

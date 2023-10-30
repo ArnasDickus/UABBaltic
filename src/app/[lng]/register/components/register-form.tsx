@@ -9,8 +9,16 @@ import { isEmailExist, isUsernameExist } from "../api/route";
 import { IPageRegisterInputs } from "./interfaces";
 import debounce from "lodash/debounce";
 import { apiRoutes } from "@/constants/routes";
+import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+import { useState } from "react";
+import { StatusCodes } from "@/constants/status-code";
 
 const RegisterForm = ({ language }: { language: string }) => {
+  const [alert, setAlert] = useState<ISnackAlert>({
+    message: "",
+    severity: "success",
+    showAlert: false,
+  });
   const debouncedCheckEmail = debounce(isEmailExist, 1500);
   const debouncedCheckUsername = debounce(isUsernameExist, 1500);
 
@@ -47,76 +55,92 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    await fetch(apiRoutes["create-user"], {
+    const test = await fetch(apiRoutes["create-user"], {
       method: "POST",
       body: JSON.stringify({ formData: data }),
     });
+    if (test.status === StatusCodes.okStatus) {
+      setAlert({
+        message: "Email was sent.",
+        severity: "success",
+        showAlert: true,
+      });
+    } else if (test.status === StatusCodes.internalServerError) {
+      setAlert({
+        message: "Something went wrong, please try again later",
+        severity: "error",
+        showAlert: true,
+      });
+    }
   };
   return (
-    <form
-      className="bg-white shadow-md rounded px-8 pb-8 mb-4"
-      onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4">
-        <Input
-          name="Name"
-          errorText={errors.name?.message}
-          inputProps={{
-            type: "text",
-            disabled: isSubmitting,
-            ...register("name"),
-          }}
-        />
-      </div>
-      <div className="mb-4">
-        <Input
-          name="Username"
-          errorText={errors.username?.message}
-          inputProps={{
-            type: "text",
-            disabled: isSubmitting,
-            ...register("username"),
-          }}
-        />
-      </div>
-      <div className="mb-4">
-        <Input
-          name="Email"
-          errorText={errors.email?.message}
-          inputProps={{
-            type: "text",
-            disabled: isSubmitting,
-            ...register("email"),
-          }}
-        />
-      </div>
-      <div className="mb-6">
-        <Input
-          name="Password"
-          errorText={errors.password?.message}
-          inputProps={{
-            type: "password",
-            disabled: isSubmitting,
-            ...register("password"),
-          }}
-        />
-      </div>
-      <div className="flex items-center justify-between">
-        <Button
-          buttonProps={{
-            disabled: isSubmitting,
-            type: "submit",
-          }}>
-          Register
-        </Button>
-        <LinkButton
-          linkProps={{
-            // @ts-ignore
-            href: `/${language}/forgot-password`,
-          }}>
-          Forgot Password?
-        </LinkButton>
-      </div>
-    </form>
+    <>
+      <SnackAlert {...alert} />
+      <form
+        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
+        onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <Input
+            name="Name"
+            errorText={errors.name?.message}
+            inputProps={{
+              type: "text",
+              disabled: isSubmitting,
+              ...register("name"),
+            }}
+          />
+        </div>
+        <div className="mb-4">
+          <Input
+            name="Username"
+            errorText={errors.username?.message}
+            inputProps={{
+              type: "text",
+              disabled: isSubmitting,
+              ...register("username"),
+            }}
+          />
+        </div>
+        <div className="mb-4">
+          <Input
+            name="Email"
+            errorText={errors.email?.message}
+            inputProps={{
+              type: "text",
+              disabled: isSubmitting,
+              ...register("email"),
+            }}
+          />
+        </div>
+        <div className="mb-6">
+          <Input
+            name="Password"
+            errorText={errors.password?.message}
+            inputProps={{
+              type: "password",
+              disabled: isSubmitting,
+              ...register("password"),
+            }}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          <Button
+            buttonProps={{
+              disabled: isSubmitting,
+              type: "submit",
+            }}>
+            Register
+          </Button>
+          <LinkButton
+            linkProps={{
+              // @ts-ignore
+              href: `/${language}/forgot-password`,
+            }}>
+            Forgot Password?
+          </LinkButton>
+        </div>
+      </form>
+    </>
   );
 };
 export default RegisterForm;
