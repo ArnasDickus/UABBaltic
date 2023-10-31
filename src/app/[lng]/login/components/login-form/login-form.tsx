@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
+import { signIn } from "next-auth/react";
 
 const LoginForm = () => {
   const [alert, setAlert] = useState<ISnackAlert>({
@@ -34,6 +35,13 @@ const LoginForm = () => {
       method: "POST",
       body: JSON.stringify({ formData: data }),
     });
+    const response = await signIn("credentials", {
+      username: data.username,
+      password: data.password,
+      redirect: false,
+    });
+
+    console.log("response", response);
     //  const newUser = await fetch(apiRoutes["create-user"], {
     //    method: "POST",
     //    body: JSON.stringify({ formData: data, language: language }),
@@ -75,7 +83,7 @@ const LoginForm = () => {
             name="Password"
             errorText={errors.password?.message}
             inputProps={{
-              type: "text",
+              type: "password",
               disabled: isSubmitting,
               ...register("password"),
             }}
