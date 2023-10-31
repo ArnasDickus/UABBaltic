@@ -5,13 +5,15 @@ import LinkButton from "@/components/link-button/link-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { isEmailExist, isUsernameExist } from "../api/route";
+
 import { IPageRegisterInputs } from "./interfaces";
 import debounce from "lodash/debounce";
 import { apiRoutes } from "@/constants/routes";
 import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
+import { GET_USER } from "@/components/store/modules/user/query";
+import client from "../../../../../apollo-client";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const [alert, setAlert] = useState<ISnackAlert>({
@@ -19,6 +21,45 @@ const RegisterForm = ({ language }: { language: string }) => {
     severity: "success",
     showAlert: false,
   });
+
+  const isEmailExist = async (email: string): Promise<boolean> => {
+    const isEmailExist: boolean = await client
+      .query({
+        query: GET_USER,
+        variables: {
+          whereUser: {
+            email: { _eq: email },
+          },
+        },
+      })
+      .then((user) => !!user.data.user.length)
+      .catch((error) => {
+        console.error("isEmailExist >", error);
+        return false;
+      });
+
+    return !isEmailExist;
+  };
+
+  const isUsernameExist = async (username: string) => {
+    const isUsernameExist: boolean = await client
+      .query({
+        query: GET_USER,
+        variables: {
+          whereUser: {
+            username: { _eq: username },
+          },
+        },
+      })
+      .then((user) => !!user.data.user.length)
+      .catch((error) => {
+        console.error("isUsernameExist >", error);
+        return false;
+      });
+
+    return isUsernameExist;
+  };
+
   const debouncedCheckEmail = debounce(isEmailExist, 1500);
   const debouncedCheckUsername = debounce(isUsernameExist, 1500);
   const validationSchema = Yup.object().shape({
