@@ -21,7 +21,6 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
   const debouncedCheckEmail = debounce(isEmailExist, 1500);
   const debouncedCheckUsername = debounce(isUsernameExist, 1500);
-
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Privaloma"),
     email: Yup.string()
@@ -55,17 +54,17 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    const test = await fetch(apiRoutes["create-user"], {
+    const newUser = await fetch(apiRoutes["create-user"], {
       method: "POST",
-      body: JSON.stringify({ formData: data }),
+      body: JSON.stringify({ formData: data, language: language }),
     });
-    if (test.status === StatusCodes.okStatus) {
+    if (newUser.status === StatusCodes.okStatus) {
       setAlert({
         message: "Email was sent.",
         severity: "success",
         showAlert: true,
       });
-    } else if (test.status === StatusCodes.internalServerError) {
+    } else if (newUser.status === StatusCodes.internalServerError) {
       setAlert({
         message: "Something went wrong, please try again later",
         severity: "error",

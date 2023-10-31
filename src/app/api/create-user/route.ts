@@ -3,9 +3,14 @@ import client from "../../../../apollo-client";
 import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+
 import { ADD_USER } from "@/components/store/modules/user/query";
 import { transporter } from "@/app/providers/email";
 import { StatusCodes } from "@/constants/status-code";
+import { getBaseUrl } from "@/app/utils/get-base-url";
+import { ADD_USER_CONFIRMATION } from "@/components/store/modules/user-confirmation/query";
+import dayjs from "dayjs";
+import { generateEmailConfirmationToken } from "@/app/utils/generate-email-confirmation-token";
 
 interface CustomNextApiRequest extends NextApiRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -14,13 +19,18 @@ interface CustomNextApiRequest extends NextApiRequest {
 export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NCreateUser.IRequest["body"] = await req.json();
   const saltRounds = 10;
+  const confirmationToken = generateEmailConfirmationToken();
+
+  const emailLink = `${getBaseUrl()}/${
+    requestData.language
+  }/confirm-email?token=${confirmationToken}`;
 
   bcrypt.genSalt(saltRounds, function (error, salt: string) {
     bcrypt.hash(
       requestData.formData.password,
       salt,
       async function (error, hash: string) {
-        await client
+        const newUser = await client
           .mutate({
             mutation: ADD_USER,
             variables: {
@@ -29,8 +39,33 @@ export const POST = async (req: CustomNextApiRequest) => {
                 password: hash,
                 email: requestData.formData.email,
                 username: requestData.formData.username,
+                email_confirmed: false,
               },
             },
+          })
+          .then((val) => val.data?.insert_user?.returning?.[0]);
+
+        await client.mutate({
+          mutation: ADD_USER_CONFIRMATION,
+          variables: {
+            addUserConfirmationObject: {
+              expires_at: dayjs().add(1, "week"),
+              user_id: newUser?.id,
+              token: confirmationToken,
+            },
+          },
+        });
+
+        await transporter
+          .sendMail({
+            from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
+            to: "1arnasdickus1@gmail.com",
+            // TODO update to proper email
+            // to: requestData.formData.email,
+            subject: "UABBaltic email confirmation",
+            html: `<div>
+            <a href=${emailLink}>Confirm Email</a>
+            </div>`,
           })
           .catch((error) => {
             console.error("ADD_USER", error);
@@ -43,23 +78,6 @@ export const POST = async (req: CustomNextApiRequest) => {
     );
   });
 
-  // Send Email
-  await transporter
-    .sendMail({
-      from: `Fred Foo 👻 <${process.env.EMAIL_USERNAME}>`, // sender address
-      to: requestData.formData.email, // list of receivers
-      subject: "Hello ✔", // Subject line
-      text: "Hello world?", // plain text body
-      html: "<b>Hello world?</b>", // html body
-    })
-    .catch((error) => {
-      console.error("Send_MAIL", error);
-      return NextResponse.json(
-        { error: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
-    });
-
   return NextResponse.json(
     { error: "User created successfully" },
     { status: StatusCodes.okStatus }
@@ -70,6 +88,7 @@ export namespace NCreateUser {
   export interface IRequest {
     body: {
       formData: IPageRegisterInputs;
+      language: string;
     };
   }
   export interface IResponse {}
