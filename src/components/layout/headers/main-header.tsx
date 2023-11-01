@@ -22,7 +22,6 @@ const MainHeader = ({ language }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const [session, setSession] = useState<Session | null>(null);
-  console.log("session", session);
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
 
   const getNavigationItems = (): IGetNavigationItems => {

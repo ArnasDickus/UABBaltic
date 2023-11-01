@@ -28,8 +28,6 @@ const handler = NextAuth({
           })
           .then((val) => val.data.user);
 
-        console.log("user[0].password", user[0].password);
-
         const comparePasswords = await compare(
           credentials?.password || "",
           user[0].password
@@ -41,11 +39,6 @@ const handler = NextAuth({
             email: user[0].email,
           };
         }
-        console.log("comparePasswords", comparePasswords);
-        console.log("user", user?.[0]?.password);
-        // Add logic here to look up the user from the credentials supplied
-        console.log("credentials", credentials);
-        // const response = await
         return null;
       },
     }),
