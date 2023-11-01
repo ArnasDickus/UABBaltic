@@ -48,7 +48,15 @@ const ConfirmEmail = ({ params, searchParams }: IPageParamProps) => {
 
   return (
     <div className="pt-14">
-      <SnackAlert {...alert} />
+      <SnackAlert
+        {...alert}
+        onClose={() => {
+          setAlert((prevState) => ({
+            ...prevState,
+            showAlert: false,
+          }));
+        }}
+      />
     </div>
   );
 };

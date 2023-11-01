@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const router = useRouter();
-  const [alert, setAlert] = useState<ISnackAlert>({
+  const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
     message: "",
     severity: "success",
     showAlert: false,
@@ -47,31 +47,26 @@ const LoginForm = () => {
       // @ts-ignore
       router.push("/");
       router.refresh();
+    } else {
+      setAlert({
+        message: "Username and Password does not match",
+        severity: "error",
+        showAlert: true,
+      });
     }
-
-    console.log("response", response);
-    //  const newUser = await fetch(apiRoutes["create-user"], {
-    //    method: "POST",
-    //    body: JSON.stringify({ formData: data, language: language }),
-    //  });
-    //  if (newUser.status === StatusCodes.okStatus) {
-    //    setAlert({
-    //      message: "Email was sent.",
-    //      severity: "success",
-    //      showAlert: true,
-    //    });
-    //  } else if (newUser.status === StatusCodes.internalServerError) {
-    //    setAlert({
-    //      message: "Something went wrong, please try again later",
-    //      severity: "error",
-    //      showAlert: true,
-    //    });
-    //  }
   };
 
   return (
     <>
-      <SnackAlert {...alert} />
+      <SnackAlert
+        {...alert}
+        onClose={() => {
+          setAlert((prevState) => ({
+            ...prevState,
+            showAlert: false,
+          }));
+        }}
+      />
       <form
         className="bg-white shadow-md rounded px-8 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}>

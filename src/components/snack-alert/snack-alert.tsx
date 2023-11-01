@@ -15,9 +15,10 @@ export interface ISnackAlert {
   message: string;
   severity: AlertColor;
   showAlert: boolean;
+  onClose?: () => void;
 }
 
-const SnackAlert = ({ showAlert, message, severity }: ISnackAlert) => {
+const SnackAlert = ({ showAlert, message, severity, onClose }: ISnackAlert) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const SnackAlert = ({ showAlert, message, severity }: ISnackAlert) => {
     if (reason === "clickaway") {
       return;
     }
+    onClose?.();
 
     setOpen(false);
   };

@@ -115,7 +115,15 @@ const RegisterForm = ({ language }: { language: string }) => {
   };
   return (
     <>
-      <SnackAlert {...alert} />
+      <SnackAlert
+        {...alert}
+        onClose={() => {
+          setAlert((prevState) => ({
+            ...prevState,
+            showAlert: false,
+          }));
+        }}
+      />
       <form
         className="bg-white shadow-md rounded px-8 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}>
