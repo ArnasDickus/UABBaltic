@@ -13,7 +13,7 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: {},
+        email: {},
         password: {},
       },
       async authorize(credentials, req) {
@@ -22,7 +22,7 @@ const handler = NextAuth({
             query: GET_USER,
             variables: {
               whereUser: {
-                username: { _eq: credentials?.username },
+                email: { _eq: credentials?.email },
               },
             },
           })
@@ -38,7 +38,7 @@ const handler = NextAuth({
         if (comparePasswords) {
           return {
             id: user[0].id,
-            username: user[0].username,
+            email: user[0].email,
           };
         }
         console.log("comparePasswords", comparePasswords);

@@ -2,9 +2,12 @@
 import LogoIcon from "@/styles/icons/logo-icon";
 import HamburgerButton from "./hamburger-button/hamburger-button";
 import { INavItems } from "@/constants/interfaces";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Session } from "next-auth";
+import { getSession, signOut } from "next-auth/react";
+import Button from "@/components/button/button";
 
 interface IMainHeader {
   language: string;
@@ -18,7 +21,8 @@ interface IGetNavigationItems {
 const MainHeader = ({ language }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-
+  const [session, setSession] = useState<Session | null>(null);
+  console.log("session", session);
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
 
   const getNavigationItems = (): IGetNavigationItems => {
@@ -46,18 +50,33 @@ const MainHeader = ({ language }: IMainHeader) => {
           title: "Documentation",
           link: `/${language}/documentation`,
         },
+        {
+          title: "Portfolio",
+          link: `/${language}/portfolio`,
+        },
       ];
+    }
 
-      rightNavItems = [
-        {
-          title: "Login",
-          link: `/${language}/login`,
-        },
-        {
-          title: "Sign Up",
-          link: `/${language}/register`,
-        },
-      ];
+    if (!pathname.includes("portfolio")) {
+      if (!session) {
+        rightNavItems = [
+          {
+            title: "Login",
+            link: `/${language}/login`,
+          },
+          {
+            title: "Sign Up",
+            link: `/${language}/register`,
+          },
+        ];
+      } else if (!!session) {
+        rightNavItems = [
+          {
+            title: "Logout",
+            link: ``,
+          },
+        ];
+      }
     }
 
     return { leftNavItems, rightNavItems };
@@ -71,6 +90,15 @@ const MainHeader = ({ language }: IMainHeader) => {
     }
     return "hover:bg-gray-900 ";
   };
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const session = await getSession();
+      setSession(session);
+    };
+
+    fetchSession();
+  }, []);
 
   return (
     <header className="fixed w-full">
@@ -110,17 +138,27 @@ const MainHeader = ({ language }: IMainHeader) => {
               </div>
               <div>
                 <div className="sm:flex hidden space-x-4">
-                  {navigationItems.rightNavItems.map((item) => (
-                    <Link
-                      key={item.title}
-                      className={`${isRouteActive(
-                        item.link
-                      )} ${linkClassNames}`}
-                      /* @ts-ignore */
-                      href={item.link}>
-                      {item.title}
-                    </Link>
-                  ))}
+                  {navigationItems.rightNavItems.map((item) => {
+                    if (item.title === "Logout" && !!session) {
+                      return (
+                        <Button key={item.title} onClick={() => signOut()}>
+                          {item.title}
+                        </Button>
+                      );
+                    } else {
+                      return (
+                        <Link
+                          key={item.title}
+                          className={`${isRouteActive(
+                            item.link
+                          )} ${linkClassNames}`}
+                          /* @ts-ignore */
+                          href={item.link}>
+                          {item.title}
+                        </Link>
+                      );
+                    }
+                  })}
                 </div>
               </div>
             </div>
@@ -131,18 +169,28 @@ const MainHeader = ({ language }: IMainHeader) => {
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigationItems.leftNavItems
                 .concat(navigationItems.rightNavItems)
-                .map((item) => (
-                  <Link
-                    className={`${isRouteActive(
-                      item.link
-                    )} ${linkClassNames} block`}
-                    key={item.title}
-                    onClick={() => setMenuOpen(false)}
-                    // @ts-ignore
-                    href={item.link}>
-                    {item.title}
-                  </Link>
-                ))}
+                .map((item) => {
+                  if (item.title === "Logout" && !!session) {
+                    return (
+                      <Button key={item.title} onClick={() => signOut()}>
+                        {item.title}
+                      </Button>
+                    );
+                  } else {
+                    return (
+                      <Link
+                        className={`${isRouteActive(
+                          item.link
+                        )} ${linkClassNames} block`}
+                        key={item.title}
+                        onClick={() => setMenuOpen(false)}
+                        // @ts-ignore
+                        href={item.link}>
+                        {item.title}
+                      </Link>
+                    );
+                  }
+                })}
             </div>
           </div>
         )}

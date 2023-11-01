@@ -9,8 +9,10 @@ import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [alert, setAlert] = useState<ISnackAlert>({
     message: "",
     severity: "success",
@@ -18,7 +20,7 @@ const LoginForm = () => {
   });
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Privaloma"),
+    email: Yup.string().required("Privaloma"),
     password: Yup.string().required("No password provided."),
   });
 
@@ -36,10 +38,16 @@ const LoginForm = () => {
       body: JSON.stringify({ formData: data }),
     });
     const response = await signIn("credentials", {
-      username: data.username,
+      email: data.email,
       password: data.password,
       redirect: false,
     });
+
+    if (!response?.error) {
+      // @ts-ignore
+      router.push("/");
+      router.refresh();
+    }
 
     console.log("response", response);
     //  const newUser = await fetch(apiRoutes["create-user"], {
@@ -69,12 +77,12 @@ const LoginForm = () => {
         onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
-            name="Username"
-            errorText={errors.username?.message}
+            name="Email"
+            errorText={errors.email?.message}
             inputProps={{
               type: "text",
               disabled: isSubmitting,
-              ...register("username"),
+              ...register("email"),
             }}
           />
         </div>
