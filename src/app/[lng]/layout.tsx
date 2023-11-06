@@ -13,6 +13,7 @@ import ReduxProvider from "../providers/redux-provider";
 import MainHeader from "@/components/layout/headers/main-header";
 import { ApolloProvider } from "@apollo/client";
 import client from "../../../apollo-client";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,12 +28,14 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
-        <ApolloProvider client={client}>
-          <ReduxProvider>
-            <MainHeader language={lng} />
-            {children}
-          </ReduxProvider>
-        </ApolloProvider>
+        <SessionProvider>
+          <ApolloProvider client={client}>
+            <ReduxProvider>
+              <MainHeader language={lng} />
+              {children}
+            </ReduxProvider>
+          </ApolloProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -2,11 +2,10 @@
 import LogoIcon from "@/styles/icons/logo-icon";
 import HamburgerButton from "./hamburger-button/hamburger-button";
 import { INavItems } from "@/constants/interfaces";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Session } from "next-auth";
-import { getSession, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 
 interface IMainHeader {
@@ -21,7 +20,7 @@ interface IGetNavigationItems {
 const MainHeader = ({ language }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const [session, setSession] = useState<Session | null>(null);
+  const { data: session } = useSession();
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
 
   const getNavigationItems = (): IGetNavigationItems => {
@@ -68,7 +67,7 @@ const MainHeader = ({ language }: IMainHeader) => {
             link: `/${language}/register`,
           },
         ];
-      } else if (!!session) {
+      } else if (session) {
         rightNavItems = [
           {
             title: "Logout",
@@ -89,15 +88,6 @@ const MainHeader = ({ language }: IMainHeader) => {
     }
     return "hover:bg-gray-900 ";
   };
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      const session = await getSession();
-      setSession(session);
-    };
-
-    fetchSession();
-  }, []);
 
   return (
     <header className="fixed w-full">
@@ -138,7 +128,7 @@ const MainHeader = ({ language }: IMainHeader) => {
               <div>
                 <div className="sm:flex hidden space-x-4">
                   {navigationItems.rightNavItems.map((item) => {
-                    if (item.title === "Logout" && !!session) {
+                    if (session) {
                       return (
                         <Button key={item.title} onClick={() => signOut()}>
                           {item.title}
@@ -169,7 +159,7 @@ const MainHeader = ({ language }: IMainHeader) => {
               {navigationItems.leftNavItems
                 .concat(navigationItems.rightNavItems)
                 .map((item) => {
-                  if (item.title === "Logout" && !!session) {
+                  if (session) {
                     return (
                       <Button key={item.title} onClick={() => signOut()}>
                         {item.title}
