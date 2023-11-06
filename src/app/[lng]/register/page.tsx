@@ -4,6 +4,7 @@ import { FC } from "react";
 import RegisterForm from "./components/register-form";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import { formContainerClassNames } from "@/styles/reusable-styles";
 
 const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
   const session = await getServerSession();
@@ -11,7 +12,7 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
     redirect("/");
   }
   return (
-    <div className="w-full justify-center flex items-center h-screen ml-auto mr-auto">
+    <div className={formContainerClassNames}>
       <RegisterForm language={lng} />
     </div>
   );

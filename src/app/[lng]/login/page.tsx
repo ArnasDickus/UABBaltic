@@ -1,14 +1,26 @@
 import { getServerSession } from "next-auth";
 import LoginForm from "./components/login-form/login-form";
 import { redirect } from "next/navigation";
+import { formContainerClassNames } from "@/styles/reusable-styles";
 
-const PageLogin = async () => {
+const isLoggedIn = async () => {
   const session = await getServerSession();
   if (session) {
-    redirect("/");
+    return false;
   }
+  return true;
+};
+
+const PageLogin = async () => {
+  const isLogged = await isLoggedIn();
+  console.log("isLoggedIn", isLogged);
+  if (!isLogged) redirect("/");
+  // const session = await getServerSession();
+  // if (session) {
+  //   redirect("/");
+  // }
   return (
-    <div className="w-full justify-center flex items-center h-screen ml-auto mr-auto">
+    <div className={formContainerClassNames}>
       <LoginForm />
     </div>
   );
