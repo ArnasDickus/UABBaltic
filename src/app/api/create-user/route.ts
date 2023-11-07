@@ -10,7 +10,7 @@ import { StatusCodes } from "@/constants/status-code";
 import { getBaseUrl } from "@/app/utils/get-base-url";
 import { ADD_USER_CONFIRMATION } from "@/components/store/modules/user-confirmation/query";
 import dayjs from "dayjs";
-import { generateEmailConfirmationToken } from "@/app/utils/generate-email-confirmation-token";
+import { generateToken } from "@/app/utils/generate-email-confirmation-token";
 
 interface CustomNextApiRequest extends NextApiRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -19,7 +19,7 @@ interface CustomNextApiRequest extends NextApiRequest {
 export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NCreateUser.IRequest["body"] = await req.json();
   const saltRounds = 10;
-  const confirmationToken = generateEmailConfirmationToken();
+  const confirmationToken = generateToken();
 
   const emailLink = `${getBaseUrl()}/${
     requestData.language

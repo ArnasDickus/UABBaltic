@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-export const generateEmailConfirmationToken = () => {
+export const generateToken = () => {
   const tokenLength = 64;
   return crypto.randomBytes(tokenLength).toString("hex");
 };

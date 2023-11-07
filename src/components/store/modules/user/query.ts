@@ -25,7 +25,7 @@ export const UPDATE_USERS = gql`
 
 export const GET_USER = gql`
   query GetUser($whereUser: user_bool_exp) {
-    user(where: $whereUser) {
+    user(where: $whereUser, limit: 1) {
       id
       username
       password

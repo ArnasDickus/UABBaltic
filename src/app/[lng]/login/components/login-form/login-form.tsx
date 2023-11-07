@@ -27,7 +27,7 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<ILoginForm>({
     resolver: yupResolver(validationSchema),
   });
