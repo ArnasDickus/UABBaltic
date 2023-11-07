@@ -55,7 +55,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     .sendMail({
       from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
       to: requestData.email,
-      subject: "UABBaltic email confirmation",
+      subject: "UABBaltic password reset",
       html: `<div>
             <a href=${emailLink}>Reset password</a>
             </div>`,

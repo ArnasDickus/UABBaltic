@@ -30,7 +30,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     });
 
   return NextResponse.json(
-    { message: "User created successfully", emailExist: isEmailExist },
+    { message: "Email checked successfully", emailExist: isEmailExist },
     { status: StatusCodes.okStatus }
   );
 };

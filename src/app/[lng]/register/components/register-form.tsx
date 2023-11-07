@@ -14,6 +14,7 @@ import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
 import { GET_USER } from "@/components/store/modules/user/query";
 import client from "../../../../../apollo-client";
+import { formClassNames } from "@/styles/reusable-styles";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const [alert, setAlert] = useState<ISnackAlert>({
@@ -124,9 +125,7 @@ const RegisterForm = ({ language }: { language: string }) => {
           }));
         }}
       />
-      <form
-        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
-        onSubmit={handleSubmit(onSubmit)}>
+      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
             name="Name"

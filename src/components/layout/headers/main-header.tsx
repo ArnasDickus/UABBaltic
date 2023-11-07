@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
+import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 
 interface IMainHeader {
   language: string;
@@ -101,7 +102,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                 }}
               />
             </div>
-            <div className="flex items-center justify-between w-full">
+            <div className={`${formButtonContainerClassNames} w-full`}>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <Link
                   href={`/${language}`}

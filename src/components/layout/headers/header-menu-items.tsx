@@ -55,25 +55,6 @@ const HeaderMenuItems = ({ language }: IMenuItems): IGetNavigationItems => {
         link: `/${language}/register`,
       },
     ];
-    // if (!session) {
-    // rightNavItems = [
-    //   {
-    //     title: "Login",
-    //     link: `/${language}/login`,
-    //   },
-    //   {
-    //     title: "Sign Up",
-    //     link: `/${language}/register`,
-    //   },
-    // ];
-    //   } else if (!!session) {
-    //     rightNavItems = [
-    //       {
-    //         title: "Logout",
-    //         link: ``,
-    //       },
-    //     ];
-    //   }
   }
 
   return { leftNavItems, rightNavItems };

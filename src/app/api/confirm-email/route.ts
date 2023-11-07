@@ -53,7 +53,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     });
 
   return NextResponse.json(
-    { error: "User created successfully" },
+    { error: "Email confirmed" },
     { status: StatusCodes.okStatus }
   );
 };

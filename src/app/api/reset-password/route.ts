@@ -38,7 +38,7 @@ export const POST = async (req: CustomNextApiRequest) => {
               { status: StatusCodes.internalServerError }
             );
           });
-        const test = await client
+        await client
           .mutate({
             mutation: UPDATE_USERS,
             variables: {

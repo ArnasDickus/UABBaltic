@@ -10,6 +10,10 @@ import * as Yup from "yup";
 import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
+import {
+  formButtonContainerClassNames,
+  formClassNames,
+} from "@/styles/reusable-styles";
 
 const ResetPasswordForm = ({ token }: { token: string }) => {
   const router = useRouter();
@@ -73,9 +77,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
           }));
         }}
       />
-      <form
-        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
-        onSubmit={handleSubmit(onSubmit)}>
+      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
             name="New Password"
@@ -98,7 +100,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
             }}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className={formButtonContainerClassNames}>
           <Button
             buttonProps={{
               disabled: isSubmitting,

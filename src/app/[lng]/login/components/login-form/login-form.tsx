@@ -10,6 +10,10 @@ import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import {
+  formButtonContainerClassNames,
+  formClassNames,
+} from "@/styles/reusable-styles";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -67,9 +71,7 @@ const LoginForm = () => {
           }));
         }}
       />
-      <form
-        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
-        onSubmit={handleSubmit(onSubmit)}>
+      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
             name="Email"
@@ -92,7 +94,7 @@ const LoginForm = () => {
             }}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className={formButtonContainerClassNames}>
           <Button
             buttonProps={{
               disabled: isSubmitting,

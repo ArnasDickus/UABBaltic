@@ -11,6 +11,10 @@ import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
 import { NCheckEmail } from "@/app/api/check-email/route";
 import { StatusCodes } from "@/constants/status-code";
+import {
+  formButtonContainerClassNames,
+  formClassNames,
+} from "@/styles/reusable-styles";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
   const router = useRouter();
@@ -87,9 +91,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
           }));
         }}
       />
-      <form
-        className="bg-white shadow-md rounded px-8 pb-8 mb-4"
-        onSubmit={handleSubmit(onSubmit)}>
+      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
             name="Email"
@@ -101,7 +103,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
             }}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className={formButtonContainerClassNames}>
           <Button
             buttonProps={{
               disabled: isSubmitting,
