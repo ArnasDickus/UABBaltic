@@ -1,7 +1,6 @@
 "use client";
 import Input from "@/components/input/input";
-import { ISnackAlert } from "@/components/snack-alert/snack-alert";
-import { IPageParamProps } from "@/constants/interfaces";
+import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -9,6 +8,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { IResetPasswordForm } from "./interfaces";
 import * as Yup from "yup";
 import Button from "@/components/button/button";
+import { apiRoutes } from "@/constants/routes";
+import { StatusCodes } from "@/constants/status-code";
 
 const ResetPasswordForm = ({ token }: { token: string }) => {
   const router = useRouter();
@@ -35,13 +36,45 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
   } = useForm<IResetPasswordForm>({
     resolver: yupResolver(validationSchema),
   });
-  //   console;
+
   const onSubmit: SubmitHandler<IResetPasswordForm> = async (data) => {
     console.log("data", data);
+    const resetPasswordResponse = await fetch(apiRoutes["reset-password"], {
+      method: "POST",
+      body: JSON.stringify({ password: data.newPassword, token }),
+    });
+
+    if (resetPasswordResponse.status === StatusCodes.okStatus) {
+      setAlert({
+        message: "Password was changed",
+        severity: "success",
+        showAlert: true,
+      });
+      // @ts-ignore
+      router.push("/");
+    } else if (
+      resetPasswordResponse.status === StatusCodes.internalServerError
+    ) {
+      setAlert({
+        message: "Something went wrong, please try again later",
+        severity: "error",
+        showAlert: true,
+      });
+    }
+    console.log("resetPasswordResponse", resetPasswordResponse);
   };
 
   return (
-    <div>
+    <>
+      <SnackAlert
+        {...alert}
+        onClose={() => {
+          setAlert((prevState) => ({
+            ...prevState,
+            showAlert: false,
+          }));
+        }}
+      />
       <form
         className="bg-white shadow-md rounded px-8 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}>
@@ -77,7 +110,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
           </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 export default ResetPasswordForm;

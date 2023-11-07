@@ -59,9 +59,7 @@ export const POST = async (req: CustomNextApiRequest) => {
         await transporter
           .sendMail({
             from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-            to: "1arnasdickus1@gmail.com",
-            // TODO update to proper email
-            // to: requestData.formData.email,
+            to: requestData.formData.email,
             subject: "UABBaltic email confirmation",
             html: `<div>
             <a href=${emailLink}>Confirm Email</a>

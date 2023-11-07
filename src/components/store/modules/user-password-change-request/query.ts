@@ -18,7 +18,10 @@ export const GET_USER_PASSWORD_CHANGE_REQUEST = gql`
   query GetUserPasswordChangeRequest(
     $whereUserPasswordChangeRequest: user_password_change_request_bool_exp
   ) {
-    user_password_change_request(where: $whereUserPasswordChangeRequest) {
+    user_password_change_request(
+      where: $whereUserPasswordChangeRequest
+      limit: 1
+    ) {
       id
       user {
         id

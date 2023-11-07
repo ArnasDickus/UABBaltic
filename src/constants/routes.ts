@@ -4,4 +4,5 @@ export const apiRoutes = {
   "login-user": "/api/login-user",
   "check-email": "/api/check-email",
   "forgot-password": "/api/forgot-password",
+  "reset-password": "/api/reset-password",
 };

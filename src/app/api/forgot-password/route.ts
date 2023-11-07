@@ -40,7 +40,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     mutation: ADD_USER_PASSWORD_CHANGE_REQUEST,
     variables: {
       addUserPasswordChangeRequestObject: {
-        expires_at: dayjs().add(1, "week"),
+        expires_at: dayjs().add(1, "hour"),
         token: confirmationToken,
         user_id: userId,
       },
@@ -54,9 +54,7 @@ export const POST = async (req: CustomNextApiRequest) => {
   await transporter
     .sendMail({
       from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-      to: "1arnasdickus1@gmail.com",
-      // TODO update to proper email
-      // to: requestData.formData.email,
+      to: requestData.email,
       subject: "UABBaltic email confirmation",
       html: `<div>
             <a href=${emailLink}>Reset password</a>

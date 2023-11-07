@@ -1,14 +1,11 @@
 import { NextApiRequest } from "next";
 import client from "../../../../apollo-client";
 import { NextResponse } from "next/server";
-
-import { transporter } from "@/app/providers/email";
 import { StatusCodes } from "@/constants/status-code";
-import { getBaseUrl } from "@/app/utils/get-base-url";
+import { GET_USER_PASSWORD_CHANGE_REQUEST } from "@/components/store/modules/user-password-change-request/query";
 import dayjs from "dayjs";
-import { generateToken } from "@/app/utils/generate-email-confirmation-token";
-import { ADD_USER_PASSWORD_CHANGE_REQUEST } from "@/components/store/modules/user-password-change-request/query";
-import { GET_USER } from "@/components/store/modules/user/query";
+import bcrypt from "bcrypt";
+import { UPDATE_USERS } from "@/components/store/modules/user/query";
 
 interface CustomNextApiRequest extends NextApiRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
@@ -16,62 +13,56 @@ interface CustomNextApiRequest extends NextApiRequest {
 
 export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NForgotPassword.IRequest["body"] = await req.json();
-  const confirmationToken = generateToken();
+  const saltRounds = 10;
 
-  const userId = await client
-    .query({
-      query: GET_USER,
-      variables: {
-        whereUser: {
-          email: { _eq: requestData.email },
-        },
-      },
-    })
-    .then((val) => val.data.user[0].id)
-    .catch((error) => {
-      console.error("GET_USER", error);
-      return NextResponse.json(
-        { message: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
-    });
-
-  await client.mutate({
-    mutation: ADD_USER_PASSWORD_CHANGE_REQUEST,
-    variables: {
-      addUserPasswordChangeRequestObject: {
-        expires_at: dayjs().add(1, "week"),
-        token: confirmationToken,
-        user_id: userId,
-      },
-    },
+  bcrypt.genSalt(saltRounds, function (error, salt: string) {
+    bcrypt.hash(
+      requestData.password,
+      salt,
+      async function (error, hash: string) {
+        const userId = await client
+          .query({
+            query: GET_USER_PASSWORD_CHANGE_REQUEST,
+            variables: {
+              whereUserPasswordChangeRequest: {
+                token: { _eq: requestData.token },
+                expires_at: { _gte: dayjs().format() },
+              },
+            },
+          })
+          .then((val) => val.data.user_password_change_request?.[0]?.user?.id)
+          .catch((error) => {
+            console.error("GET_USER_PASSWORD_CHANGE_REQUEST >", error);
+            return NextResponse.json(
+              { message: "Internal server error" },
+              { status: StatusCodes.internalServerError }
+            );
+          });
+        const test = await client
+          .mutate({
+            mutation: UPDATE_USERS,
+            variables: {
+              whereUpdateUsers: {
+                id: { _eq: userId },
+              },
+              setUpdateUsers: {
+                password: hash,
+              },
+            },
+          })
+          .catch((error) => {
+            console.error("UPDATE_USERS >", error);
+            return NextResponse.json(
+              { message: "Internal server error" },
+              { status: StatusCodes.internalServerError }
+            );
+          });
+      }
+    );
   });
 
-  const emailLink = `${getBaseUrl()}/${
-    requestData.language
-  }/reset-password?token=${confirmationToken}`;
-
-  await transporter
-    .sendMail({
-      from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-      to: "1arnasdickus1@gmail.com",
-      // TODO update to proper email
-      // to: requestData.formData.email,
-      subject: "UABBaltic email confirmation",
-      html: `<div>
-            <a href=${emailLink}>Reset password</a>
-            </div>`,
-    })
-    .catch((error) => {
-      console.error("ADD_USER", error);
-      return NextResponse.json(
-        { message: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
-    });
-
   return NextResponse.json(
-    { message: "Email sent successfully" },
+    { message: "Reset password" },
     { status: StatusCodes.okStatus }
   );
 };
@@ -80,6 +71,7 @@ export namespace NForgotPassword {
   export interface IRequest {
     body: {
       token: string;
+      password: string;
     };
   }
   export interface IResponse {}
