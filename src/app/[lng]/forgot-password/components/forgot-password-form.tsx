@@ -2,40 +2,25 @@
 import Input from "@/components/input/input";
 import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IForgotPassword } from "./interfaces";
 import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
-import { NCheckEmail } from "@/app/api/check-email/route";
 import { StatusCodes } from "@/constants/status-code";
 import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
+import { isEmailExist } from "@/app/utils/auth-functions";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
-  const router = useRouter();
   const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
     message: "",
     severity: "success",
     showAlert: false,
   });
-
-  const isEmailExist = async (email: string): Promise<boolean> => {
-    const isEmail: NCheckEmail.IResponse = await fetch(
-      apiRoutes["check-email"],
-      {
-        method: "POST",
-        body: JSON.stringify({ email: email }),
-      }
-    ).then((emailResult) => {
-      return emailResult.json();
-    });
-    return isEmail.emailExist;
-  };
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Privaloma").email("Invalid Email"),

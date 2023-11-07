@@ -7,14 +7,17 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IPageRegisterInputs } from "./interfaces";
-import debounce from "lodash/debounce";
 import { apiRoutes } from "@/constants/routes";
 import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
 import { GET_USER } from "@/components/store/modules/user/query";
 import client from "../../../../../apollo-client";
-import { formClassNames } from "@/styles/reusable-styles";
+import {
+  formButtonContainerClassNames,
+  formClassNames,
+} from "@/styles/reusable-styles";
+import { isEmailExist } from "@/app/utils/auth-functions";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const [alert, setAlert] = useState<ISnackAlert>({
@@ -22,25 +25,6 @@ const RegisterForm = ({ language }: { language: string }) => {
     severity: "success",
     showAlert: false,
   });
-
-  const isEmailExist = async (email: string): Promise<boolean> => {
-    const isEmailExist: boolean = await client
-      .query({
-        query: GET_USER,
-        variables: {
-          whereUser: {
-            email: { _eq: email },
-          },
-        },
-      })
-      .then((user) => !!user.data.user.length)
-      .catch((error) => {
-        console.error("isEmailExist >", error);
-        return false;
-      });
-
-    return !isEmailExist;
-  };
 
   const isUsernameExist = async (username: string) => {
     const isUsernameExist: boolean = await client
@@ -61,27 +45,10 @@ const RegisterForm = ({ language }: { language: string }) => {
     return isUsernameExist;
   };
 
-  const debouncedCheckEmail = debounce(isEmailExist, 1500);
-  const debouncedCheckUsername = debounce(isUsernameExist, 1500);
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Privaloma"),
-    email: Yup.string()
-      .email()
-      .required("Privaloma")
-      .test("checkEmailUnique", "This Email already in use", async (email) => {
-        const uniqueEmail = await debouncedCheckEmail(email);
-        return !uniqueEmail as boolean;
-      }),
-    username: Yup.string()
-      .required("Privaloma")
-      .test(
-        "checkUsernameUnique",
-        "This Username already in use",
-        async (username) => {
-          const uniqueUsername = await debouncedCheckUsername(username);
-          return !uniqueUsername as boolean;
-        }
-      ),
+    email: Yup.string().email().required("Privaloma"),
+    username: Yup.string().required("Privaloma"),
     password: Yup.string()
       .required("No password provided.")
       .min(8, "Password is too short - should be 8 chars minimum.")
@@ -96,6 +63,27 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
+    const emailExist = await isEmailExist(data.email);
+    const usernameExist = await isUsernameExist(data.username);
+
+    if (emailExist) {
+      setAlert({
+        message: `Emailas jau egzistuoja`,
+        severity: "error",
+        showAlert: true,
+      });
+      return;
+    }
+
+    if (usernameExist) {
+      setAlert({
+        message: `Username jau egzistuoja`,
+        severity: "error",
+        showAlert: true,
+      });
+      return;
+    }
+
     const newUser = await fetch(apiRoutes["create-user"], {
       method: "POST",
       body: JSON.stringify({ formData: data, language: language }),
@@ -170,7 +158,7 @@ const RegisterForm = ({ language }: { language: string }) => {
             }}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className={formButtonContainerClassNames}>
           <Button
             buttonProps={{
               disabled: isSubmitting,

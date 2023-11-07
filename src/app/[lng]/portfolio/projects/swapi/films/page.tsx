@@ -1,13 +1,14 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
 import Card from "../components/card/card";
+
+import Loader from "@/styles/icons/loader";
+import Table from "@/components/table/table";
 import {
   useGetSwapiFilmsApiQuery,
   useLazyGetSwapiFilmCharactersApiQuery,
-} from "@/app/store/services/swapi-api";
-import Loader from "@/styles/icons/loader";
-import Table from "@/components/table/table";
-import { SwapiPeopleApi } from "@/app/store/types/swapi-type";
+} from "@/components/store/services/swapi-api";
+import { SwapiPeopleApi } from "@/components/store/types/swapi-type";
 
 type TPeopleSwapiData = Pick<
   SwapiPeopleApi,
