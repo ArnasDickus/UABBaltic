@@ -38,7 +38,6 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
   });
 
   const onSubmit: SubmitHandler<IResetPasswordForm> = async (data) => {
-    console.log("data", data);
     const resetPasswordResponse = await fetch(apiRoutes["reset-password"], {
       method: "POST",
       body: JSON.stringify({ password: data.newPassword, token }),
@@ -61,7 +60,6 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         showAlert: true,
       });
     }
-    console.log("resetPasswordResponse", resetPasswordResponse);
   };
 
   return (
