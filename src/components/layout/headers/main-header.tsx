@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
+import { useTranslation } from "@/app/i18n/client";
 
 interface IMainHeader {
   language: string;
@@ -19,6 +20,7 @@ interface IGetNavigationItems {
 }
 
 const MainHeader = ({ language }: IMainHeader) => {
+  const { t } = useTranslation({ language, ns: "header" });
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
@@ -31,26 +33,26 @@ const MainHeader = ({ language }: IMainHeader) => {
     if (pathname.includes("portfolio")) {
       leftNavItems = [
         {
-          title: "Home",
+          title: t("home"),
           link: "#hero-section",
         },
         {
-          title: "Experience",
+          title: t("experience"),
           link: "#experience-section",
         },
       ];
     } else {
       leftNavItems = [
         {
-          title: "About",
+          title: t("about"),
           link: `/${language}/about`,
         },
         {
-          title: "Documentation",
+          title: t("documentation"),
           link: `/${language}/documentation`,
         },
         {
-          title: "Portfolio",
+          title: t("portfolio"),
           link: `/${language}/portfolio`,
         },
       ];
@@ -60,18 +62,18 @@ const MainHeader = ({ language }: IMainHeader) => {
       if (!session) {
         rightNavItems = [
           {
-            title: "Login",
+            title: t("login"),
             link: `/${language}/login`,
           },
           {
-            title: "Sign Up",
+            title: t("signUp"),
             link: `/${language}/register`,
           },
         ];
       } else if (session) {
         rightNavItems = [
           {
-            title: "Logout",
+            title: t("logout"),
             link: ``,
           },
         ];
