@@ -1,13 +1,13 @@
 import { NextApiRequest } from "next";
 import client from "../../../../apollo-client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import { GET_USER_PASSWORD_CHANGE_REQUEST } from "@/components/store/modules/user-password-change-request/query";
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import { UPDATE_USERS } from "@/components/store/modules/user/query";
 
-interface CustomNextApiRequest extends NextApiRequest {
+interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
 }
 
