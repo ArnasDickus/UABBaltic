@@ -14,8 +14,7 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
     redirect("/");
   }
   return (
-    <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/register`} />}>
+    <PageContainer footer={<ServerFooter language={lng} path="/register" />}>
       <div className={formContainerClassNames}>
         <RegisterForm language={lng} />
       </div>

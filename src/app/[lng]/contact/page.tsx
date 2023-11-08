@@ -5,8 +5,7 @@ import { FC } from "react";
 
 const PageContact: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/contact`} />}>
+    <PageContainer footer={<ServerFooter language={lng} path="/contact" />}>
       <p>PageContact</p>
     </PageContainer>
   );

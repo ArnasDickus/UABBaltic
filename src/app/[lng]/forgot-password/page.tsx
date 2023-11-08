@@ -14,7 +14,7 @@ const PageForgotPassword: FC<IPageParamProps> = async ({ params: { lng } }) => {
   }
   return (
     <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/forgot-password`} />}>
+      footer={<ServerFooter language={lng} path="/forgot-password" />}>
       <div className={formContainerClassNames}>
         <ForgotPasswordForm language={lng} />
       </div>

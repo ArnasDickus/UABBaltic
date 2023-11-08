@@ -6,7 +6,7 @@ import { FC } from "react";
 const PageDocumentation: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
     <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/documentation`} />}>
+      footer={<ServerFooter language={lng} path="/documentation" />}>
       <p>Documentation page</p>
     </PageContainer>
   );

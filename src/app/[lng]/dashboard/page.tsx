@@ -5,8 +5,7 @@ import { FC } from "react";
 
 const PageDashboard: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/dashboard`} />}>
+    <PageContainer footer={<ServerFooter language={lng} path="/dashboard" />}>
       <p>PageDashboard</p>
     </PageContainer>
   );

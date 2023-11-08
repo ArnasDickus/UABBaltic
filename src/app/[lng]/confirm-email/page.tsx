@@ -50,12 +50,7 @@ const ConfirmEmail = ({ params, searchParams }: IPageParamProps) => {
 
   return (
     <PageContainer
-      footer={
-        <ClientFooter
-          language={params.lng}
-          path={`/${params.lng}/confirm-email`}
-        />
-      }>
+      footer={<ClientFooter language={params.lng} path="/confirm-email" />}>
       <SnackAlert
         {...alert}
         onClose={() => {

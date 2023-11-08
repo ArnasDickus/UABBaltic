@@ -8,8 +8,7 @@ import PageContainer from "@/styles/components/page-container";
 
 const Page = ({ params: { lng } }: IPageParamProps) => {
   return (
-    <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/portfolio`} />}>
+    <PageContainer footer={<ServerFooter language={lng} path="/portfolio" />}>
       <HeroSection />
       <ProjectsSection language={lng} />
       <ExperienceSection />

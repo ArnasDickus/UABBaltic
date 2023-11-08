@@ -14,8 +14,7 @@ const PageLogin: FC<IPageParamProps> = async ({ params: { lng } }) => {
   }
 
   return (
-    <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/login`} />}>
+    <PageContainer footer={<ServerFooter language={lng} path="/login" />}>
       <div className={formContainerClassNames}>
         <LoginForm />
       </div>

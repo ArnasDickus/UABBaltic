@@ -7,12 +7,7 @@ import { ServerFooter } from "@/components/layout/footer/serverfooter";
 const PageResetPassword = ({ params, searchParams }: IPageParamProps) => {
   return (
     <PageContainer
-      footer={
-        <ServerFooter
-          language={params.lng}
-          path={`/${params.lng}/reset-password`}
-        />
-      }>
+      footer={<ServerFooter language={params.lng} path="/reset-password" />}>
       <div className={formContainerClassNames}>
         <ResetPasswordForm token={searchParams.token as string} />
       </div>

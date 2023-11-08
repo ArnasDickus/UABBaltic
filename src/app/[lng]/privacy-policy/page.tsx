@@ -6,7 +6,7 @@ import { FC } from "react";
 const PagePrivacyPolicy: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
     <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/privacy-policy`} />}>
+      footer={<ServerFooter language={lng} path="/privacy-policy" />}>
       <p>PagePrivacyPolicy</p>
     </PageContainer>
   );
