@@ -32,7 +32,7 @@ export default function RootLayout({
           <ApolloProvider client={client}>
             <ReduxProvider>
               <MainHeader language={lng} />
-              {children}
+              <main>{children}</main>
             </ReduxProvider>
           </ApolloProvider>
         </SessionProvider>
