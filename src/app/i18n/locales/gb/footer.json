@@ -1,3 +1,6 @@
 {
-  "languageSwitcher": "Switch from <1>{{lng}}</1> to: "
+  "about": "About us",
+  "privacyPolicy": "Privacy policy",
+  "contact": "Contacts",
+  "allRights": "All rights reserved"
 }

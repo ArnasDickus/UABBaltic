@@ -5,6 +5,8 @@ import RegisterForm from "./components/register-form";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { formContainerClassNames } from "@/styles/reusable-styles";
+import PageContainer from "@/styles/components/page-container";
+import { ServerFooter } from "@/components/layout/footer/serverfooter";
 
 const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
   const session = await getServerSession();
@@ -12,9 +14,12 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
     redirect("/");
   }
   return (
-    <div className={formContainerClassNames}>
-      <RegisterForm language={lng} />
-    </div>
+    <PageContainer
+      footer={<ServerFooter language={lng} path={`/${lng}/register`} />}>
+      <div className={formContainerClassNames}>
+        <RegisterForm language={lng} />
+      </div>
+    </PageContainer>
   );
 };
 export default PageRegister;

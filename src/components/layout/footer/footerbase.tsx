@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Trans } from "react-i18next/TransWithoutContext";
 import { TFunction } from "i18next";
 import { languages } from "@/app/i18n/settings";
 import Flag from "@/components/flag/flag";
@@ -10,18 +9,18 @@ interface IUseTranslation {
   path: string;
 }
 
-export const FooterBase = ({ t, lng, path = "" }: IUseTranslation) => {
+export const FooterBase = async ({ t, lng, path = "" }: IUseTranslation) => {
   const listItems = [
     {
-      name: "About",
+      name: t("about"),
       link: `/${lng}/about`,
     },
     {
-      name: "Privacy Policy",
+      name: t("privacyPolicy"),
       link: `/${lng}/privacy-policy`,
     },
     {
-      name: "Contact",
+      name: t("contact"),
       link: `/${lng}/contact`,
     },
   ];
@@ -35,7 +34,7 @@ export const FooterBase = ({ t, lng, path = "" }: IUseTranslation) => {
             <Link href={`/${lng}`} className="hover:underline">
               UABBaltic
             </Link>
-            . All Rights Reserved.
+            . {t("allRights")}.
           </span>
           <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
             {listItems.map((item) => (

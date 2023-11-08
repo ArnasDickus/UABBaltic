@@ -1,8 +1,14 @@
-const PageDashboard = () => {
+import { ServerFooter } from "@/components/layout/footer/serverfooter";
+import { IPageParamProps } from "@/constants/interfaces";
+import PageContainer from "@/styles/components/page-container";
+import { FC } from "react";
+
+const PageDashboard: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <div>
+    <PageContainer
+      footer={<ServerFooter language={lng} path={`/${lng}/dashboard`} />}>
       <p>PageDashboard</p>
-    </div>
+    </PageContainer>
   );
 };
 export default PageDashboard;

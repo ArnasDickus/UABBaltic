@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import ForgotPasswordForm from "./components/forgot-password-form";
 import { FC } from "react";
 import { IPageParamProps } from "@/constants/interfaces";
+import PageContainer from "@/styles/components/page-container";
+import { ServerFooter } from "@/components/layout/footer/serverfooter";
 
 const PageForgotPassword: FC<IPageParamProps> = async ({ params: { lng } }) => {
   const session = await getServerSession();
@@ -11,9 +13,12 @@ const PageForgotPassword: FC<IPageParamProps> = async ({ params: { lng } }) => {
     redirect("/");
   }
   return (
-    <div className={formContainerClassNames}>
-      <ForgotPasswordForm language={lng} />
-    </div>
+    <PageContainer
+      footer={<ServerFooter language={lng} path={`/${lng}/forgot-password`} />}>
+      <div className={formContainerClassNames}>
+        <ForgotPasswordForm language={lng} />
+      </div>
+    </PageContainer>
   );
 };
 export default PageForgotPassword;

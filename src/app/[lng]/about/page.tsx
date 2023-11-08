@@ -1,8 +1,14 @@
-const PageAbout = () => {
+import { ServerFooter } from "@/components/layout/footer/serverfooter";
+import { IPageParamProps } from "@/constants/interfaces";
+import PageContainer from "@/styles/components/page-container";
+import { FC } from "react";
+
+const PageAbout: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <div>
+    <PageContainer
+      footer={<ServerFooter language={lng} path={`/${lng}/about`} />}>
       <p>This is page About</p>
-    </div>
+    </PageContainer>
   );
 };
 export default PageAbout;

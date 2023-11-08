@@ -3,12 +3,12 @@ import { IPageParamProps } from "@/constants/interfaces";
 import PageContainer from "@/styles/components/page-container";
 import { FC } from "react";
 
-const PageDocumentation: FC<IPageParamProps> = async ({ params: { lng } }) => {
+const PagePrivacyPolicy: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
     <PageContainer
-      footer={<ServerFooter language={lng} path={`/${lng}/documentation`} />}>
-      <p>Documentation page</p>
+      footer={<ServerFooter language={lng} path={`/${lng}/privacy-policy`} />}>
+      <p>PagePrivacyPolicy</p>
     </PageContainer>
   );
 };
-export default PageDocumentation;
+export default PagePrivacyPolicy;
