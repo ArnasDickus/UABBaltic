@@ -5,18 +5,83 @@ import { INavItems } from "@/constants/interfaces";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import Button from "@/components/button/button";
+import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 
 interface IMainHeader {
   language: string;
+}
+
+interface IGetNavigationItems {
   leftNavItems: INavItems[];
   rightNavItems: INavItems[];
 }
 
-const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
+const MainHeader = ({ language }: IMainHeader) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-
+  const { data: session } = useSession();
   const linkClassNames = "text-white rounded-md px-3 py-2 text-sm font-medium";
+
+  const getNavigationItems = (): IGetNavigationItems => {
+    let leftNavItems: INavItems[] = [];
+    let rightNavItems: INavItems[] = [];
+
+    if (pathname.includes("portfolio")) {
+      leftNavItems = [
+        {
+          title: "Home",
+          link: "#hero-section",
+        },
+        {
+          title: "Experience",
+          link: "#experience-section",
+        },
+      ];
+    } else {
+      leftNavItems = [
+        {
+          title: "About",
+          link: `/${language}/about`,
+        },
+        {
+          title: "Documentation",
+          link: `/${language}/documentation`,
+        },
+        {
+          title: "Portfolio",
+          link: `/${language}/portfolio`,
+        },
+      ];
+    }
+
+    if (!pathname.includes("portfolio")) {
+      if (!session) {
+        rightNavItems = [
+          {
+            title: "Login",
+            link: `/${language}/login`,
+          },
+          {
+            title: "Sign Up",
+            link: `/${language}/register`,
+          },
+        ];
+      } else if (session) {
+        rightNavItems = [
+          {
+            title: "Logout",
+            link: ``,
+          },
+        ];
+      }
+    }
+
+    return { leftNavItems, rightNavItems };
+  };
+
+  const navigationItems: IGetNavigationItems = getNavigationItems();
 
   const isRouteActive = (route: string) => {
     if (route === pathname) {
@@ -26,7 +91,7 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
   };
 
   return (
-    <header>
+    <header className="fixed w-full">
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
@@ -37,108 +102,54 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
                 }}
               />
             </div>
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <Link
-                href={`/${language}`}
-                className="flex flex-shrink-0 items-center">
-                <LogoIcon />
-              </Link>
-              <div className="hidden sm:ml-6 sm:block">
-                <div className="flex space-x-4">
-                  {leftNavItems.map((item) => (
-                    <Link
-                      key={item.title}
-                      // @ts-ignore
-                      href={item.link}
-                      className={` ${isRouteActive(
-                        item.link
-                      )}${linkClassNames}`}
-                      aria-current="page">
-                      {item.title}
-                    </Link>
-                  ))}
+            <div className={`${formButtonContainerClassNames} w-full`}>
+              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <Link
+                  href={`/${language}`}
+                  className="flex flex-shrink-0 items-center">
+                  <LogoIcon />
+                </Link>
+                <div className="hidden sm:ml-6 sm:block">
+                  <div className="flex space-x-4">
+                    {navigationItems.leftNavItems.map((item) => (
+                      <Link
+                        key={item.title}
+                        // @ts-ignore
+                        href={item.link}
+                        className={` ${isRouteActive(
+                          item.link
+                        )}${linkClassNames}`}
+                        aria-current="page">
+                        {item.title}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              {/* 
-              // TODO Implement Notification.
-              <button
-                type="button"
-                className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                <span className="absolute -inset-1.5"></span>
-                <span className="sr-only">View notifications</span>
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  aria-hidden="true">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                  />
-                </svg>
-              </button> */}
-
-              {/* Display on login */}
-              {/* <div className="relative ml-3">
-                <div>
-                  <button
-                    onClick={() => setDropdownMenu(!dropdownMenu)}
-                    type="button"
-                    className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    id="user-menu-button"
-                    aria-expanded="false"
-                    aria-haspopup="true">
-                    <span className="absolute -inset-1.5"></span>
-                    <span className="sr-only">Open user menu</span>
-                    <AccountCircleIcon color="warning" fontSize="medium" />
-                  </button>
+              <div>
+                <div className="sm:flex hidden space-x-4">
+                  {navigationItems.rightNavItems.map((item) => {
+                    if (session) {
+                      return (
+                        <Button key={item.title} onClick={() => signOut()}>
+                          {item.title}
+                        </Button>
+                      );
+                    } else {
+                      return (
+                        <Link
+                          key={item.title}
+                          className={`${isRouteActive(
+                            item.link
+                          )} ${linkClassNames}`}
+                          /* @ts-ignore */
+                          href={item.link}>
+                          {item.title}
+                        </Link>
+                      );
+                    }
+                  })}
                 </div>
-
-                {dropdownMenu && (
-                  <div
-                    className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="user-menu-button">
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700"
-                      role="menuitem"
-                      id="user-menu-item-0">
-                      Your Profile
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700"
-                      role="menuitem"
-                      id="user-menu-item-1">
-                      Settings
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700"
-                      role="menuitem"
-                      id="user-menu-item-2">
-                      Sign out
-                    </a>
-                  </div>
-                )}
-              </div> */}
-              <div className="hidden sm:block">
-                {rightNavItems.map((item) => (
-                  <Link
-                    key={item.title}
-                    className={`${isRouteActive(item.link)} ${linkClassNames}`}
-                    /* @ts-ignore */
-                    href={item.link}>
-                    {item.title}
-                  </Link>
-                ))}
               </div>
             </div>
           </div>
@@ -146,18 +157,30 @@ const MainHeader = ({ language, leftNavItems, rightNavItems }: IMainHeader) => {
         {isMenuOpen && (
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              {leftNavItems.concat(rightNavItems).map((item) => (
-                <Link
-                  className={`${isRouteActive(
-                    item.link
-                  )}  text-white block rounded-md px-3 py-2 text-base font-medium`}
-                  key={item.title}
-                  onClick={() => setMenuOpen(false)}
-                  // @ts-ignore
-                  href={item.link}>
-                  {item.title}
-                </Link>
-              ))}
+              {navigationItems.leftNavItems
+                .concat(navigationItems.rightNavItems)
+                .map((item) => {
+                  if (session) {
+                    return (
+                      <Button key={item.title} onClick={() => signOut()}>
+                        {item.title}
+                      </Button>
+                    );
+                  } else {
+                    return (
+                      <Link
+                        className={`${isRouteActive(
+                          item.link
+                        )} ${linkClassNames} block`}
+                        key={item.title}
+                        onClick={() => setMenuOpen(false)}
+                        // @ts-ignore
+                        href={item.link}>
+                        {item.title}
+                      </Link>
+                    );
+                  }
+                })}
             </div>
           </div>
         )}
