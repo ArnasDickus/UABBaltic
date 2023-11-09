@@ -9,7 +9,10 @@ const PageResetPassword = ({ params, searchParams }: IPageParamProps) => {
     <PageContainer
       footer={<ServerFooter language={params.lng} path="/reset-password" />}>
       <div className={formContainerClassNames}>
-        <ResetPasswordForm token={searchParams.token as string} />
+        <ResetPasswordForm
+          language={params.lng}
+          token={searchParams.token as string}
+        />
       </div>
     </PageContainer>
   );

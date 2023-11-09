@@ -14,8 +14,16 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
+import { useTranslation } from "@/app/i18n/client";
 
-const ResetPasswordForm = ({ token }: { token: string }) => {
+const ResetPasswordForm = ({
+  language,
+  token,
+}: {
+  language: string;
+  token: string;
+}) => {
+  const { t } = useTranslation({ language, ns: "reset_password" });
   const router = useRouter();
   const [alert, setAlert] = useState<ISnackAlert>({
     message: "",
@@ -25,18 +33,18 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
 
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
-      .required("No password provided.")
-      .min(8, "Password is too short - should be 8 chars minimum.")
-      .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
+      .required(t("requred"))
+      .min(8, t("passwordTooShort"))
+      .matches(/[a-zA-Z]/, t("passwordLatin")),
     repeatPassword: Yup.string()
       .required()
-      .oneOf([Yup.ref("newPassword")], "Your passwords do not match."),
+      .oneOf([Yup.ref("newPassword")], t("passwordMatch")),
   });
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<IResetPasswordForm>({
     resolver: yupResolver(validationSchema),
   });
@@ -49,7 +57,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
 
     if (resetPasswordResponse.status === StatusCodes.okStatus) {
       setAlert({
-        message: "Password was changed",
+        message: t("passwordChanged"),
         severity: "success",
         showAlert: true,
       });
@@ -59,7 +67,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
       resetPasswordResponse.status === StatusCodes.internalServerError
     ) {
       setAlert({
-        message: "Something went wrong, please try again later",
+        message: t("internalError"),
         severity: "error",
         showAlert: true,
       });
@@ -80,7 +88,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
       <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
-            name="New Password"
+            name={t("newPassword")}
             errorText={errors.newPassword?.message}
             inputProps={{
               type: "password",
@@ -91,7 +99,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         </div>
         <div className="mb-4">
           <Input
-            name="Repeat password"
+            name={t("repeatPassword")}
             errorText={errors.repeatPassword?.message}
             inputProps={{
               type: "password",
@@ -106,7 +114,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
               disabled: isSubmitting,
               type: "submit",
             }}>
-            Submit
+            {t("submit")}
           </Button>
         </div>
       </form>
