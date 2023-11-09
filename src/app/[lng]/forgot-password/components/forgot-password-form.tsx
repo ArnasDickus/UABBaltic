@@ -14,8 +14,10 @@ import {
   formClassNames,
 } from "@/styles/reusable-styles";
 import { isEmailExist } from "@/app/utils/auth-functions";
+import { useTranslation } from "@/app/i18n/client";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
+  const { t } = useTranslation({ language, ns: "forgot_password" });
   const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
     message: "",
     severity: "success",
@@ -23,7 +25,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
   });
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Privaloma").email("Invalid Email"),
+    email: Yup.string().required(t("required")).email(t("invalidEmail")),
   });
 
   const {
@@ -39,7 +41,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
 
     if (!emailExist) {
       setAlert({
-        message: "Emailas neegzistuoja",
+        message: t("emailNotExist"),
         severity: "error",
         showAlert: true,
       });
@@ -51,13 +53,13 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
 
       if (forgotPassword.status === StatusCodes.okStatus) {
         setAlert({
-          message: "Emailas išsiųstas",
+          message: t("emailSent"),
           severity: "success",
           showAlert: true,
         });
       } else if (forgotPassword.status === StatusCodes.internalServerError) {
         setAlert({
-          message: "Internal server error",
+          message: t("error"),
           severity: "error",
           showAlert: true,
         });
@@ -94,7 +96,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
               disabled: isSubmitting,
               type: "submit",
             }}>
-            Reset password
+            {t("resetPassword")}
           </Button>
         </div>
       </form>

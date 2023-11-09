@@ -18,8 +18,10 @@ import {
   formClassNames,
 } from "@/styles/reusable-styles";
 import { isEmailExist } from "@/app/utils/auth-functions";
+import { useTranslation } from "@/app/i18n/client";
 
 const RegisterForm = ({ language }: { language: string }) => {
+  const { t } = useTranslation({ language, ns: "register" });
   const [alert, setAlert] = useState<ISnackAlert>({
     message: "",
     severity: "success",
@@ -46,18 +48,18 @@ const RegisterForm = ({ language }: { language: string }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Privaloma"),
-    email: Yup.string().email().required("Privaloma"),
-    username: Yup.string().required("Privaloma"),
+    name: Yup.string().required(t("required")),
+    email: Yup.string().email().required(t("required")),
+    username: Yup.string().required(t("required")),
     password: Yup.string()
-      .required("No password provided.")
-      .min(8, "Password is too short - should be 8 chars minimum.")
-      .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
+      .required(t("required"))
+      .min(8, t("passwordTooShort"))
+      .matches(/[a-zA-Z]/, t("passwordLatin")),
   });
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<IPageRegisterInputs>({
     resolver: yupResolver(validationSchema),
   });
@@ -68,7 +70,7 @@ const RegisterForm = ({ language }: { language: string }) => {
 
     if (emailExist) {
       setAlert({
-        message: `Emailas jau egzistuoja`,
+        message: t("emailExist"),
         severity: "error",
         showAlert: true,
       });
@@ -77,7 +79,7 @@ const RegisterForm = ({ language }: { language: string }) => {
 
     if (usernameExist) {
       setAlert({
-        message: `Username jau egzistuoja`,
+        message: t("usernameInUse"),
         severity: "error",
         showAlert: true,
       });
@@ -90,13 +92,13 @@ const RegisterForm = ({ language }: { language: string }) => {
     });
     if (newUser.status === StatusCodes.okStatus) {
       setAlert({
-        message: "Email was sent.",
+        message: t("emailWasSent"),
         severity: "success",
         showAlert: true,
       });
     } else if (newUser.status === StatusCodes.internalServerError) {
       setAlert({
-        message: "Something went wrong, please try again later",
+        message: t("internalError"),
         severity: "error",
         showAlert: true,
       });
@@ -116,7 +118,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
-            name="Name"
+            name={t("name")}
             errorText={errors.name?.message}
             inputProps={{
               type: "text",
@@ -127,7 +129,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         </div>
         <div className="mb-4">
           <Input
-            name="Username"
+            name={t("username")}
             errorText={errors.username?.message}
             inputProps={{
               type: "text",
@@ -138,7 +140,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         </div>
         <div className="mb-4">
           <Input
-            name="Email"
+            name={t("email")}
             errorText={errors.email?.message}
             inputProps={{
               type: "text",
@@ -149,7 +151,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         </div>
         <div className="mb-6">
           <Input
-            name="Password"
+            name={t("password")}
             errorText={errors.password?.message}
             inputProps={{
               type: "password",
@@ -164,14 +166,14 @@ const RegisterForm = ({ language }: { language: string }) => {
               disabled: isSubmitting,
               type: "submit",
             }}>
-            Register
+            {t("register")}
           </Button>
           <LinkButton
             linkProps={{
               // @ts-ignore
               href: `/${language}/forgot-password`,
             }}>
-            Forgot Password?
+            {t("forgotPassword")}
           </LinkButton>
         </div>
       </form>

@@ -1,0 +1,7 @@
+{
+  "required": "Privaloma",
+  "emailPasswordMatch": "El. paštas arba slaptažodis nesutampa",
+  "login": "Prisijungti",
+  "email": "El. paštas",
+  "password": "Slaptažodis"
+}

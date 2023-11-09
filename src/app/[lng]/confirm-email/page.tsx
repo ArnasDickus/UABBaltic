@@ -1,8 +1,10 @@
 "use client";
+import { ClientFooter } from "@/components/layout/footer/clientfooter";
 import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { IPageParamProps } from "@/constants/interfaces";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
+import PageContainer from "@/styles/components/page-container";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -47,7 +49,8 @@ const ConfirmEmail = ({ params, searchParams }: IPageParamProps) => {
   }, [params.lng, router, searchParams.token]);
 
   return (
-    <div className="pt-14">
+    <PageContainer
+      footer={<ClientFooter language={params.lng} path="/confirm-email" />}>
       <SnackAlert
         {...alert}
         onClose={() => {
@@ -57,7 +60,7 @@ const ConfirmEmail = ({ params, searchParams }: IPageParamProps) => {
           }));
         }}
       />
-    </div>
+    </PageContainer>
   );
 };
 export default ConfirmEmail;

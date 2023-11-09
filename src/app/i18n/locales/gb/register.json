@@ -1,0 +1,15 @@
+{
+  "required": "Required",
+  "passwordTooShort": "Password is too short - should be 8 chars minimum",
+  "passwordLatin": "Password can only contain Latin letters",
+  "emailExist": "Email already in use",
+  "usernameInUse": "Username already in use",
+  "emailWasSent": "Email was sent",
+  "internalError": "Internal Error",
+  "register": "Register",
+  "forgotPassword": "Forgot Password?",
+  "name": "Name",
+  "username": "Username",
+  "email": "Email",
+  "password": "Password"
+}

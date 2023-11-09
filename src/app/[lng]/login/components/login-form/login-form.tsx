@@ -14,8 +14,10 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
+import { useTranslation } from "@/app/i18n/client";
 
-const LoginForm = () => {
+const LoginForm = ({ language }: { language: string }) => {
+  const { t } = useTranslation({ language, ns: "login_form" });
   const router = useRouter();
   const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
     message: "",
@@ -24,8 +26,8 @@ const LoginForm = () => {
   });
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Privaloma"),
-    password: Yup.string().required("No password provided."),
+    email: Yup.string().required(t("required")),
+    password: Yup.string().required(t("required")),
   });
 
   const {
@@ -53,7 +55,7 @@ const LoginForm = () => {
       router.refresh();
     } else {
       setAlert({
-        message: "Username and Password does not match",
+        message: t("emailPasswordMatch"),
         severity: "error",
         showAlert: true,
       });
@@ -74,7 +76,7 @@ const LoginForm = () => {
       <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
           <Input
-            name="Email"
+            name={t("email")}
             errorText={errors.email?.message}
             inputProps={{
               type: "text",
@@ -85,7 +87,7 @@ const LoginForm = () => {
         </div>
         <div className="mb-4">
           <Input
-            name="Password"
+            name={t("password")}
             errorText={errors.password?.message}
             inputProps={{
               type: "password",
@@ -100,7 +102,7 @@ const LoginForm = () => {
               disabled: isSubmitting,
               type: "submit",
             }}>
-            Login
+            {t("login")}
           </Button>
         </div>
       </form>
