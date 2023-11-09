@@ -1,15 +1,20 @@
+import { useTranslation } from "@/app/i18n";
 import classes from "./hero-section.module.css";
+import HeroDevicesIcon from "@/styles/icons/hero-devices-icon";
 
-const HeroSection = () => {
+const HeroSection = async ({ language }: { language: string }) => {
+  const { t } = await useTranslation({ language, ns: "portfolio" });
   return (
     <section className={`${classes.background} flex h-screen text-white`}>
-      <div className="container mx-auto flex px-5 items-center justify-center flex-col">
-        <div className="text-center lg:w-5/12 w-full">
-          <h1 className="my-4 text-5xl font-bold leading-tight pt-16">
-            Hello, I&#39;m Arnas Dičkus
+      <div className="w-full flex flex-col justify-between">
+        <div className="text-center pt-40">
+          <h1 className=" m-0 p-0 text-5xl font-bold leading-tight">
+            {t("introduction")}
           </h1>
-          <p className="text-2xl mb-8">Front-end developer.</p>
-          <div className="flex justify-center mx-auto"></div>
+          <p className="text-2xl pt-6">{t("subtitle")}</p>
+        </div>
+        <div className="mr-auto ml-auto hidden md:block">
+          <HeroDevicesIcon width={800} height={340} />
         </div>
       </div>
     </section>

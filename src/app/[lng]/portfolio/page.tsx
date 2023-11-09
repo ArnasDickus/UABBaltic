@@ -6,13 +6,13 @@ import ProjectsSection from "@/components/portfolio/projects-section/projects-se
 import { IPageParamProps } from "@/constants/interfaces";
 import PageContainer from "@/styles/components/page-container";
 
-const Page = ({ params: { lng } }: IPageParamProps) => {
+const PagePortfolio = ({ params: { lng } }: IPageParamProps) => {
   return (
     <PageContainer footer={<ServerFooter language={lng} path="/portfolio" />}>
-      <HeroSection />
+      <HeroSection language={lng} />
       <ProjectsSection language={lng} />
       <ExperienceSection />
     </PageContainer>
   );
 };
-export default Page;
+export default PagePortfolio;
