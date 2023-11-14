@@ -7,7 +7,7 @@ import { useTranslation } from "@/app/i18n";
 const ExperienceSection = async ({ language }: { language: string }) => {
   const { t } = await useTranslation({ language, ns: "portfolio" });
   return (
-    <section className="pt-10">
+    <section className="pt-10" id="experience-section">
       <h2 className="text-2xl text-center pb-5">{t("companies")}</h2>
       <div className="flex justify-center items-center gap-10">
         <a href="https://www.emendis.io/" target="_blank">

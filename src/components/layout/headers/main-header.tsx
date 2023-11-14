@@ -40,6 +40,10 @@ const MainHeader = ({ language }: IMainHeader) => {
           title: t("experience"),
           link: "#experience-section",
         },
+        {
+          title: t("resume"),
+          link: "https://drive.google.com/file/d/1a0G7Kbw5XVT2erEhPMfPAszUAKWeVEK3/view?usp=sharing",
+        },
       ];
     } else {
       leftNavItems = [
@@ -118,6 +122,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                         key={item.title}
                         // @ts-ignore
                         href={item.link}
+                        target={item.title === t("resume") ? "_blank" : "_self"}
                         className={` ${isRouteActive(
                           item.link
                         )}${linkClassNames}`}
@@ -174,6 +179,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                         className={`${isRouteActive(
                           item.link
                         )} ${linkClassNames} block`}
+                        target={item.title === t("resume") ? "_blank" : "_self"}
                         key={item.title}
                         onClick={() => setMenuOpen(false)}
                         // @ts-ignore

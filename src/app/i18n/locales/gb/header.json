@@ -6,5 +6,6 @@
   "portfolio": "Portfolio",
   "login": "Login",
   "signUp": "Sign Up",
-  "logout": "Logout"
+  "logout": "Logout",
+  "resume": "CV"
 }
