@@ -11,7 +11,7 @@ const PagePortfolio = ({ params: { lng } }: IPageParamProps) => {
   return (
     <PageContainer footer={<ServerFooter language={lng} path="/portfolio" />}>
       <HeroSection language={lng} />
-      <AboutSection />
+      <AboutSection language={lng} />
       <ProjectsSection language={lng} />
       <ExperienceSection />
     </PageContainer>
