@@ -10,6 +10,13 @@ interface IUseTranslation {
 }
 
 export const FooterBase = async ({ t, lng, path = "" }: IUseTranslation) => {
+  const getValidCountryCode = (language: string) => {
+    if (language === "en") {
+      return "gb";
+    }
+    return "lt";
+  };
+
   return (
     <footer>
       <footer className="bg-white rounded-lg shadow mt-4 dark:bg-gray-800">
@@ -29,7 +36,7 @@ export const FooterBase = async ({ t, lng, path = "" }: IUseTranslation) => {
                   <span key={language} className="flex">
                     {index > 0 && " or "}
                     <Link href={`/${language}${path}`}>
-                      <Flag countryCode={language} />
+                      <Flag countryCode={getValidCountryCode(language)} />
                     </Link>
                   </span>
                 );

@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import client from "../../../../apollo-client";
 import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
 import { NextRequest, NextResponse } from "next/server";
