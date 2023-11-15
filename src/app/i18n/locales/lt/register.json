@@ -1,0 +1,14 @@
+{
+  "required": "Privaloma",
+  "passwordTooShort": "Slaptažodis per trumpas - bent 8 simboliai",
+  "passwordLatin": "Slaptažodis gali turėti tik lotynų raides",
+  "emailExist": "El. paštas jau naudojamas",
+  "usernameInUse": "Vartotojo vardas jau naudojamas",
+  "emailWasSent": "Laiškas išsiųstas",
+  "internalError": "Serverio klaida",
+  "register": "Registruotis",
+  "name": "Vardas",
+  "username": "Vartotojo vadas",
+  "email": "El. paštas",
+  "password": "Slaptažodis"
+}

@@ -6,6 +6,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "types": ["node", "jest", "@testing-library/jest-dom"],
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
