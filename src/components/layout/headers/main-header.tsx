@@ -48,14 +48,6 @@ const MainHeader = ({ language }: IMainHeader) => {
     } else {
       leftNavItems = [
         {
-          title: t("about"),
-          link: `/${language}/about`,
-        },
-        {
-          title: t("documentation"),
-          link: `/${language}/documentation`,
-        },
-        {
           title: t("portfolio"),
           link: `/${language}/portfolio`,
         },
