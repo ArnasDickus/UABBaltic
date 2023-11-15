@@ -37,6 +37,10 @@ const MainHeader = ({ language }: IMainHeader) => {
           link: "#hero-section",
         },
         {
+          title: t("projects"),
+          link: "#projects-section",
+        },
+        {
           title: t("experience"),
           link: "#experience-section",
         },

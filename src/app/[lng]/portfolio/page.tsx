@@ -6,6 +6,7 @@ import { IPageParamProps } from "@/constants/interfaces";
 import PageContainer from "@/styles/components/page-container";
 import AboutSection from "./components/about-section/about-section";
 import { Metadata } from "next";
+import ProjectsSection from "./components/projects-section/projects-section";
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -18,6 +19,7 @@ const PagePortfolio = ({ params: { lng } }: IPageParamProps) => {
     <PageContainer footer={<ServerFooter language={lng} path="/portfolio" />}>
       <HeroSection language={lng} />
       <AboutSection language={lng} />
+      <ProjectsSection language={lng} />
       <ExperienceSection language={lng} />
     </PageContainer>
   );

@@ -1,11 +1,10 @@
 {
   "home": "Home",
   "experience": "Experience",
-  "about": "About us",
-  "documentation": "Documentation",
   "portfolio": "Portfolio",
   "login": "Login",
   "signUp": "Sign Up",
   "logout": "Logout",
-  "resume": "CV"
+  "resume": "CV",
+  "projects": "Projects"
 }
