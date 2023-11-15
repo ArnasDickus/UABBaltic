@@ -1,4 +1,8 @@
+import { ServerFooter } from "@/components/layout/footer/serverfooter";
+import { IPageParamProps } from "@/constants/interfaces";
+import PageContainer from "@/styles/components/page-container";
 import { Metadata } from "next";
+import { FC } from "react";
 
 export const metadata: Metadata = {
   title: "Swapi",
@@ -6,11 +10,15 @@ export const metadata: Metadata = {
   keywords: ["Swapi"],
 };
 
-const PageSwapi = () => {
+const PageSwapi: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <div>
-      <p>PageSwapi</p>
-    </div>
+    <PageContainer
+      footer={<ServerFooter language={lng} path="/portfolio/projects/swapi" />}>
+      <p>
+        This task was inspired by all the practical tasks I did regarding Swap
+        Api
+      </p>
+    </PageContainer>
   );
 };
 export default PageSwapi;
