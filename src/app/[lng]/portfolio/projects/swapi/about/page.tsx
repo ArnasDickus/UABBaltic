@@ -1,3 +1,11 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Swapi",
+  description: "About Swapi task",
+  keywords: ["About", "Swapi"],
+};
+
 const PageAbout = () => {
   return (
     <div>

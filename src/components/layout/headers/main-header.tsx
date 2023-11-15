@@ -101,11 +101,11 @@ const MainHeader = ({ language }: IMainHeader) => {
               />
             </div>
             <div className={`${formButtonContainerClassNames} w-full`}>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-stretch justify-center sm:items-center sm:justify-start">
                 <Link
                   href={`/${language}`}
                   className="flex flex-shrink-0 items-center">
-                  <LogoIcon />
+                  <LogoIcon width={200} color="#fff" fill="#fff" />
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

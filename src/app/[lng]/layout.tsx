@@ -1,4 +1,3 @@
-"use client";
 import { Inter } from "next/font/google";
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
@@ -9,17 +8,42 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { IPageParamsLayout } from "@/constants/interfaces";
-import ReduxProvider from "../providers/redux-provider";
 import MainHeader from "@/components/layout/headers/main-header";
-import { ApolloProvider } from "@apollo/client";
-import client from "../../../apollo-client";
-import { SessionProvider } from "next-auth/react";
+import Providers from "./components/providers/providers";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
 }
+
+const title = "UAB Baltic | A place to test inpractical ideas";
+const description = "Every developer needs a hobby website";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s - UABBaltic",
+    absolute: "",
+  },
+  description,
+  keywords: ["Next.js", "React", "Web Development"],
+  openGraph: {
+    type: "website",
+    url: "https://www.uabbaltic.lt/",
+    title,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@DickusArnas",
+    creator: "@DickusArnas",
+    title,
+    description,
+  },
+  viewport: "width=device-width, initial-scale=1",
+  robots: "index, follow",
+};
 
 export default function RootLayout({
   children,
@@ -28,14 +52,10 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
-        <SessionProvider>
-          <ApolloProvider client={client}>
-            <ReduxProvider>
-              <MainHeader language={lng} />
-              <main>{children}</main>
-            </ReduxProvider>
-          </ApolloProvider>
-        </SessionProvider>
+        <Providers>
+          <MainHeader language={lng} />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
