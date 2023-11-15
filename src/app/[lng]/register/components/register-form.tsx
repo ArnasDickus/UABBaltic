@@ -168,13 +168,6 @@ const RegisterForm = ({ language }: { language: string }) => {
             }}>
             {t("register")}
           </Button>
-          <LinkButton
-            linkProps={{
-              // @ts-ignore
-              href: `/${language}/forgot-password`,
-            }}>
-            {t("forgotPassword")}
-          </LinkButton>
         </div>
       </form>
     </>

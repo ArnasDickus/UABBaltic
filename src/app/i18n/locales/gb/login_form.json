@@ -3,5 +3,6 @@
   "emailPasswordMatch": "Email and Password does not match",
   "login": "Login",
   "email": "Email",
-  "password": "Password"
+  "password": "Password",
+  "forgotPassword": "Forgot Password?"
 }

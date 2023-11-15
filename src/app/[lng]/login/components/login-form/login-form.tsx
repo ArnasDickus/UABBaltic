@@ -15,6 +15,7 @@ import {
   formClassNames,
 } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
+import LinkButton from "@/components/link-button/link-button";
 
 const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
@@ -104,6 +105,13 @@ const LoginForm = ({ language }: { language: string }) => {
             }}>
             {t("login")}
           </Button>
+          <LinkButton
+            linkProps={{
+              // @ts-ignore
+              href: `/${language}/forgot-password`,
+            }}>
+            {t("forgotPassword")}
+          </LinkButton>
         </div>
       </form>
     </>
