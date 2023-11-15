@@ -7,6 +7,13 @@ import { redirect } from "next/navigation";
 import { formContainerClassNames } from "@/styles/reusable-styles";
 import PageContainer from "@/styles/components/page-container";
 import { ServerFooter } from "@/components/layout/footer/serverfooter";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Register",
+  description: "A place to register",
+  keywords: ["Register"],
+};
 
 const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
   const session = await getServerSession();

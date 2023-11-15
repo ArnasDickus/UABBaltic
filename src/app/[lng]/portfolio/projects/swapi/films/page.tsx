@@ -14,7 +14,12 @@ type TPeopleSwapiData = Pick<
   SwapiPeopleApi,
   "name" | "gender" | "birth_year" | "mass"
 >;
-
+// TODO add metadata
+// export const metadata: Metadata = {
+//   title: "About Swapi",
+//   description: "About Swapi task",
+//   keywords: ["About", "Swapi"],
+// };
 const PageFilms = () => {
   const [tableData, setTableData] = useState<TPeopleSwapiData[]>();
   const [headers, setHeaders] = useState<string[]>();
