@@ -12,7 +12,6 @@ const PagePortfolio = ({ params: { lng } }: IPageParamProps) => {
       <HeroSection language={lng} />
       <AboutSection language={lng} />
       <ExperienceSection language={lng} />
-      {/* <ProjectsSection language={lng} /> */}
     </PageContainer>
   );
 };
