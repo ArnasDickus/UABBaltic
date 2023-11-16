@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import Loader from "@/styles/icons/loader";
 import Table from "@/components/table/table";
@@ -22,6 +22,7 @@ import {
 } from "@/components/store/slices/swapi-films-slice";
 
 import { sectionHeader } from "@/styles/reusable-styles";
+import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 
 const FilmContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "swapi" });
@@ -29,6 +30,12 @@ const FilmContent = ({ language }: { language: string }) => {
   const swapiData = useAppSelector(selectSwapiFilms);
   const [filmsTrigger, filmsData] = useLazyGetSwapiFilmsApiQuery();
   const [actorsTrigger, peopleData] = useLazyGetSwapiFilmCharactersApiQuery();
+
+  const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
+    message: "",
+    severity: "success",
+    showAlert: false,
+  });
 
   const fetchMovieActors = async (episodeId: number) => {
     if (!swapiData.movies.length) {
@@ -55,7 +62,6 @@ const FilmContent = ({ language }: { language: string }) => {
     showActors: boolean,
     actorsLength: number
   ) => {
-    console.log("actorsLength", actorsLength);
     if (!actorsLength) {
       fetchMovieActors(episodeId);
     } else {
@@ -81,6 +87,22 @@ const FilmContent = ({ language }: { language: string }) => {
   useEffect(() => {
     const getMovieCharacters = () => {
       if (peopleData.data) {
+        const errorResults = peopleData.data.filter((item) =>
+          item.hasOwnProperty("error")
+        );
+        setAlert({
+          message: errorResults.length
+            ? t("fetchedData", {
+                data: peopleData.data.length - errorResults.length,
+                amount: peopleData.data.length,
+              })
+            : t("fetchedAll", {
+                data: peopleData.data.length,
+              }),
+          showAlert: true,
+          severity: errorResults.length ? "error" : "success",
+        });
+
         const modifiedData: TPeopleSwapiData[] = peopleData.data.map(
           (person) => {
             return {
@@ -96,7 +118,7 @@ const FilmContent = ({ language }: { language: string }) => {
     };
 
     getMovieCharacters();
-  }, [dispatch, peopleData.data]);
+  }, [dispatch, peopleData.data, t]);
 
   useEffect(() => {
     const getAllMovies = () => {
@@ -108,6 +130,7 @@ const FilmContent = ({ language }: { language: string }) => {
             episode_id: film.episode_id,
             release_date: film.release_date,
             showActors: false,
+            failedActors: [],
             characters: film.characters,
             actors: [],
           });
@@ -126,62 +149,74 @@ const FilmContent = ({ language }: { language: string }) => {
   }, [filmsTrigger, swapiData.movies]);
 
   return (
-    <div className="w-full">
-      <div className="flex p-4 gap-3 flex-wrap justify-center">
-        {swapiData.movies.length ? (
-          swapiData.movies.map((film) => (
-            <Fragment key={film.episode_id}>
-              <Card
-                buttonText={displayButtonText(
-                  film.actors.length,
-                  film.showActors
-                )}
-                description={film.release_date}
-                heroText={`${t("episodeId")}: ${film.episode_id}`}
-                onClick={() => {
-                  handleCardButton(
-                    film.episode_id,
-                    film.showActors,
-                    film.actors.length
-                  );
-                }}
-                title={film.title}
-              />
-            </Fragment>
-          ))
-        ) : (
-          <Loader className="animate-spin" />
-        )}
-      </div>
-      <div className="shadow-sm overflow-hidden my-8">
-        {peopleData.status === "pending" && (
-          <div className="flex justify-center">
-            <Loader className="animate-spin" />
-          </div>
-        )}
-        {swapiData.movies
-          .filter((movie) => movie.showActors)
-          .map((movies) => {
-            return (
-              <div key={movies.episode_id}>
-                <h2 className={sectionHeader}>
-                  {movies.actors.length ? movies.title : ""}
-                </h2>
-                <Table
-                  data={movies.actors}
-                  headers={
-                    movies.actors.length ? Object.keys(movies.actors[0]) : []
-                  }
-                  loading={
-                    movies.episode_id === swapiData.episodeId &&
-                    peopleData.status === "pending"
-                  }
+    <>
+      <SnackAlert
+        {...alert}
+        onClose={() => {
+          setAlert((prevState) => ({
+            ...prevState,
+            showAlert: false,
+          }));
+        }}
+      />
+
+      <div className="w-full">
+        <div className="flex p-4 gap-3 flex-wrap justify-center">
+          {swapiData.movies.length ? (
+            swapiData.movies.map((film) => (
+              <Fragment key={film.episode_id}>
+                <Card
+                  buttonText={displayButtonText(
+                    film.actors.length,
+                    film.showActors
+                  )}
+                  description={film.release_date}
+                  heroText={`${t("episodeId")}: ${film.episode_id}`}
+                  onClick={() => {
+                    handleCardButton(
+                      film.episode_id,
+                      film.showActors,
+                      film.actors.length
+                    );
+                  }}
+                  title={film.title}
                 />
-              </div>
-            );
-          })}
+              </Fragment>
+            ))
+          ) : (
+            <Loader className="animate-spin" />
+          )}
+        </div>
+        <div className="shadow-sm overflow-hidden my-8">
+          {peopleData.status === "pending" && (
+            <div className="flex justify-center">
+              <Loader className="animate-spin" />
+            </div>
+          )}
+          {swapiData.movies
+            .filter((movie) => movie.showActors)
+            .map((movies) => {
+              return (
+                <div key={movies.episode_id}>
+                  <h2 className={sectionHeader}>
+                    {movies.actors.length ? movies.title : ""}
+                  </h2>
+                  <Table
+                    data={movies.actors}
+                    headers={
+                      movies.actors.length ? Object.keys(movies.actors[0]) : []
+                    }
+                    loading={
+                      movies.episode_id === swapiData.episodeId &&
+                      peopleData.status === "pending"
+                    }
+                  />
+                </div>
+              );
+            })}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default FilmContent;

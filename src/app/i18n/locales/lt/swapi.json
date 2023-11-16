@@ -6,5 +6,7 @@
   "episodeId": "Epizodo ID",
   "fetchActors": "Pakviesti Aktorius",
   "showActors": "Parodyti Aktorius",
-  "hideActors": "Paslėpti Aktorius"
+  "hideActors": "Paslėpti Aktorius",
+  "fetchedData": "Ištraukėm {{data}} iš {{amount}} prašymus",
+  "fetchedAll": "Ištraukėm visus {{data}} iš {{data}} prašymus"
 }

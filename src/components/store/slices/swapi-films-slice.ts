@@ -14,7 +14,7 @@ export type TPeopleSwapiData = Pick<
 export type TFilmsSwapiData = Pick<
   ISwapiFilmsApi["results"][0],
   "episode_id" | "title" | "release_date" | "characters"
-> & { showActors: boolean };
+> & { showActors: boolean; failedActors: string[] };
 
 export interface ISwapiFilmsSlice {
   movies: IMoviesSwapiData[];

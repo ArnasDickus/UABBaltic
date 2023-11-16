@@ -6,5 +6,7 @@
   "episodeId": "Episode ID",
   "fetchActors": "Fetch Actors",
   "showActors": "Show Actors",
-  "hideActors": "Hide Actors"
+  "hideActors": "Hide Actors",
+  "fetchedData": "Fetched {{data}} out of {{amount}} requests",
+  "fetchedAll": "Fetched all {{data}} out of {{data}} requests"
 }

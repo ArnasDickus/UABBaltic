@@ -23,6 +23,7 @@ export const swapiApi = createApi({
           const response: IFilmCharactersApi[] = (await Promise.all(
             characters.map((character) => baseQuery(character))
           )) as IFilmCharactersApi[];
+          console.log("response", response);
           return { data: response };
         } catch (error: any) {
           return { error };
