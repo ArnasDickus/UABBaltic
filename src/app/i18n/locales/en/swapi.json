@@ -2,5 +2,9 @@
   "swapi": "SWAPI",
   "about": "About",
   "films": "Films",
-  "portfolio": "Portfolio"
+  "portfolio": "Portfolio",
+  "episodeId": "Episode ID",
+  "fetchActors": "Fetch Actors",
+  "showActors": "Show Actors",
+  "hideActors": "Hide Actors"
 }

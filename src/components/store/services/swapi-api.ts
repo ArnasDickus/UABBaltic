@@ -3,10 +3,10 @@ import {
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
-import { SwapiFilmsApi, SwapiPeopleApi } from "../types/swapi-type";
+import { ISwapiFilmsApi, ISwapiPeopleApi } from "../types/swapi-type";
 
 interface IFilmCharactersApi {
-  data: SwapiPeopleApi;
+  data: ISwapiPeopleApi;
   meta: FetchBaseQueryMeta;
 }
 
@@ -14,7 +14,7 @@ export const swapiApi = createApi({
   reducerPath: "SwapiApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://swapi.dev/api/" }),
   endpoints: (builder) => ({
-    getSwapiFilmsApi: builder.query<SwapiFilmsApi, void>({
+    getSwapiFilmsApi: builder.query<ISwapiFilmsApi, void>({
       query: () => "films",
     }),
     getSwapiFilmCharactersApi: builder.query<IFilmCharactersApi[], string[]>({
@@ -33,6 +33,6 @@ export const swapiApi = createApi({
 });
 
 export const {
-  useGetSwapiFilmsApiQuery,
+  useLazyGetSwapiFilmsApiQuery,
   useLazyGetSwapiFilmCharactersApiQuery,
 } = swapiApi;

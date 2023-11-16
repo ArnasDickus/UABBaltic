@@ -2,5 +2,9 @@
   "swapi": "SWAPI",
   "about": "Apie",
   "films": "Filmai",
-  "portfolio": "Portfelis"
+  "portfolio": "Portfelis",
+  "episodeId": "Epizodo ID",
+  "fetchActors": "Pakviesti Aktorius",
+  "showActors": "Parodyti Aktorius",
+  "hideActors": "Paslėpti Aktorius"
 }

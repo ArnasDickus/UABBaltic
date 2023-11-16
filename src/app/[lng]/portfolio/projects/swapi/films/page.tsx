@@ -14,8 +14,10 @@ export const metadata: Metadata = {
 const PageFilms: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
     <PageContainer
-      footer={<ServerFooter language={lng} path="/portfolio/projects/swapi" />}>
-      <FilmContent />
+      footer={
+        <ServerFooter language={lng} path="/portfolio/projects/swapi/films" />
+      }>
+      <FilmContent language={lng} />
     </PageContainer>
   );
 };

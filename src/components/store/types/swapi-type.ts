@@ -15,14 +15,14 @@ export interface SwapiFilmsResults {
   vehicles: string[];
 }
 
-export interface SwapiFilmsApi {
+export interface ISwapiFilmsApi {
   count: number;
   next: number;
   previous: number;
   results: SwapiFilmsResults[];
 }
 
-export interface SwapiPeopleApi {
+export interface ISwapiPeopleApi {
   birth_year: string;
   created: string;
   edited: string;
