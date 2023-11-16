@@ -39,7 +39,7 @@ const SideMenu = ({ language }: { language: string }) => {
     <>
       <div className="fixed top-0 left-0 z-40 w-18 h-screen overflow-hidden text-gray-400 bg-gray-900 sm:w-40">
         <Link
-          className="flex items-center w-full px-3 mt-3"
+          className="flex items-center w-full px-3 mt-7"
           // @ts-ignore
           href={`/${language}/portfolio/projects/swapi`}>
           <span className="ml-2 text-sm font-bold hidden sm:block">

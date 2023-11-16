@@ -8,5 +8,7 @@
   "showActors": "Parodyti Aktorius",
   "hideActors": "Paslėpti Aktorius",
   "fetchedData": "Ištraukėm {{data}} iš {{amount}} prašymus",
-  "fetchedAll": "Ištraukėm visus {{data}} iš {{data}} prašymus"
+  "fetchedAll": "Ištraukėm visus {{data}} iš {{data}} prašymus",
+  "aboutTitle": "Swapi - Žvaigždžių karų API",
+  "aboutDescription": "Užduotis buvo orginaliai sukurta kaip techninė interviu užduotis. Po kiek laiko gavau tą pačia užduotį iš kitos kompanijos. Bei vėliau iš dar kitos kompanijos. Taip susiformavo Swapi užduotis"
 }
