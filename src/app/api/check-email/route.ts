@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";

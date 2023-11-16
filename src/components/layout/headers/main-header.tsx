@@ -30,11 +30,15 @@ const MainHeader = ({ language }: IMainHeader) => {
     let leftNavItems: INavItems[] = [];
     let rightNavItems: INavItems[] = [];
 
-    if (pathname.includes("portfolio")) {
+    if (pathname === `/${language}/portfolio`) {
       leftNavItems = [
         {
           title: t("home"),
           link: "#hero-section",
+        },
+        {
+          title: t("projects"),
+          link: "#projects-section",
         },
         {
           title: t("experience"),

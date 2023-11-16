@@ -8,7 +8,7 @@ const PageContainer = ({
   footer: ReactNode;
 }) => {
   return (
-    <div className="pt-16 flex flex-col min-h-screen">
+    <div className="pt-16 flex flex-col min-h-screen w-full">
       <div className="grow">{children}</div>
       {footer}
     </div>
