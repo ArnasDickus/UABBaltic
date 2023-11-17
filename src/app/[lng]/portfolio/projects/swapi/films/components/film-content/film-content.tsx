@@ -131,7 +131,6 @@ const FilmContent = ({ language }: { language: string }) => {
             episode_id: film.episode_id,
             release_date: film.release_date,
             showActors: false,
-            failedActors: [],
             characters: film.characters,
             actors: [],
           });
