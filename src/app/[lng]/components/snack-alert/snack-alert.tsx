@@ -3,7 +3,7 @@ import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
 import {
   selectToastAlert,
@@ -35,7 +35,29 @@ const SnackAlert = () => {
         showAlert: false,
       })
     );
+    // Cleans up Alert message without affecting MUI animation
+    setTimeout(() => {
+      dispatch(
+        showHideAlert({
+          message: "",
+          severity: "info",
+          showAlert: false,
+        })
+      );
+    }, 1000);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(
+        showHideAlert({
+          message: "",
+          severity: "info",
+          showAlert: false,
+        })
+      );
+    };
+  }, [dispatch]);
 
   return (
     <Stack spacing={2}>
