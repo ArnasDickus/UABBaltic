@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
       <body className={inter.className}>
-        <Providers>
+        <Providers language={lng}>
           <MainHeader language={lng} />
           <SnackAlert />
           <main>{children}</main>
