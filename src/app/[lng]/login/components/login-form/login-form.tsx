@@ -46,11 +46,7 @@ const LoginForm = ({ language }: { language: string }) => {
       redirect: false,
     });
 
-    if (!response?.error) {
-      // @ts-ignore
-      router.push("/");
-      router.refresh();
-    } else {
+    if (response?.error) {
       dispatch(
         showHideAlert({
           message: t("emailPasswordMatch"),

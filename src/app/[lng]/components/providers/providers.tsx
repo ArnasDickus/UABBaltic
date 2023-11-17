@@ -5,12 +5,21 @@ import { ReactNode } from "react";
 import client from "../../../../../apollo-client";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/store/store";
+import AuthGuard from "../auth-guard/auth-guard";
 
-const Providers = ({ children }: { children: ReactNode }) => {
+const Providers = ({
+  children,
+  language,
+}: {
+  children: ReactNode;
+  language: string;
+}) => {
   return (
     <SessionProvider>
       <ApolloProvider client={client}>
-        <ReduxProvider store={store}>{children}</ReduxProvider>
+        <ReduxProvider store={store}>
+          <AuthGuard language={language}>{children}</AuthGuard>
+        </ReduxProvider>
       </ApolloProvider>
     </SessionProvider>
   );
