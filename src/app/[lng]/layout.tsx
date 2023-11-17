@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     title,
     description,
   },
+  metadataBase: new URL("https://www.uabbaltic.lt/"),
   twitter: {
     card: "summary_large_image",
     site: "@DickusArnas",

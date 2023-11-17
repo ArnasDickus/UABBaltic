@@ -1,7 +1,6 @@
 "use client";
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
-import LinkButton from "@/components/link-button/link-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,7 +10,7 @@ import { apiRoutes } from "@/constants/routes";
 import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
-import { GET_USER } from "@/components/store/modules/user/query";
+
 import client from "../../../../../apollo-client";
 import {
   formButtonContainerClassNames,
@@ -19,6 +18,7 @@ import {
 } from "@/styles/reusable-styles";
 import { isEmailExist } from "@/app/utils/auth-functions";
 import { useTranslation } from "@/app/i18n/client";
+import { GET_USER } from "@/store/modules/user/query";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });

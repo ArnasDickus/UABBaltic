@@ -3,14 +3,18 @@ import { Fragment, useEffect, useState } from "react";
 
 import Loader from "@/styles/icons/loader";
 import Table from "@/components/table/table";
-import {
-  useLazyGetSwapiFilmCharactersApiQuery,
-  useLazyGetSwapiFilmsApiQuery,
-} from "@/components/store/services/swapi-api";
+
 import { useTranslation } from "@/app/i18n/client";
 
 import Card from "../../../components/card/card";
-import { useAppDispatch, useAppSelector } from "@/components/store/redux-hooks";
+
+import { sectionHeader } from "@/styles/reusable-styles";
+import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
+import {
+  useLazyGetSwapiFilmCharactersApiQuery,
+  useLazyGetSwapiFilmsApiQuery,
+} from "@/store/services/swapi-api";
 import {
   IMoviesSwapiData,
   TPeopleSwapiData,
@@ -19,10 +23,7 @@ import {
   addMovies,
   selectSwapiFilms,
   showHideActors,
-} from "@/components/store/slices/swapi-films-slice";
-
-import { sectionHeader } from "@/styles/reusable-styles";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+} from "@/store/slices/swapi-films-slice";
 
 const FilmContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "swapi" });
