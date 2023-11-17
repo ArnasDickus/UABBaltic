@@ -11,6 +11,7 @@ import { IPageParamsLayout } from "@/constants/interfaces";
 import MainHeader from "@/components/layout/headers/main-header";
 import Providers from "./components/providers/providers";
 import { Metadata } from "next";
+import SnackAlert from "./components/snack-alert/snack-alert";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <MainHeader language={lng} />
+          <SnackAlert />
           <main>{children}</main>
         </Providers>
       </body>

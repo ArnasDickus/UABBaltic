@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 
 import Loader from "@/styles/icons/loader";
 import Table from "@/components/table/table";
@@ -9,7 +9,7 @@ import { useTranslation } from "@/app/i18n/client";
 import Card from "../../../components/card/card";
 
 import { sectionHeader } from "@/styles/reusable-styles";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+import SnackAlert from "@/app/[lng]/components/snack-alert/snack-alert";
 import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
 import {
   useLazyGetSwapiFilmCharactersApiQuery,
@@ -24,6 +24,7 @@ import {
   selectSwapiFilms,
   showHideActors,
 } from "@/store/slices/swapi-films-slice";
+import { showHideAlert } from "@/store/slices/toast-alert-slice";
 
 const FilmContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "swapi" });
@@ -31,12 +32,6 @@ const FilmContent = ({ language }: { language: string }) => {
   const swapiData = useAppSelector(selectSwapiFilms);
   const [filmsTrigger, filmsData] = useLazyGetSwapiFilmsApiQuery();
   const [actorsTrigger, peopleData] = useLazyGetSwapiFilmCharactersApiQuery();
-
-  const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
-    message: "",
-    severity: "success",
-    showAlert: false,
-  });
 
   const fetchMovieActors = async (episodeId: number) => {
     if (!swapiData.movies.length) {
@@ -91,18 +86,20 @@ const FilmContent = ({ language }: { language: string }) => {
         const errorResults = peopleData.data.filter((item) =>
           item.hasOwnProperty("error")
         );
-        setAlert({
-          message: errorResults.length
-            ? t("fetchedData", {
-                data: peopleData.data.length - errorResults.length,
-                amount: peopleData.data.length,
-              })
-            : t("fetchedAll", {
-                data: peopleData.data.length,
-              }),
-          showAlert: true,
-          severity: errorResults.length ? "error" : "success",
-        });
+        dispatch(
+          showHideAlert({
+            message: errorResults.length
+              ? t("fetchedData", {
+                  data: peopleData.data.length - errorResults.length,
+                  amount: peopleData.data.length,
+                })
+              : t("fetchedAll", {
+                  data: peopleData.data.length,
+                }),
+            severity: errorResults.length ? "error" : "success",
+            showAlert: true,
+          })
+        );
 
         const modifiedData: TPeopleSwapiData[] = peopleData.data.map(
           (person) => {
@@ -150,16 +147,7 @@ const FilmContent = ({ language }: { language: string }) => {
 
   return (
     <>
-      <SnackAlert
-        {...alert}
-        onClose={() => {
-          setAlert((prevState) => ({
-            ...prevState,
-            showAlert: false,
-          }));
-        }}
-      />
-
+      <SnackAlert {...alert} />
       <div className="w-full">
         <div className="flex p-4 gap-3 flex-wrap justify-center">
           {swapiData.movies.length ? (

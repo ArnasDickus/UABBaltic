@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { swapiApi } from "./services/swapi-api";
 import swapiFilmsReducer from "./slices/swapi-films-slice";
+import toastAlertReducer from "./slices/toast-alert-slice";
 
 export const store = configureStore({
   reducer: {
     [swapiApi.reducerPath]: swapiApi.reducer,
     swapiFilms: swapiFilmsReducer,
+    toastAlert: toastAlertReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

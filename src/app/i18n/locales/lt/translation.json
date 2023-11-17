@@ -1,4 +1,6 @@
 {
   "heroTitle": "UAB Baltic - Programuotojo smėlio dežė",
-  "heroSubtitle": "Vieta kur galima išmėginti nepraktiškas įdėjas"
+  "heroSubtitle": "Vieta kur galima išmėginti nepraktiškas įdėjas",
+  "confirmEmail": "El. paštas patvirtintas",
+  "confirmEmailFail": "El. pašto patvirtinti nepavyko"
 }

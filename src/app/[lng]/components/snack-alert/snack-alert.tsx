@@ -1,8 +1,14 @@
+"use client";
 import * as React from "react";
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
-import MuiAlert, { AlertColor, AlertProps } from "@mui/material/Alert";
-import { forwardRef, useEffect, useState } from "react";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { forwardRef } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
+import {
+  selectToastAlert,
+  showHideAlert,
+} from "@/store/slices/toast-alert-slice";
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -11,19 +17,9 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export interface ISnackAlert {
-  message: string;
-  severity: AlertColor;
-  showAlert: boolean;
-  onClose?: () => void;
-}
-
-const SnackAlert = ({ showAlert, message, severity, onClose }: ISnackAlert) => {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setOpen(showAlert);
-  }, [showAlert]);
+const SnackAlert = () => {
+  const dispatch = useAppDispatch();
+  const alertData = useAppSelector(selectToastAlert);
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -32,20 +28,24 @@ const SnackAlert = ({ showAlert, message, severity, onClose }: ISnackAlert) => {
     if (reason === "clickaway") {
       return;
     }
-    onClose?.();
-
-    setOpen(false);
+    dispatch(
+      showHideAlert({
+        message: alertData.message,
+        severity: alertData.severity,
+        showAlert: false,
+      })
+    );
   };
 
   return (
     <Stack spacing={2}>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        open={open}
+        open={alertData.showAlert}
         autoHideDuration={6000}
         onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
-          {message}
+        <Alert onClose={handleClose} severity={alertData.severity}>
+          {alertData.message}
         </Alert>
       </Snackbar>
     </Stack>
