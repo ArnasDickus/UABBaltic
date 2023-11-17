@@ -1,9 +1,10 @@
 import client from "../../../../apollo-client";
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
-import { GET_USER_CONFIRMATION } from "@/components/store/modules/user-confirmation/query";
+
 import dayjs from "dayjs";
-import { UPDATE_USERS } from "@/components/store/modules/user/query";
+import { GET_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
+import { UPDATE_USERS } from "@/store/modules/user/query";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NConfirmEmail.IRequest["body"]>;

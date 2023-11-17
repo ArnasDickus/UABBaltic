@@ -1,4 +1,6 @@
 {
   "heroTitle": "UAB Baltic - Programuotojo smėlio dežė",
-  "heroSubtitle": "A place to test inpractical ideas"
+  "heroSubtitle": "A place to test inpractical ideas",
+  "confirmEmail": "Email confirmed",
+  "confirmEmailFail": "Email failed to confirm"
 }

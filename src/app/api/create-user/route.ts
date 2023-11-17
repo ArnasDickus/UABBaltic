@@ -3,13 +3,14 @@ import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces"
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-import { ADD_USER } from "@/components/store/modules/user/query";
 import { transporter } from "@/app/providers/email";
 import { StatusCodes } from "@/constants/status-code";
 import { getBaseUrl } from "@/app/utils/get-base-url";
-import { ADD_USER_CONFIRMATION } from "@/components/store/modules/user-confirmation/query";
+
 import dayjs from "dayjs";
 import { generateToken } from "@/app/utils/generate-email-confirmation-token";
+import { ADD_USER } from "@/store/modules/user/query";
+import { ADD_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;

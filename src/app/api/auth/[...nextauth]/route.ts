@@ -1,9 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import client from "../../../../../apollo-client";
-import { GET_USER } from "@/components/store/modules/user/query";
+import { GET_USER } from "@/store/modules/user/query";
 
 const handler = NextAuth({
   session: {

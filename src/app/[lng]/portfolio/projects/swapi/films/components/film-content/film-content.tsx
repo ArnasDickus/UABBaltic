@@ -1,16 +1,16 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 
 import Loader from "@/styles/icons/loader";
 import Table from "@/components/table/table";
+import { useTranslation } from "@/app/i18n/client";
+import Card from "../../../components/card/card";
+import { sectionHeader } from "@/styles/reusable-styles";
+import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
 import {
   useLazyGetSwapiFilmCharactersApiQuery,
   useLazyGetSwapiFilmsApiQuery,
-} from "@/components/store/services/swapi-api";
-import { useTranslation } from "@/app/i18n/client";
-
-import Card from "../../../components/card/card";
-import { useAppDispatch, useAppSelector } from "@/components/store/redux-hooks";
+} from "@/store/services/swapi-api";
 import {
   IMoviesSwapiData,
   TPeopleSwapiData,
@@ -19,10 +19,8 @@ import {
   addMovies,
   selectSwapiFilms,
   showHideActors,
-} from "@/components/store/slices/swapi-films-slice";
-
-import { sectionHeader } from "@/styles/reusable-styles";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+} from "@/store/slices/swapi-films-slice";
+import { showHideAlert } from "@/store/slices/toast-alert-slice";
 
 const FilmContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "swapi" });
@@ -30,12 +28,6 @@ const FilmContent = ({ language }: { language: string }) => {
   const swapiData = useAppSelector(selectSwapiFilms);
   const [filmsTrigger, filmsData] = useLazyGetSwapiFilmsApiQuery();
   const [actorsTrigger, peopleData] = useLazyGetSwapiFilmCharactersApiQuery();
-
-  const [alert, setAlert] = useState<Omit<ISnackAlert, "onClose">>({
-    message: "",
-    severity: "success",
-    showAlert: false,
-  });
 
   const fetchMovieActors = async (episodeId: number) => {
     if (!swapiData.movies.length) {
@@ -90,18 +82,20 @@ const FilmContent = ({ language }: { language: string }) => {
         const errorResults = peopleData.data.filter((item) =>
           item.hasOwnProperty("error")
         );
-        setAlert({
-          message: errorResults.length
-            ? t("fetchedData", {
-                data: peopleData.data.length - errorResults.length,
-                amount: peopleData.data.length,
-              })
-            : t("fetchedAll", {
-                data: peopleData.data.length,
-              }),
-          showAlert: true,
-          severity: errorResults.length ? "error" : "success",
-        });
+        dispatch(
+          showHideAlert({
+            message: errorResults.length
+              ? t("fetchedData", {
+                  data: peopleData.data.length - errorResults.length,
+                  amount: peopleData.data.length,
+                })
+              : t("fetchedAll", {
+                  data: peopleData.data.length,
+                }),
+            severity: errorResults.length ? "error" : "success",
+            showAlert: true,
+          })
+        );
 
         const modifiedData: TPeopleSwapiData[] = peopleData.data.map(
           (person) => {
@@ -130,7 +124,6 @@ const FilmContent = ({ language }: { language: string }) => {
             episode_id: film.episode_id,
             release_date: film.release_date,
             showActors: false,
-            failedActors: [],
             characters: film.characters,
             actors: [],
           });
@@ -149,74 +142,62 @@ const FilmContent = ({ language }: { language: string }) => {
   }, [filmsTrigger, swapiData.movies]);
 
   return (
-    <>
-      <SnackAlert
-        {...alert}
-        onClose={() => {
-          setAlert((prevState) => ({
-            ...prevState,
-            showAlert: false,
-          }));
-        }}
-      />
-
-      <div className="w-full">
-        <div className="flex p-4 gap-3 flex-wrap justify-center">
-          {swapiData.movies.length ? (
-            swapiData.movies.map((film) => (
-              <Fragment key={film.episode_id}>
-                <Card
-                  buttonText={displayButtonText(
-                    film.actors.length,
-                    film.showActors
-                  )}
-                  description={film.release_date}
-                  heroText={`${t("episodeId")}: ${film.episode_id}`}
-                  onClick={() => {
-                    handleCardButton(
-                      film.episode_id,
-                      film.showActors,
-                      film.actors.length
-                    );
-                  }}
-                  title={film.title}
-                />
-              </Fragment>
-            ))
-          ) : (
-            <Loader className="animate-spin" />
-          )}
-        </div>
-        <div className="shadow-sm overflow-hidden my-8">
-          {peopleData.status === "pending" && (
-            <div className="flex justify-center">
-              <Loader className="animate-spin" />
-            </div>
-          )}
-          {swapiData.movies
-            .filter((movie) => movie.showActors)
-            .map((movies) => {
-              return (
-                <div key={movies.episode_id}>
-                  <h2 className={sectionHeader}>
-                    {movies.actors.length ? movies.title : ""}
-                  </h2>
-                  <Table
-                    data={movies.actors}
-                    headers={
-                      movies.actors.length ? Object.keys(movies.actors[0]) : []
-                    }
-                    loading={
-                      movies.episode_id === swapiData.episodeId &&
-                      peopleData.status === "pending"
-                    }
-                  />
-                </div>
-              );
-            })}
-        </div>
+    <div className="w-full">
+      <div className="flex p-4 gap-3 flex-wrap justify-center">
+        {swapiData.movies.length ? (
+          swapiData.movies.map((film) => (
+            <Fragment key={film.episode_id}>
+              <Card
+                buttonText={displayButtonText(
+                  film.actors.length,
+                  film.showActors
+                )}
+                description={film.release_date}
+                heroText={`${t("episodeId")}: ${film.episode_id}`}
+                onClick={() => {
+                  handleCardButton(
+                    film.episode_id,
+                    film.showActors,
+                    film.actors.length
+                  );
+                }}
+                title={film.title}
+              />
+            </Fragment>
+          ))
+        ) : (
+          <Loader className="animate-spin" />
+        )}
       </div>
-    </>
+      <div className="shadow-sm overflow-hidden my-8">
+        {peopleData.status === "pending" && (
+          <div className="flex justify-center">
+            <Loader className="animate-spin" />
+          </div>
+        )}
+        {swapiData.movies
+          .filter((movie) => movie.showActors)
+          .map((movies) => {
+            return (
+              <div key={movies.episode_id}>
+                <h2 className={sectionHeader}>
+                  {movies.actors.length ? movies.title : ""}
+                </h2>
+                <Table
+                  data={movies.actors}
+                  headers={
+                    movies.actors.length ? Object.keys(movies.actors[0]) : []
+                  }
+                  loading={
+                    movies.episode_id === swapiData.episodeId &&
+                    peopleData.status === "pending"
+                  }
+                />
+              </div>
+            );
+          })}
+      </div>
+    </div>
   );
 };
 export default FilmContent;

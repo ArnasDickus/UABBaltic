@@ -4,7 +4,7 @@ import { ApolloProvider } from "@apollo/client";
 import { ReactNode } from "react";
 import client from "../../../../../apollo-client";
 import { Provider as ReduxProvider } from "react-redux";
-import { store } from "@/components/store/store";
+import { store } from "@/store/store";
 
 const Providers = ({ children }: { children: ReactNode }) => {
   return (
