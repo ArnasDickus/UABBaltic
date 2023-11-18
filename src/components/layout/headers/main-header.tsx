@@ -9,7 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
-import { hideMainHeaderFooter } from "@/constants/hide-main-header-footer";
+import { hideMainHeaderFooter } from "@/app/utils/hide-main-header-footer";
 
 interface IMainHeader {
   language: string;

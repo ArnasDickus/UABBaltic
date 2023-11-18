@@ -1,5 +1,5 @@
 "use client";
-import { hideMainHeaderFooter } from "@/constants/hide-main-header-footer";
+import { hideMainHeaderFooter } from "@/app/utils/hide-main-header-footer";
 import { usePathname } from "next/navigation";
 
 import { ReactNode } from "react";
@@ -18,11 +18,11 @@ const PageContainer = ({
     <div
       className={`${
         hideMainHeaderFooter(language, pathname)
-          ? "pt-16 flex flex-col min-h-screen w-ful"
-          : ""
+          ? ""
+          : "pt-16 flex flex-col min-h-screen w-full"
       }`}>
       <div className="grow">{children}</div>
-      {hideMainHeaderFooter(language, pathname) ? footer : null}
+      {hideMainHeaderFooter(language, pathname) ? null : footer}
     </div>
   );
 };

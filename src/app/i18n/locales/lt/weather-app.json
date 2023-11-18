@@ -1,3 +1,5 @@
 {
-  "internalError": "Klaida, palaukite kelias minutes prieš bandydami dar kartą"
+  "internalError": "Klaida, palaukite kelias minutes prieš bandydami dar kartą",
+  "weatherForecast": "Orų Prognozė",
+  "dayForecast": "Dienos Prognozė"
 }

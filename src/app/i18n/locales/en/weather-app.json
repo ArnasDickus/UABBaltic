@@ -1,3 +1,5 @@
 {
-  "internalError": "Error, Please wait a few minutes before you try again"
+  "internalError": "Error, Please wait a few minutes before you try again",
+  "weatherForecast": "Weather Forecast",
+  "dayForecast": "Day Forecast"
 }
