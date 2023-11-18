@@ -7,8 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IPageRegisterInputs } from "./interfaces";
 import { apiRoutes } from "@/constants/routes";
-import SnackAlert from "@/app/[lng]/components/snack-alert/snack-alert";
-import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
 
 import client from "../../../../../apollo-client";

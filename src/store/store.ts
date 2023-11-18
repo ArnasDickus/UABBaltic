@@ -6,6 +6,7 @@ import toastAlertReducer from "./slices/toast-alert-slice";
 export const store = configureStore({
   reducer: {
     [swapiApi.reducerPath]: swapiApi.reducer,
+
     swapiFilms: swapiFilmsReducer,
     toastAlert: toastAlertReducer,
   },

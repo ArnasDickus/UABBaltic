@@ -17,12 +17,20 @@ const ProjectsSection = async ({ language }: { language: string }) => {
       image: SwapiProject,
       imageAlt: t("swapi"),
     },
+    {
+      title: t("weatherApp"),
+      description: t("weatherAppDescription"),
+      link: `/${language}/portfolio/projects/weather-app`,
+      linkTitle: t("demo"),
+      image: SwapiProject,
+      imageAlt: t("weatherApp"),
+    },
   ];
 
   return (
     <section className="pt-10" id="projects-section">
       <h2 className={sectionHeader}>{t("projects")}</h2>
-      <div className="w-full flex justify-center">
+      <div className="w-full flex gap-8 flex-wrap pl-4 pr-4 justify-center">
         {projects.map((project) => (
           <ProjectCard key={project.title} {...project} />
         ))}
