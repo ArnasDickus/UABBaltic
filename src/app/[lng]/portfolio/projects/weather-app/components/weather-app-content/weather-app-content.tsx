@@ -46,11 +46,12 @@ const WeatherAppContent = ({ language }: { language: string }) => {
       currentWeatherTrigger({
         lat: geoLocations.latitude,
         lon: geoLocations.longitude,
+        language,
       });
     };
 
     getCurrentWeather();
-  }, [currentWeatherTrigger, t]);
+  }, [currentWeatherTrigger, language, t]);
 
   useEffect(() => {
     if (currentWeather.isError) {
@@ -89,7 +90,7 @@ const WeatherAppContent = ({ language }: { language: string }) => {
         />
       </div>
       <div className={classes.autoHeight}>
-        <WeekForecast />
+        <WeekForecast language={language} />
       </div>
     </div>
   );

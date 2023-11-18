@@ -14,11 +14,11 @@ export const weatherAppApi = createApi({
       IWeatherApiResponse,
       IWeatherApiRequest
     >({
-      query: ({ lat, lon }) => {
+      query: (data) => {
         return {
           url: apiRoutes["get-weather-data"],
           method: "POST",
-          body: { lat, lon },
+          body: { ...data },
         };
       },
     }),

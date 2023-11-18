@@ -1,0 +1,6 @@
+@import "/src/styles/components/weather-global-styles.scss";
+
+.titleContainer {
+  background-color: $backgroundColor;
+  padding: 10px $globalSidePadding;
+}

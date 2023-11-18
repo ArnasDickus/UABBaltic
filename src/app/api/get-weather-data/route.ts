@@ -10,11 +10,14 @@ interface CustomNextApiRequest extends NextRequest {
 }
 
 export const POST = async (req: CustomNextApiRequest) => {
-  const { lat, lon }: NGetWeatherData.IRequest["body"] = await req.json();
+  const { lat, lon, language }: NGetWeatherData.IRequest["body"] =
+    await req.json();
 
   try {
     const weatherResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${lon}&appid=${process.env.WEATHER_API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${lon}&lang=${
+        language || "en"
+      }&units=metric&appid=${process.env.WEATHER_API_KEY}`
     );
 
     if (weatherResponse.status !== StatusCodes.okStatus) {

@@ -1,6 +1,7 @@
 export interface IWeatherApiRequest {
   lat: number;
   lon: number;
+  language: string;
 }
 
 export interface IWeatherApiResponse {

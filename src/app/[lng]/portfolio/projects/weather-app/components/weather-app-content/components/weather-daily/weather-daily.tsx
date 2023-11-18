@@ -3,7 +3,7 @@ import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 
 import classes from "./weather-daily.module.scss";
 import reusableClasses from "@/styles/components/weather-reusable.module.scss";
-import { convertKelvinToCelsius } from "@/app/utils/temperature-converter";
+import { roundToNoDecimals } from "@/app/utils/round-values";
 
 interface IWeatherDaily {
   cityName: string;
@@ -20,7 +20,7 @@ const WeatherDaily = ({
     <div className={classes.container}>
       <div>
         <h2 className={`${reusableClasses.secondaryTitle} ${classes.title}`}>
-          {convertKelvinToCelsius(temperature)} &deg;
+          {roundToNoDecimals(temperature)} &deg;
         </h2>
         <p className={`${reusableClasses.secondaryTitle} ${classes.subtitle}`}>
           {cityName}

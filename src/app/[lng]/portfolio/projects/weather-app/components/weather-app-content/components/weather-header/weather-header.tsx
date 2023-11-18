@@ -1,10 +1,10 @@
 "use client";
-import { convertKelvinToCelsius } from "@/app/utils/temperature-converter";
 import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { useTranslation } from "@/app/i18n/client";
 import classes from "./weather-header.module.scss";
 import reusableClasses from "@/styles/components/weather-reusable.module.scss";
+import { roundToNoDecimals } from "@/app/utils/round-values";
 
 interface IWeatherHeader {
   maxTemperature: number;
@@ -36,10 +36,10 @@ const WeatherHeader = ({
         <p className={reusableClasses.secondaryTitle}>{t("dayForecast")}</p>
         <div className={classes.highLowContainer}>
           <span className={reusableClasses.secondaryTitle}>
-            {convertKelvinToCelsius(minTemperature)}
+            {roundToNoDecimals(minTemperature)}
           </span>
           <span className={reusableClasses.subtitle}>
-            {convertKelvinToCelsius(maxTemperature)}
+            {roundToNoDecimals(maxTemperature)}
           </span>
         </div>
       </div>
