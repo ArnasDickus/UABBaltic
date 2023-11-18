@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
+import { hideMainHeaderFooter } from "@/constants/hide-main-header-footer";
 
 interface IMainHeader {
   language: string;
@@ -93,7 +94,10 @@ const MainHeader = ({ language }: IMainHeader) => {
   };
 
   return (
-    <header className="fixed w-full">
+    <header
+      className={`${
+        hideMainHeaderFooter(language, pathname) ? "hidden" : "fixed w-full"
+      }`}>
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">

@@ -15,6 +15,7 @@ const PageSwapi: FC<IPageParamProps> = async ({ params: { lng } }) => {
   const { t } = await useTranslation({ language: lng, ns: "swapi" });
   return (
     <PageContainer
+      language={lng}
       footer={<ServerFooter language={lng} path="/portfolio/projects/swapi" />}>
       <div className="m-10 text-center">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">

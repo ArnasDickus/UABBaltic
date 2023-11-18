@@ -53,8 +53,8 @@ const WeatherAppContent = ({ language }: { language: string }) => {
         );
         return;
       }
-      const currentWeather = await currentWeatherResponse.json();
-      console.log("currentWeather", currentWeather);
+      const currentWeather: NGetWeatherData.IResponse =
+        await currentWeatherResponse.json();
     };
 
     getCurrentWeather();

@@ -7,6 +7,7 @@ import WeatherAppContent from "./components/weather-app-content/weather-app-cont
 const WeatherAppPage: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
     <PageContainer
+      language={lng}
       footer={
         <ServerFooter language={lng} path="/portfolio/projects/weather-app" />
       }>

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 const ConfirmEmail = ({ params, searchParams }: IPageParamProps) => {
   return (
     <PageContainer
+      language={params.lng}
       footer={<ServerFooter language={params.lng} path="/confirm-email" />}>
       <ValidateEmail params={params} searchParams={searchParams} />
     </PageContainer>
