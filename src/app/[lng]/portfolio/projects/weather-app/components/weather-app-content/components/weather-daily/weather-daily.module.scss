@@ -1,0 +1,26 @@
+.container {
+  background-color: #5e6676;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.svg {
+  color: #fff;
+}
+
+.title {
+  font-size: 50px;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 25px;
+  text-align: center;
+}
+
+.weatherType {
+  font-size: 15px;
+  text-align: center;
+}

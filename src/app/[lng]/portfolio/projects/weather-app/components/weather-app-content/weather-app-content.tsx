@@ -3,12 +3,14 @@ import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { useEffect } from "react";
-import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import classes from "./weather-app-content.module.scss";
+
 import { useLazyGetCurrentWeatherApiQuery } from "@/store/services/weather-app-api";
-import { convertKelvinToCelsius } from "@/app/utils/temperature-converter";
+
 import PageLoader from "@/app/[lng]/components/page-loader/page-loader";
+import WeatherHeader from "./components/weather-header/weather-header";
+import WeatherDaily from "./components/weather-daily/weather-daily";
+import WeekForecast from "./components/week-forecast/week-forecast";
+import classes from "./weather-app-content.module.scss";
 
 const WeatherAppContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language: language, ns: "weather-app" });
@@ -70,32 +72,24 @@ const WeatherAppContent = ({ language }: { language: string }) => {
   }
 
   return (
-    <div>
-      <div className={classes.headerContainer}>
-        <div className={classes.flexContainer}>
-          <CloudOutlinedIcon className={classes.svg} />
-          <div className={classes.headerTextContainer}>
-            <p className={classes.mainTitle}>{t("weatherForecast")}</p>
-
-            <span className={classes.subtitle}>Utrecht</span>
-          </div>
-          <SettingsOutlinedIcon className={classes.svg} />
-        </div>
-        <div className={classes.flexContainer}>
-          <p className={classes.secondaryTitle}>{t("dayForecast")}</p>
-          <div className={classes.highLowContainer}>
-            <span className={classes.secondaryTitle}>
-              {convertKelvinToCelsius(
-                currentWeatherResponse?.main.temp_max || 0
-              )}
-            </span>
-            <span className={classes.subtitle}>
-              {convertKelvinToCelsius(
-                currentWeatherResponse?.main.temp_min || 0
-              )}
-            </span>
-          </div>
-        </div>
+    <div className={classes.container}>
+      <div className={classes.autoHeight}>
+        <WeatherHeader
+          language={language}
+          maxTemperature={currentWeatherResponse?.main.temp_max || 0}
+          minTemperature={currentWeatherResponse?.main.temp_min || 0}
+          cityName={currentWeatherResponse?.name || ""}
+        />
+      </div>
+      <div className={classes.fillHeight}>
+        <WeatherDaily
+          cityName={currentWeatherResponse?.name || ""}
+          temperature={currentWeatherResponse?.main.temp || 0}
+          weatherType={currentWeatherResponse?.weather[0].main || ""}
+        />
+      </div>
+      <div className={classes.autoHeight}>
+        <WeekForecast />
       </div>
     </div>
   );

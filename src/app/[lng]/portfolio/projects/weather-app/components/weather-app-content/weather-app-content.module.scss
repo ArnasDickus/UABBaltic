@@ -1,38 +1,13 @@
-.headerContainer {
-  padding: 5px 5px;
-  background-color: #3a424c;
+.container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  height: 100vh;
 }
 
-.flexContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.autoHeight {
+  flex: 0 0 auto;
 }
 
-.mainTitle {
-  color: #acb0b4;
-}
-
-.secondaryTitle {
-  color: #d2d4d6;
-}
-
-.subtitle {
-  color: #878a90;
-}
-
-.headerTextContainer {
-  text-align: center;
-}
-
-.svg {
-  color: #50b5e5;
-}
-
-.highLowContainer {
-  display: flex;
-  gap: 10px;
+.fillHeight {
+  flex: 1;
 }

@@ -9,7 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
-import { hideMainHeaderFooter } from "@/app/utils/hide-main-header-footer";
+import { hideMainHeader } from "@/app/utils/hide-main-header-footer";
 
 interface IMainHeader {
   language: string;
@@ -96,7 +96,7 @@ const MainHeader = ({ language }: IMainHeader) => {
   return (
     <header
       className={`${
-        hideMainHeaderFooter(language, pathname) ? "hidden" : "fixed w-full"
+        hideMainHeader(language, pathname) ? "hidden" : "fixed w-full"
       }`}>
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

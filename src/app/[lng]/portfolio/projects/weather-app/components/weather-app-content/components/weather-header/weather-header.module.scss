@@ -1,0 +1,26 @@
+.headerContainer {
+  padding: 5px 5px;
+  background-color: #3a424c;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flexContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.headerTextContainer {
+  text-align: center;
+}
+
+.svg {
+  color: #50b5e5;
+}
+
+.highLowContainer {
+  display: flex;
+  gap: 10px;
+}
