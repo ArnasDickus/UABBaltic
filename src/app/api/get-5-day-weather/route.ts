@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import {
+  I5DaysWeatherApiResponse,
   IWeatherApiRequest,
-  IWeatherApiResponse,
 } from "@/app/[lng]/portfolio/projects/weather-app/components/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
-  json: () => Promise<NGetWeatherData.IRequest["body"]>;
+  json: () => Promise<NGetCurrentWeather.IRequest["body"]>;
 }
 
 export const POST = async (req: CustomNextApiRequest) => {
-  const { lat, lon, language }: NGetWeatherData.IRequest["body"] =
+  const { lat, lon, language }: NGetCurrentWeather.IRequest["body"] =
     await req.json();
 
   try {
     const weatherResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${lon}&lang=${
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=${
         language || "en"
       }&units=metric&appid=${process.env.WEATHER_API_KEY}`
     );
@@ -27,7 +27,8 @@ export const POST = async (req: CustomNextApiRequest) => {
       );
     }
 
-    const weatherData: NGetWeatherData.IResponse = await weatherResponse.json();
+    const weatherData: NGetCurrentWeather.IResponse =
+      await weatherResponse.json();
 
     return NextResponse.json(
       { message: "Success", response: weatherData },
@@ -42,9 +43,9 @@ export const POST = async (req: CustomNextApiRequest) => {
   }
 };
 
-export namespace NGetWeatherData {
+export namespace NGetCurrentWeather {
   export interface IRequest {
     body: IWeatherApiRequest;
   }
-  export interface IResponse extends IWeatherApiResponse {}
+  export interface IResponse extends I5DaysWeatherApiResponse {}
 }

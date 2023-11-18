@@ -6,5 +6,6 @@ export const apiRoutes = {
   "check-username": "/api/check-username",
   "forgot-password": "/api/forgot-password",
   "reset-password": "/api/reset-password",
-  "get-weather-data": "/api/get-weather-data",
+  "get-current-weather": "/api/get-current-weather",
+  "get-5-day-weather": "/api/get-5-day-weather",
 };

@@ -4,7 +4,10 @@ import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { useEffect } from "react";
 
-import { useLazyGetCurrentWeatherApiQuery } from "@/store/services/weather-app-api";
+import {
+  useLazyGet5DaysWeatherApiQuery,
+  useLazyGetCurrentWeatherApiQuery,
+} from "@/store/services/weather-app-api";
 
 import PageLoader from "@/app/[lng]/components/page-loader/page-loader";
 import WeatherHeader from "./components/weather-header/weather-header";
@@ -17,10 +20,17 @@ const WeatherAppContent = ({ language }: { language: string }) => {
   const dispatch = useAppDispatch();
   const [currentWeatherTrigger, currentWeather] =
     useLazyGetCurrentWeatherApiQuery();
+  const [weather5DaysTrigger, weather5Days] = useLazyGet5DaysWeatherApiQuery();
 
-  console.log("currentWeather", currentWeather);
+  // const [weeklyWeatherTrigger, weeklyWeather] = useLazyGetWeatherApiQuery();
 
+  // console.log("currentWeather", currentWeather);
+  // console.log("weeklyWeather", weeklyWeather);
+  const currentWeather5DaysResponse = weather5Days.currentData?.response;
   const currentWeatherResponse = currentWeather.currentData?.response;
+
+  console.log("currentWeather5DaysResponse", currentWeather5DaysResponse);
+  console.log("currentWeatherResponse", currentWeatherResponse);
 
   const getCurrentPosition = async (): Promise<{
     latitude: number;
@@ -48,10 +58,16 @@ const WeatherAppContent = ({ language }: { language: string }) => {
         lon: geoLocations.longitude,
         language,
       });
+
+      weather5DaysTrigger({
+        lat: geoLocations.latitude,
+        lon: geoLocations.longitude,
+        language,
+      });
     };
 
     getCurrentWeather();
-  }, [currentWeatherTrigger, language, t]);
+  }, [currentWeatherTrigger, language, t, weather5DaysTrigger]);
 
   useEffect(() => {
     if (currentWeather.isError) {

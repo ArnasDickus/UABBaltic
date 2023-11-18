@@ -4,7 +4,31 @@ export interface IWeatherApiRequest {
   language: string;
 }
 
-export interface IWeatherApiResponse {
+interface IWeatherMain {
+  temp: number;
+  feels_like: number;
+  temp_min: number;
+  temp_max: number;
+  pressure: number;
+  sea_level: number;
+  grind_level: number;
+  humidity: number;
+}
+
+interface IWeather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+
+interface IWind {
+  speed: number;
+  deg: number;
+  gust: number;
+}
+
+export interface ICurrentWeatherApiResponse {
   message: string;
   response: {
     base: string;
@@ -18,16 +42,7 @@ export interface IWeatherApiResponse {
     };
     dt: number;
     id: number;
-    main: {
-      temp: number;
-      feels_like: number;
-      temp_min: number;
-      temp_max: number;
-      pressure: number;
-      sea_level: number;
-      grind_level: number;
-      humidity: number;
-    };
+    main: IWeatherMain;
     name: string;
     sys: {
       type2: number;
@@ -38,16 +53,43 @@ export interface IWeatherApiResponse {
     };
     timezone: number;
     visibility: number;
-    weather: {
+    weather: IWeather[];
+    wind: IWind;
+  };
+}
+
+export interface I5DaysWeatherApiResponse {
+  message: string;
+  response: {
+    city: {
       id: number;
-      main: string;
-      description: string;
-      icon: string;
-    }[];
-    wind: {
-      speed: number;
-      deg: number;
-      gust: number;
+      coord: {
+        lat: number;
+        lon: number;
+      };
+      name: string;
+      population: number;
+      sunrise: number;
+      sunset: number;
+      timezone: number;
     };
+    cnt: number;
+    cod: string;
+    list: {
+      clouds: {
+        all: number;
+      };
+      dt: number;
+      dt_txt: string;
+      main: IWeatherMain;
+      pop: number;
+      sys: {
+        pod: string;
+      };
+      visibility: number;
+      weather: IWeather;
+      wind: IWind;
+    }[];
+    message: number;
   };
 }

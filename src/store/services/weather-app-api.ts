@@ -1,6 +1,7 @@
 import {
   IWeatherApiRequest,
-  IWeatherApiResponse,
+  ICurrentWeatherApiResponse,
+  I5DaysWeatherApiResponse,
 } from "@/app/[lng]/portfolio/projects/weather-app/components/interfaces";
 import { getBaseUrl } from "@/app/utils/get-base-url";
 import { apiRoutes } from "@/constants/routes";
@@ -11,12 +12,24 @@ export const weatherAppApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: getBaseUrl() }),
   endpoints: (builder) => ({
     getCurrentWeatherApi: builder.query<
-      IWeatherApiResponse,
+      ICurrentWeatherApiResponse,
       IWeatherApiRequest
     >({
       query: (data) => {
         return {
-          url: apiRoutes["get-weather-data"],
+          url: apiRoutes["get-current-weather"],
+          method: "POST",
+          body: { ...data },
+        };
+      },
+    }),
+    get5DaysWeatherApi: builder.query<
+      I5DaysWeatherApiResponse,
+      IWeatherApiRequest
+    >({
+      query: (data) => {
+        return {
+          url: apiRoutes["get-5-day-weather"],
           method: "POST",
           body: { ...data },
         };
@@ -25,4 +38,7 @@ export const weatherAppApi = createApi({
   }),
 });
 
-export const { useLazyGetCurrentWeatherApiQuery } = weatherAppApi;
+export const {
+  useLazyGetCurrentWeatherApiQuery,
+  useLazyGet5DaysWeatherApiQuery,
+} = weatherAppApi;
