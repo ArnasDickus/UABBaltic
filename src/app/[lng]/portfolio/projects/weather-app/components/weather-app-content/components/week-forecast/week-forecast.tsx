@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { roundToNoDecimals } from "@/app/utils/round-values";
 import Image from "next/image";
 import { getWeatherImage } from "@/app/utils/get-weather-image";
-import WeatherVisual from "../weather-visual/weather-visual";
+// import WeatherVisual from "../weather-visual/weather-visual";
 
 interface IWeekForescast {
   language: string;
@@ -46,10 +46,10 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
                 </div>
               </div>
               <div className={classes.weatherVisual}>
-                <WeatherVisual
+                {/* <WeatherVisual
                   temperatureMax={weather.main.temp_max}
                   temperatureMin={weather.main.temp_min}
-                />
+                /> */}
               </div>
             </div>
           );

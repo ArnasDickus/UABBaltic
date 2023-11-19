@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
 import classes from "./weather-visual.module.scss";
 
 interface IWeatherVisual {
@@ -7,25 +6,7 @@ interface IWeatherVisual {
   temperatureMax: number;
 }
 
-interface IVisual {
-  height: string;
-  marginTop: string;
-}
-
 const WeatherVisual = ({ temperatureMin, temperatureMax }: IWeatherVisual) => {
-  const [minVisual, setMinVisual] = useState<IVisual>({
-    height: "0",
-    marginTop: "0",
-  });
-  const [maxVisual, setMaxVisual] = useState<IVisual>({
-    height: "0",
-    marginTop: "0",
-  });
-  const temperatureMultiplier = 5;
-  const topHeight = 50;
-
-  console.log("minVisual", minVisual);
-  console.log("maxVisual", maxVisual);
   // If temperature is positive.
   // Plan 2
   // If negative Convert to plan 2 and change padding.
@@ -77,37 +58,11 @@ const WeatherVisual = ({ temperatureMin, temperatureMax }: IWeatherVisual) => {
   //   return `${positiveTemperature * temperatureMultiplier}px`;
   // };
 
-  // console.log("High", convertTemperatureIntoPx(10));
-  // console.log("Low", convertTemperatureIntoPx(-10));
-
   return (
     <div className={classes.visualContainer}>
-      <div>
-        {/* IF Positive change here. */}
-        <div className={`${classes.column} ${classes.dayColumn}`}></div>
-        <div>
-          <hr />
-        </div>
-        {/* IF Negative change here. */}
-        <div className={`${classes.column} ${classes.dayColumn}`}></div>
-      </div>
-      <div>
-        {/* IF Positive change here. */}
-        <div className={`${classes.column} ${classes.nightColumn}`}></div>
-        <div>
-          <hr />
-        </div>
+      <div className={`${classes.column} ${classes.dayColumn}`}></div>
 
-        <div className={`${classes.column} ${classes.nightColumn}`}></div>
-      </div>
-
-      {/* <div className={`${classes.column} ${classes.dayColumn}`}>
-     
-      </div>
-
-      <div className={`${classes.column} ${classes.nightColumn}`}>
-      
-      </div> */}
+      <div className={`${classes.column} ${classes.nightColumn}`}></div>
     </div>
   );
 };
