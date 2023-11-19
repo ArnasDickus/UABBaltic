@@ -15,7 +15,7 @@ interface IWeatherMain {
   humidity: number;
 }
 
-interface IWeather {
+export interface IWeather {
   id: number;
   main: string;
   description: string;
@@ -87,7 +87,7 @@ export interface I5DaysWeatherApiResponse {
         pod: string;
       };
       visibility: number;
-      weather: IWeather;
+      weather: IWeather[];
       wind: IWind;
     }[];
     message: number;

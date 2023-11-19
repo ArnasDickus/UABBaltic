@@ -2,7 +2,7 @@
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
   useLazyGet5DaysWeatherApiQuery,
@@ -14,10 +14,14 @@ import WeatherHeader from "./components/weather-header/weather-header";
 import WeatherDaily from "./components/weather-daily/weather-daily";
 import WeekForecast from "./components/week-forecast/week-forecast";
 import classes from "./weather-app-content.module.scss";
+import { I5DaysWeatherApiResponse } from "../interfaces";
 
 const WeatherAppContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language: language, ns: "weather-app" });
   const dispatch = useAppDispatch();
+  const [wheather5DaysModifiedData, setwWeather5DaysModifiedData] = useState<
+    I5DaysWeatherApiResponse["response"]["list"]
+  >([]);
   const [currentWeatherTrigger, currentWeather] =
     useLazyGetCurrentWeatherApiQuery();
   const [weather5DaysTrigger, weather5Days] = useLazyGet5DaysWeatherApiQuery();
@@ -70,20 +74,39 @@ const WeatherAppContent = ({ language }: { language: string }) => {
   }, [currentWeatherTrigger, language, t, weather5DaysTrigger]);
 
   useEffect(() => {
-    if (currentWeather.isError) {
-      dispatch(
-        showHideAlert({
-          message: t("internalError"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
-    }
-  }, [currentWeather.isError, dispatch, t]);
+    const weatherDataErrorHandler = () => {
+      if (currentWeather.isError || weather5Days.isError) {
+        dispatch(
+          showHideAlert({
+            message: t("internalError"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+    };
+    weatherDataErrorHandler();
+  }, [currentWeather.isError, dispatch, t, weather5Days.isError]);
+
+  useEffect(() => {
+    const modifyFiveDayWeather = () => {
+      if (weather5Days.currentData?.response) {
+        const filtered5DaysWeatherList =
+          weather5Days.currentData?.response.list.filter((item) =>
+            item.dt_txt.includes("12:00:00")
+          );
+        setwWeather5DaysModifiedData(filtered5DaysWeatherList);
+        console.log("filtered5DaysWeatherList", filtered5DaysWeatherList);
+      }
+    };
+    modifyFiveDayWeather();
+  }, [weather5Days.currentData?.response]);
 
   if (
     currentWeather.status !== "fulfilled" &&
-    currentWeather.status !== "rejected"
+    currentWeather.status !== "rejected" &&
+    weather5Days.status !== "fulfilled" &&
+    weather5Days.status !== "rejected"
   ) {
     return <PageLoader />;
   }
@@ -102,11 +125,14 @@ const WeatherAppContent = ({ language }: { language: string }) => {
         <WeatherDaily
           cityName={currentWeatherResponse?.name || ""}
           temperature={currentWeatherResponse?.main.temp || 0}
-          weatherType={currentWeatherResponse?.weather[0].main || ""}
+          weather={currentWeatherResponse?.weather || []}
         />
       </div>
       <div className={classes.autoHeight}>
-        <WeekForecast language={language} />
+        <WeekForecast
+          language={language}
+          weatherData={wheather5DaysModifiedData}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 $backgroundColor: #3a424c;
 $globalSidePadding: 10px;
+$lighterBackgroundColor: #5e6676;
 
 :export {
   backgroundColor: $backgroundColor;
   globalSidePadding: $globalSidePadding;
+  lighterBackgroundColor: $lighterBackgroundColor;
 }

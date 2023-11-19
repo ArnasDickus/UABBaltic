@@ -4,3 +4,20 @@
   background-color: $backgroundColor;
   padding: 10px $globalSidePadding;
 }
+
+.listContainer {
+  display: flex;
+  background-color: $lighterBackgroundColor;
+  padding: 10px $globalSidePadding;
+  justify-content: space-between;
+}
+
+.temperatureContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.weatherItem {
+  text-align: center;
+}

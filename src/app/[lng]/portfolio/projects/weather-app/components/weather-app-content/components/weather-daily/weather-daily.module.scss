@@ -1,13 +1,11 @@
+@import "/src/styles/components/weather-global-styles.scss";
+
 .container {
-  background-color: #5e6676;
+  background-color: $lighterBackgroundColor;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.svg {
-  color: #fff;
 }
 
 .title {
@@ -23,4 +21,10 @@
 .weatherType {
   font-size: 15px;
   text-align: center;
+}
+
+.weatherDesriptionContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
