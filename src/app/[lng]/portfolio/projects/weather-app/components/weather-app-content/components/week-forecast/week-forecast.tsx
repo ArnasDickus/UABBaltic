@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { roundToNoDecimals } from "@/app/utils/round-values";
 import Image from "next/image";
 import { getWeatherImage } from "@/app/utils/get-weather-image";
+import WeatherVisual from "../weather-visual/weather-visual";
 
 interface IWeekForescast {
   language: string;
@@ -25,22 +26,30 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
         {weatherData?.map((weather) => {
           return (
             <div className={classes.weatherItem} key={weather.dt}>
-              <p className={reusableClasses.secondaryTitle}>
-                {dayjs(weather.dt_txt).format("ddd").toUpperCase()}
-              </p>
-              <Image
-                src={getWeatherImage(weather.weather[0].icon)}
-                width={50}
-                height={50}
-                alt={weather.weather[0].icon}
-              />
-              <div className={classes.temperatureContainer}>
+              <div className={classes.weeklyItem}>
                 <p className={reusableClasses.secondaryTitle}>
-                  {roundToNoDecimals(weather.main.temp_min)}
+                  {dayjs(weather.dt_txt).format("ddd").toUpperCase()}
                 </p>
-                <p className={reusableClasses.subtitle}>
-                  {roundToNoDecimals(weather.main.temp_max)}
-                </p>
+                <Image
+                  src={getWeatherImage(weather.weather[0].icon)}
+                  width={50}
+                  height={50}
+                  alt={weather.weather[0].icon}
+                />
+                <div className={classes.temperatureContainer}>
+                  <p className={reusableClasses.secondaryTitle}>
+                    {roundToNoDecimals(weather.main.temp_min)}
+                  </p>
+                  <p className={reusableClasses.subtitle}>
+                    {roundToNoDecimals(weather.main.temp_max)}
+                  </p>
+                </div>
+              </div>
+              <div className={classes.weatherVisual}>
+                <WeatherVisual
+                  temperatureMax={weather.main.temp_max}
+                  temperatureMin={weather.main.temp_min}
+                />
               </div>
             </div>
           );

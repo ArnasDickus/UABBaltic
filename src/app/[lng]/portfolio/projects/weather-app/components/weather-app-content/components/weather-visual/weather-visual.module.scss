@@ -1,0 +1,20 @@
+.visualContainer {
+  display: flex;
+  align-items: flex-end;
+}
+
+.column {
+  height: 50px;
+  width: 30px;
+  // padding-bottom: 50px;
+}
+
+.dayColumn {
+  background-color: #ab8149;
+  border-top: #ef951d 2px solid;
+}
+
+.nightColumn {
+  background-color: #667899;
+  border-top: #6b87bc 2px solid;
+}

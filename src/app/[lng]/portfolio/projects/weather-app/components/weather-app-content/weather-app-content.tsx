@@ -26,15 +26,8 @@ const WeatherAppContent = ({ language }: { language: string }) => {
     useLazyGetCurrentWeatherApiQuery();
   const [weather5DaysTrigger, weather5Days] = useLazyGet5DaysWeatherApiQuery();
 
-  // const [weeklyWeatherTrigger, weeklyWeather] = useLazyGetWeatherApiQuery();
-
-  // console.log("currentWeather", currentWeather);
-  // console.log("weeklyWeather", weeklyWeather);
   const currentWeather5DaysResponse = weather5Days.currentData?.response;
   const currentWeatherResponse = currentWeather.currentData?.response;
-
-  console.log("currentWeather5DaysResponse", currentWeather5DaysResponse);
-  console.log("currentWeatherResponse", currentWeatherResponse);
 
   const getCurrentPosition = async (): Promise<{
     latitude: number;
@@ -96,7 +89,6 @@ const WeatherAppContent = ({ language }: { language: string }) => {
             item.dt_txt.includes("12:00:00")
           );
         setwWeather5DaysModifiedData(filtered5DaysWeatherList);
-        console.log("filtered5DaysWeatherList", filtered5DaysWeatherList);
       }
     };
     modifyFiveDayWeather();

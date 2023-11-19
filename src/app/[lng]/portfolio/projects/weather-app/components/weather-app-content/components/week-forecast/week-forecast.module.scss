@@ -7,8 +7,8 @@
 
 .listContainer {
   display: flex;
+  padding-top: 10px;
   background-color: $lighterBackgroundColor;
-  padding: 10px $globalSidePadding;
   justify-content: space-between;
 }
 
@@ -20,4 +20,12 @@
 
 .weatherItem {
   text-align: center;
+}
+
+.weeklyItem {
+  padding: 0 $globalSidePadding 0 $globalSidePadding;
+}
+
+.weatherVisual {
+  padding-top: 10px;
 }
