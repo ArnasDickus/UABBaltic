@@ -66,6 +66,7 @@ const CitySearch = ({ language }: ICitySearch) => {
             onChange: (event: ChangeEvent<HTMLInputElement>) =>
               setSearchTerm(event.target.value),
           }}
+          onDelete={() => setSearchTerm("")}
         />
       </div>
       <div className={classes.citiesContainer}>
@@ -77,7 +78,12 @@ const CitySearch = ({ language }: ICitySearch) => {
               onListClick(city.coord.lat, city.coord.lon);
             }}>
             <p className={classes.title}>
-              {highlightText(city.name, searchTerm)}
+              {highlightText(
+                `${city.name}, ${city.state.length ? `${city.state},` : ""} ${
+                  city.country
+                }`,
+                searchTerm
+              )}
             </p>
           </li>
         ))}
