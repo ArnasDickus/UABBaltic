@@ -2,5 +2,7 @@
   "internalError": "Error, Please wait a few minutes before you try again",
   "weatherForecast": "Weather Forecast",
   "dayForecast": "Day Forecast",
-  "weekForecast": "Week Forecast"
+  "weekForecast": "Week Forecast",
+  "location": "Location",
+  "search": "Search"
 }

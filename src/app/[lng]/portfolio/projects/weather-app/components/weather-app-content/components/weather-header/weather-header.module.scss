@@ -1,7 +1,6 @@
 @import "/src/styles/components/weather-global-styles.scss";
 
 .headerContainer {
-  padding: 10px $globalSidePadding;
   background-color: $backgroundColor;
   display: flex;
   flex-direction: column;
@@ -9,6 +8,7 @@
 }
 
 .flexContainer {
+  padding: 10px $globalSidePadding;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;

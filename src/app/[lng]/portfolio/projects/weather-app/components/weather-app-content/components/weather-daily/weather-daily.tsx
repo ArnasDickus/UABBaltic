@@ -26,7 +26,7 @@ const WeatherDaily = ({ cityName, temperature, weather }: IWeatherDaily) => {
         <div className={classes.weatherDesriptionContainer}>
           <p
             className={`${reusableClasses.secondaryTitle} ${classes.weatherType}`}>
-            {capitalizeFirstLetter(weather[0].description || "")}
+            {capitalizeFirstLetter(weather?.[0]?.description || "")}
           </p>
           <Image
             alt={weather[0].main}

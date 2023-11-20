@@ -93,3 +93,14 @@ export interface I5DaysWeatherApiResponse {
     message: number;
   };
 }
+
+export interface ICities {
+  id: number;
+  name: string;
+  state: string;
+  country: string;
+  coord: {
+    lon: number;
+    lat: number;
+  };
+}
