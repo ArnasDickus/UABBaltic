@@ -3,6 +3,7 @@ import { swapiApi } from "./services/swapi-api";
 import swapiFilmsReducer from "./slices/swapi-films-slice";
 import toastAlertReducer from "./slices/toast-alert-slice";
 import { weatherAppApi } from "./services/weather-app-api";
+import weatherSliceReducer from "./slices/weather-slice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
 
     swapiFilms: swapiFilmsReducer,
     toastAlert: toastAlertReducer,
+    weatherApp: weatherSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

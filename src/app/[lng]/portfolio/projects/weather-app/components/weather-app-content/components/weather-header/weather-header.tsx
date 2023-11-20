@@ -29,13 +29,6 @@ const WeatherHeader = ({
   const [searchMenu, setSearchMenu] = useState<ISearchMenu>({
     isOpen: false,
   });
-  // console.log("JSON", JSON.stringify(CityListJSON));
-  // const stringifyJSON = JSON.stringify(CityListJSON);
-  // const parseJSON: ICities[] = JSON.parse(stringifyJSON);
-  // console.log("parseJSON", parseJSON);
-  // const cityList = JSON.parse(CityList);
-
-  // console.log("cityList", cityList);
 
   const openSearchMenu = () => {
     setSearchMenu({
@@ -46,22 +39,36 @@ const WeatherHeader = ({
   return (
     <div className={classes.headerContainer}>
       <div className={classes.flexContainer}>
-        <CloudOutlinedIcon className={classes.svg} />
+        {!searchMenu.isOpen ? (
+          <CloudOutlinedIcon className={classes.svg} />
+        ) : (
+          <button
+            className={classes.doneButton}
+            onClick={() =>
+              setSearchMenu({
+                isOpen: false,
+              })
+            }>
+            {t("done")}
+          </button>
+        )}
+
         <div className={classes.headerTextContainer}>
           <p className={reusableClasses.mainTitle}>
             {searchMenu.isOpen ? t("location") : t("weatherForecast")}
           </p>
           <span className={reusableClasses.subtitle}>{cityName}</span>
         </div>
-        <div onClick={openSearchMenu}>
-          <SettingsOutlinedIcon className={classes.svg} />
-        </div>
+        {!searchMenu.isOpen ? (
+          <div onClick={openSearchMenu}>
+            <SettingsOutlinedIcon className={classes.svg} />
+          </div>
+        ) : (
+          <span className={classes.emptyIcon} />
+        )}
       </div>
       {searchMenu.isOpen ? (
-        <>
-          <CitySearch language={language} />
-          {/* <CityList cities={CityListJSON as ICities[]} /> */}
-        </>
+        <CitySearch language={language} />
       ) : (
         <div className={classes.flexContainer}>
           <p className={reusableClasses.secondaryTitle}>{t("dayForecast")}</p>

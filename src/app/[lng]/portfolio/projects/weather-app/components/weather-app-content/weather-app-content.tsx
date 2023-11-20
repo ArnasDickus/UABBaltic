@@ -1,6 +1,6 @@
 "use client";
 import { useTranslation } from "@/app/i18n/client";
-import { useAppDispatch } from "@/store/redux-hooks";
+import { useAppDispatch, useAppSelector } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { useEffect, useState } from "react";
 
@@ -15,18 +15,18 @@ import WeatherDaily from "./components/weather-daily/weather-daily";
 import WeekForecast from "./components/week-forecast/week-forecast";
 import classes from "./weather-app-content.module.scss";
 import { I5DaysWeatherApiResponse } from "../interfaces";
+import { selectWeather, updateCoordinates } from "@/store/slices/weather-slice";
 
 const WeatherAppContent = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language: language, ns: "weather-app" });
   const dispatch = useAppDispatch();
-  const [wheather5DaysModifiedData, setwWeather5DaysModifiedData] = useState<
+  const weatherCoordinates = useAppSelector(selectWeather);
+  const [weather5DaysModifiedData, setWeather5DaysModifiedData] = useState<
     I5DaysWeatherApiResponse["response"]["list"]
   >([]);
   const [currentWeatherTrigger, currentWeather] =
     useLazyGetCurrentWeatherApiQuery();
   const [weather5DaysTrigger, weather5Days] = useLazyGet5DaysWeatherApiQuery();
-
-  const currentWeather5DaysResponse = weather5Days.currentData?.response;
   const currentWeatherResponse = currentWeather.currentData?.response;
 
   const getCurrentPosition = async (): Promise<{
@@ -50,21 +50,39 @@ const WeatherAppContent = ({ language }: { language: string }) => {
       const geoLocations: { latitude: number; longitude: number } =
         await getCurrentPosition();
 
+      dispatch(
+        updateCoordinates({
+          latitude: geoLocations.latitude,
+          longitude: geoLocations.longitude,
+        })
+      );
+    };
+
+    getCurrentWeather();
+  }, [dispatch, language, t]);
+
+  useEffect(() => {
+    const fetchWeatherData = () => {
       currentWeatherTrigger({
-        lat: geoLocations.latitude,
-        lon: geoLocations.longitude,
+        lat: weatherCoordinates.coordinates.latitude,
+        lon: weatherCoordinates.coordinates.longitude,
         language,
       });
 
       weather5DaysTrigger({
-        lat: geoLocations.latitude,
-        lon: geoLocations.longitude,
+        lat: weatherCoordinates.coordinates.latitude,
+        lon: weatherCoordinates.coordinates.longitude,
         language,
       });
     };
 
-    getCurrentWeather();
-  }, [currentWeatherTrigger, language, t, weather5DaysTrigger]);
+    fetchWeatherData();
+  }, [
+    currentWeatherTrigger,
+    language,
+    weather5DaysTrigger,
+    weatherCoordinates.coordinates,
+  ]);
 
   useEffect(() => {
     const weatherDataErrorHandler = () => {
@@ -88,7 +106,7 @@ const WeatherAppContent = ({ language }: { language: string }) => {
           weather5Days.currentData?.response.list.filter((item) =>
             item.dt_txt.includes("12:00:00")
           );
-        setwWeather5DaysModifiedData(filtered5DaysWeatherList);
+        setWeather5DaysModifiedData(filtered5DaysWeatherList);
       }
     };
     modifyFiveDayWeather();
@@ -123,7 +141,7 @@ const WeatherAppContent = ({ language }: { language: string }) => {
       <div className={classes.autoHeight}>
         <WeekForecast
           language={language}
-          weatherData={wheather5DaysModifiedData}
+          weatherData={weather5DaysModifiedData}
         />
       </div>
     </div>

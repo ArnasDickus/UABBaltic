@@ -5,11 +5,18 @@ import { useTranslation } from "@/app/i18n/client";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ICities } from "../../../interfaces";
 import classes from "./city-search.module.scss";
+import { useAppDispatch } from "@/store/redux-hooks";
+import { updateCoordinates } from "@/store/slices/weather-slice";
 
-const CitySearch = ({ language }: { language: string }) => {
+interface ICitySearch {
+  language: string;
+}
+
+const CitySearch = ({ language }: ICitySearch) => {
   const { t } = useTranslation({ language: language, ns: "weather-app" });
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCities, setFilteredCities] = useState<ICities[]>([]);
+  const dispatch = useAppDispatch();
 
   const memoizedFilteredCities = useMemo(
     () => filteredCities,
@@ -26,6 +33,15 @@ const CitySearch = ({ language }: { language: string }) => {
       ) : (
         <span key={index}>{part}</span>
       )
+    );
+  };
+
+  const onListClick = (lat: number, lon: number) => {
+    dispatch(
+      updateCoordinates({
+        latitude: lat,
+        longitude: lon,
+      })
     );
   };
 
@@ -54,7 +70,12 @@ const CitySearch = ({ language }: { language: string }) => {
       </div>
       <div className={classes.citiesContainer}>
         {memoizedFilteredCities.map((city) => (
-          <li className={classes.list} key={city.id}>
+          <li
+            className={classes.list}
+            key={city.id}
+            onClick={() => {
+              onListClick(city.coord.lat, city.coord.lon);
+            }}>
             <p className={classes.title}>
               {highlightText(city.name, searchTerm)}
             </p>

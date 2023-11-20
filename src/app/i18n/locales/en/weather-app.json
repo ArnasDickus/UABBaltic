@@ -4,5 +4,6 @@
   "dayForecast": "Day Forecast",
   "weekForecast": "Week Forecast",
   "location": "Location",
-  "search": "Search"
+  "search": "Search",
+  "done": "Done"
 }
