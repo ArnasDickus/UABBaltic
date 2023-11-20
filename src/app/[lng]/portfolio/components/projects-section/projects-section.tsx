@@ -4,6 +4,7 @@ import ProjectCard, {
 } from "@/components/project-card/project-card";
 import { sectionHeader } from "@/styles/reusable-styles";
 import SwapiProject from "../../../../../../public/images/swapi-project.png";
+import WeatherProject from "../../../../../../public/images/weather-project.png";
 
 const ProjectsSection = async ({ language }: { language: string }) => {
   const { t } = await useTranslation({ language, ns: "portfolio" });
@@ -22,7 +23,7 @@ const ProjectsSection = async ({ language }: { language: string }) => {
       description: t("weatherAppDescription"),
       link: `/${language}/portfolio/projects/weather-app`,
       linkTitle: t("demo"),
-      image: SwapiProject,
+      image: WeatherProject,
       imageAlt: t("weatherApp"),
     },
   ];
