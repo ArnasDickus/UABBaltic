@@ -17,93 +17,84 @@ interface CustomNextApiRequest extends NextRequest {
 }
 
 export const POST = async (req: CustomNextApiRequest) => {
-  const requestData: NCreateUser.IRequest["body"] = await req.json();
-  const saltRounds = 10;
-  const confirmationToken = generateToken();
+  try {
+    const requestData: NCreateUser.IRequest["body"] = await req.json();
+    const saltRounds = 10;
+    const confirmationToken = generateToken();
 
-  const emailLink = `${getBaseUrl()}/${
-    requestData.language
-  }/confirm-email?token=${confirmationToken}`;
+    const emailLink = `${getBaseUrl()}/${
+      requestData.language
+    }/confirm-email?token=${confirmationToken}`;
 
-  bcrypt.genSalt(saltRounds, function (error, salt: string) {
-    bcrypt.hash(
-      requestData.formData.password,
-      salt,
-      async function (error, hash: string) {
-        const newUser = await client
-          .mutate({
-            mutation: ADD_USER,
-            variables: {
-              addUserObject: {
-                name: requestData.formData.name,
-                password: hash,
-                email: requestData.formData.email,
-                username: requestData.formData.username,
-                email_confirmed: false,
-              },
-            },
-          })
-          .then((val) => val.data?.insert_user?.returning?.[0]);
+    bcrypt.genSalt(saltRounds, async function (error, salt: string) {
+      try {
+        if (error) {
+          throw error;
+        }
 
-        await client.mutate({
-          mutation: ADD_USER_CONFIRMATION,
-          variables: {
-            addUserConfirmationObject: {
-              expires_at: dayjs().add(1, "week"),
-              user_id: newUser?.id,
-              token: confirmationToken,
-            },
-          },
-        });
+        bcrypt.hash(
+          requestData.formData.password,
+          salt,
+          async function (error, hash: string) {
+            try {
+              if (error) {
+                throw error;
+              }
 
-        // await new Promise((resolve, reject) => {
-        //   // verify connection configuration
-        //   transporter.verify(function (error, success) {
-        //     if (error) {
-        //       console.error(error);
-        //       reject(error);
-        //     } else {
-        //       resolve(success);
-        //     }
-        //   });
-        // });
+              const newUser = await client
+                .mutate({
+                  mutation: ADD_USER,
+                  variables: {
+                    addUserObject: {
+                      name: requestData.formData.name,
+                      password: hash,
+                      email: requestData.formData.email,
+                      username: requestData.formData.username,
+                      email_confirmed: false,
+                    },
+                  },
+                })
+                .then((val) => val.data?.insert_user?.returning?.[0]);
 
-        // const mailData = {
-        //   from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-        //   to: requestData.formData.email,
-        //   subject: "UABBaltic email confirmation",
-        //   html: `<div>
-        //     <a href=${emailLink}>Confirm Email</a>
-        //     </div>`,
-        // };
+              await client.mutate({
+                mutation: ADD_USER_CONFIRMATION,
+                variables: {
+                  addUserConfirmationObject: {
+                    expires_at: dayjs().add(1, "week"),
+                    user_id: newUser?.id,
+                    token: confirmationToken,
+                  },
+                },
+              });
 
-        // await transporter.sendMail({}).catch((error) => {
-        //   console.error("ADD_USER", error);
-        //   return NextResponse.json(
-        //     { error: "Internal Server Error" },
-        //     { status: StatusCodes.internalServerError }
-        //   );
-        // });
-
-        // await new Promise((resolve, reject) => {
-        //   // send mail
-        //   transporter.sendMail(mailData, (err, info) => {
-        //     if (err) {
-        //       console.error(err);
-        //       reject(err);
-        //     } else {
-        //       resolve(info);
-        //     }
-        //   });
-        // });
+              return NextResponse.json(
+                { message: "User created successfully" },
+                { status: StatusCodes.okStatus }
+              );
+            } catch (hashingError) {
+              console.error("Error hashing password:", hashingError);
+              return NextResponse.json(
+                { error: "Internal Server Error" },
+                { status: StatusCodes.internalServerError }
+              );
+            }
+          }
+        );
+      } catch (saltError) {
+        console.error("Error generating salt:", saltError);
+        return NextResponse.json(
+          { error: "Internal Server Error" },
+          { status: StatusCodes.internalServerError }
+        );
       }
+    });
+  } catch (jsonError) {
+    console.error("Error parsing JSON:", jsonError);
+    return NextResponse.json(
+      { error: "Bad Request" },
+      { status: StatusCodes.badRequest }
     );
-  });
-
-  return NextResponse.json(
-    { message: "User created successfully" },
-    { status: StatusCodes.okStatus }
-  );
+  }
 };
 
 export namespace NCreateUser {
