@@ -24,6 +24,7 @@ const WeatherAppContent = ({ language }: { language: string }) => {
   const [weather5DaysModifiedData, setWeather5DaysModifiedData] = useState<
     I5DaysWeatherApiResponse["response"]["list"]
   >([]);
+
   const [currentWeatherTrigger, currentWeather] =
     useLazyGetCurrentWeatherApiQuery();
   const [weather5DaysTrigger, weather5Days] = useLazyGet5DaysWeatherApiQuery();
