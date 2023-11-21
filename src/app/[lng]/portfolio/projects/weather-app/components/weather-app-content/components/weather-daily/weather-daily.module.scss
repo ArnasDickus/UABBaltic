@@ -1,0 +1,39 @@
+@import "/src/styles/components/weather-global-styles.scss";
+
+.container {
+  background-color: $lighterBackgroundColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.title {
+  color: $secondaryTitleColor;
+  font-size: 50px;
+  text-align: center;
+}
+
+.subtitle {
+  color: $secondaryTitleColor;
+  font-size: 25px;
+  text-align: center;
+}
+
+.weatherType {
+  color: $secondaryTitleColor;
+  font-size: 15px;
+  text-align: center;
+}
+
+.weatherDesriptionContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

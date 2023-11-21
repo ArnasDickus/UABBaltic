@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 const PageResetPassword = ({ params, searchParams }: IPageParamProps) => {
   return (
     <PageContainer
+      language={params.lng}
       footer={<ServerFooter language={params.lng} path="/reset-password" />}>
       <div className={formContainerClassNames}>
         <ResetPasswordForm

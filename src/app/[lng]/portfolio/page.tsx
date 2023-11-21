@@ -16,7 +16,9 @@ export const metadata: Metadata = {
 
 const PagePortfolio = ({ params: { lng } }: IPageParamProps) => {
   return (
-    <PageContainer footer={<ServerFooter language={lng} path="/portfolio" />}>
+    <PageContainer
+      language={lng}
+      footer={<ServerFooter language={lng} path="/portfolio" />}>
       <HeroSection language={lng} />
       <AboutSection language={lng} />
       <ProjectsSection language={lng} />

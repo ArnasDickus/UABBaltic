@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 
 const PageLogin: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <PageContainer footer={<ServerFooter language={lng} path="/login" />}>
+    <PageContainer
+      language={lng}
+      footer={<ServerFooter language={lng} path="/login" />}>
       <div className={formContainerClassNames}>
         <LoginForm language={lng} />
       </div>

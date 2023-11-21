@@ -6,6 +6,9 @@ import client from "../../../../../apollo-client";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "@/store/store";
 import AuthGuard from "../auth-guard/auth-guard";
+import "dayjs/locale/lt";
+import "dayjs/locale/en";
+import dayjs from "dayjs";
 
 const Providers = ({
   children,
@@ -14,6 +17,8 @@ const Providers = ({
   children: ReactNode;
   language: string;
 }) => {
+  dayjs.locale(language);
+
   return (
     <SessionProvider>
       <ApolloProvider client={client}>

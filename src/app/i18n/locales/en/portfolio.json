@@ -7,5 +7,7 @@
   "projects": "Projects that I created",
   "swapi": "Swapi",
   "swapiDescription": "One of the most common FE Interview tasks",
-  "demo": "Demo"
+  "demo": "Demo",
+  "weatherApp": "Weather App",
+  "weatherAppDescription": "App for displaying current weather information"
 }

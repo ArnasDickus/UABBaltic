@@ -1,8 +1,6 @@
 "use client";
 import Input from "@/components/input/input";
-import SnackAlert from "@/app/[lng]/components/snack-alert/snack-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import * as Yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IForgotPassword } from "./interfaces";

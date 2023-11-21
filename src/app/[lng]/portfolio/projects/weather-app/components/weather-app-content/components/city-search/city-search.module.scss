@@ -1,0 +1,33 @@
+@import "/src/styles/components/weather-global-styles.scss";
+
+.citySearchContainer {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.citiesContainer {
+  top: 36px;
+  width: 100%;
+  position: absolute;
+}
+
+.list {
+  padding: 10px 0;
+  text-decoration: none;
+  background-color: #4e555e;
+  list-style-type: none;
+  border-bottom: 1px solid #fff;
+}
+
+.title {
+  padding-left: $globalSidePadding;
+  color: #83868c;
+}
+
+.highlight {
+  color: #c4c6c9;
+}
+
+.input {
+  padding: 0 $globalSidePadding;
+}

@@ -7,7 +7,6 @@ import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { apiRoutes } from "@/constants/routes";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import {
   formButtonContainerClassNames,
   formClassNames,
@@ -19,7 +18,6 @@ import { showHideAlert } from "@/store/slices/toast-alert-slice";
 
 const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const validationSchema = Yup.object().shape({
