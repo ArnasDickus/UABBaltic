@@ -60,10 +60,9 @@ export const POST = async (req: CustomNextApiRequest) => {
           // verify connection configuration
           transporter.verify(function (error, success) {
             if (error) {
-              console.log(error);
+              console.error(error);
               reject(error);
             } else {
-              console.log("Server is ready to take our messages");
               resolve(success);
             }
           });
@@ -93,7 +92,6 @@ export const POST = async (req: CustomNextApiRequest) => {
               console.error(err);
               reject(err);
             } else {
-              console.log(info);
               resolve(info);
             }
           });
