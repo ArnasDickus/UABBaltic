@@ -137,6 +137,7 @@ const WeatherAppContent = ({ language }: { language: string }) => {
           cityName={currentWeatherResponse?.name || ""}
           temperature={currentWeatherResponse?.main.temp || 0}
           weather={currentWeatherResponse?.weather || []}
+          language={language}
         />
       </div>
       <div className={classes.autoHeight}>

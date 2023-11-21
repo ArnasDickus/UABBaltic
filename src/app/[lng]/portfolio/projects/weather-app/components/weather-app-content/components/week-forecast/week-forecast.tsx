@@ -2,7 +2,6 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import classes from "./week-forecast.module.scss";
-import reusableClasses from "@/styles/components/weather-reusable.module.scss";
 import { I5DaysWeatherApiResponse } from "../../../interfaces";
 import dayjs from "dayjs";
 import { roundToNoDecimals } from "@/app/utils/round-values";
@@ -21,14 +20,14 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
   return (
     <>
       <div className={classes.titleContainer}>
-        <h2 className={reusableClasses.secondaryTitle}>{t("weekForecast")}</h2>
+        <h2 className={classes.secondaryTitle}>{t("weekForecast")}</h2>
       </div>
       <div className={classes.listContainer}>
         {weatherData?.map((weather) => {
           return (
             <div className={classes.weatherItem} key={weather.dt}>
               <div>
-                <p className={reusableClasses.secondaryTitle}>
+                <p className={classes.secondaryTitle}>
                   {dayjs(weather.dt_txt).format("ddd").toUpperCase()}
                 </p>
                 <Image
@@ -38,10 +37,10 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
                   alt={weather.weather[0].icon}
                 />
                 <div className={classes.temperatureContainer}>
-                  <p className={reusableClasses.secondaryTitle}>
+                  <p className={classes.secondaryTitle}>
                     {roundToNoDecimals(weather.main.temp_min)}
                   </p>
-                  <p className={reusableClasses.subtitle}>
+                  <p className={classes.subtitle}>
                     {roundToNoDecimals(weather.main.temp_max)}
                   </p>
                 </div>

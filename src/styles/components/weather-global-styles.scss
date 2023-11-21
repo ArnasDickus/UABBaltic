@@ -2,8 +2,15 @@ $backgroundColor: #3a424c;
 $globalSidePadding: 10px;
 $lighterBackgroundColor: #5e6676;
 
+$mainTitleColor: #acb0b4;
+$secondaryTitleColor: #d2d4d6;
+$subtitleColor: #878a90;
+
 :export {
   backgroundColor: $backgroundColor;
   globalSidePadding: $globalSidePadding;
   lighterBackgroundColor: $lighterBackgroundColor;
+  mainTitleColor: $mainTitleColor;
+  secondaryTitleColor: $secondaryTitleColor;
+  subtitleColor: $subtitleColor;
 }
