@@ -56,28 +56,52 @@ export const POST = async (req: CustomNextApiRequest) => {
           },
         });
 
-        await transporter
-          .sendMail({
-            from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-            to: requestData.formData.email,
-            subject: "UABBaltic email confirmation",
-            html: `<div>
+        await new Promise((resolve, reject) => {
+          // verify connection configuration
+          transporter.verify(function (error, success) {
+            if (error) {
+              console.error(error);
+              reject(error);
+            } else {
+              resolve(success);
+            }
+          });
+        });
+
+        const mailData = {
+          from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
+          to: requestData.formData.email,
+          subject: "UABBaltic email confirmation",
+          html: `<div>
             <a href=${emailLink}>Confirm Email</a>
             </div>`,
-          })
-          .catch((error) => {
-            console.error("ADD_USER", error);
-            return NextResponse.json(
-              { error: "Internal Server Error" },
-              { status: StatusCodes.internalServerError }
-            );
+        };
+
+        await transporter.sendMail({}).catch((error) => {
+          console.error("ADD_USER", error);
+          return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: StatusCodes.internalServerError }
+          );
+        });
+
+        await new Promise((resolve, reject) => {
+          // send mail
+          transporter.sendMail(mailData, (err, info) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              resolve(info);
+            }
           });
+        });
       }
     );
   });
 
   return NextResponse.json(
-    { error: "User created successfully" },
+    { message: "User created successfully" },
     { status: StatusCodes.okStatus }
   );
 };
