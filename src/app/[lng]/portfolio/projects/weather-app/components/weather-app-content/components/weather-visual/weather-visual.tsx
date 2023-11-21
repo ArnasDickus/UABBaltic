@@ -50,7 +50,7 @@ const WeatherVisual = ({
       bar: {
         categoryPercentage: 1,
         barPercentage: 1,
-        barThickness: 32,
+        barThickness: "flex",
 
         borderWidth: {
           top: 2,
