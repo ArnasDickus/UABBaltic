@@ -28,7 +28,10 @@ interface IWind {
   gust: number;
 }
 
-interface ICoordinates {}
+interface ICoordinates {
+  lon: number;
+  lat: number;
+}
 
 export interface ICurrentWeatherApiResponse {
   message: string;
