@@ -16,7 +16,7 @@ interface IWeatherDaily {
 const WeatherDaily = ({ cityName, temperature, weather }: IWeatherDaily) => {
   return (
     <div className={classes.container}>
-      <div>
+      <div className={classes.textContainer}>
         <h2 className={`${reusableClasses.secondaryTitle} ${classes.title}`}>
           {roundToNoDecimals(temperature)} &deg;
         </h2>

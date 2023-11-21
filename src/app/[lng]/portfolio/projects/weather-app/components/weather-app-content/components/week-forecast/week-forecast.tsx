@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { roundToNoDecimals } from "@/app/utils/round-values";
 import Image from "next/image";
 import { getWeatherImage } from "@/app/utils/get-weather-image";
-// import WeatherVisual from "../weather-visual/weather-visual";
+import WeatherVisual from "../weather-visual/weather-visual";
 
 interface IWeekForescast {
   language: string;
@@ -17,6 +17,7 @@ interface IWeekForescast {
 
 const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
   const { t } = useTranslation({ language: language, ns: "weather-app" });
+
   return (
     <>
       <div className={classes.titleContainer}>
@@ -26,7 +27,7 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
         {weatherData?.map((weather) => {
           return (
             <div className={classes.weatherItem} key={weather.dt}>
-              <div className={classes.weeklyItem}>
+              <div>
                 <p className={reusableClasses.secondaryTitle}>
                   {dayjs(weather.dt_txt).format("ddd").toUpperCase()}
                 </p>
@@ -45,15 +46,19 @@ const WeekForecast = ({ language, weatherData }: IWeekForescast) => {
                   </p>
                 </div>
               </div>
-              <div className={classes.weatherVisual}>
-                {/* <WeatherVisual
-                  temperatureMax={weather.main.temp_max}
-                  temperatureMin={weather.main.temp_min}
-                /> */}
-              </div>
             </div>
           );
         })}
+      </div>
+      <div className={classes.weatherVisual}>
+        <WeatherVisual
+          maxTemperatures={weatherData?.map(
+            (weather) => weather?.main.temp_max
+          )}
+          minTemperatures={weatherData?.map(
+            (weather) => weather?.main.temp_min
+          )}
+        />
       </div>
     </>
   );

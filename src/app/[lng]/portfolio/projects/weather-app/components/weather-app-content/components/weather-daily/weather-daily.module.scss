@@ -28,3 +28,9 @@
   align-items: center;
   flex-wrap: wrap;
 }
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
