@@ -44,7 +44,6 @@ const LoginForm = ({ language }: { language: string }) => {
       redirect: false,
     });
 
-    console.log("response", response);
     if (response?.error) {
       dispatch(
         showHideAlert({

@@ -28,6 +28,8 @@ interface IWind {
   gust: number;
 }
 
+interface ICoordinates {}
+
 export interface ICurrentWeatherApiResponse {
   message: string;
   response: {
@@ -36,10 +38,7 @@ export interface ICurrentWeatherApiResponse {
       all: number;
     };
     cod: number;
-    coord: {
-      lon: number;
-      lat: number;
-    };
+    coord: ICoordinates;
     dt: number;
     id: number;
     main: IWeatherMain;
@@ -63,10 +62,7 @@ export interface I5DaysWeatherApiResponse {
   response: {
     city: {
       id: number;
-      coord: {
-        lat: number;
-        lon: number;
-      };
+      coord: ICoordinates;
       name: string;
       population: number;
       sunrise: number;
@@ -99,8 +95,5 @@ export interface ICities {
   name: string;
   state: string;
   country: string;
-  coord: {
-    lon: number;
-    lat: number;
-  };
+  coord: ICoordinates;
 }
