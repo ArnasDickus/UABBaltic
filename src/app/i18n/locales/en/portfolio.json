@@ -1,0 +1,13 @@
+{
+  "introduction": "Frontend Developer Mentor & Activist",
+  "subtitle": "Experienced Front-end Developer specializing in React",
+  "aboutIntro": "Hello, I'm Arnas. Nice to meet you",
+  "aboutDescription": "Since the graduation of Balticum Talents in 2018. I have worked for various companies. I trained other specialists. I am ambitious, inquisitive and improving",
+  "companies": "Companies that I worked in",
+  "projects": "Projects that I created",
+  "swapi": "Swapi",
+  "swapiDescription": "One of the most common FE Interview tasks",
+  "demo": "Demo",
+  "weatherApp": "Weather App",
+  "weatherAppDescription": "App for displaying current weather information"
+}

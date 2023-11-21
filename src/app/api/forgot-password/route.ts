@@ -1,4 +1,3 @@
-import { NextApiRequest } from "next";
 import client from "../../../../apollo-client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -7,8 +6,8 @@ import { StatusCodes } from "@/constants/status-code";
 import { getBaseUrl } from "@/app/utils/get-base-url";
 import dayjs from "dayjs";
 import { generateToken } from "@/app/utils/generate-email-confirmation-token";
-import { ADD_USER_PASSWORD_CHANGE_REQUEST } from "@/components/store/modules/user-password-change-request/query";
-import { GET_USER } from "@/components/store/modules/user/query";
+import { GET_USER } from "@/store/modules/user/query";
+import { ADD_USER_PASSWORD_CHANGE_REQUEST } from "@/store/modules/user-password-change-request/query";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;

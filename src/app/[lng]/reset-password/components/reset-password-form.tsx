@@ -1,9 +1,7 @@
 "use client";
 import Input from "@/components/input/input";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IResetPasswordForm } from "./interfaces";
 import * as Yup from "yup";
@@ -15,6 +13,8 @@ import {
   formClassNames,
 } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
+import { useAppDispatch } from "@/store/redux-hooks";
+import { showHideAlert } from "@/store/slices/toast-alert-slice";
 
 const ResetPasswordForm = ({
   language,
@@ -25,11 +25,7 @@ const ResetPasswordForm = ({
 }) => {
   const { t } = useTranslation({ language, ns: "reset_password" });
   const router = useRouter();
-  const [alert, setAlert] = useState<ISnackAlert>({
-    message: "",
-    severity: "success",
-    showAlert: false,
-  });
+  const dispatch = useAppDispatch();
 
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
@@ -56,69 +52,62 @@ const ResetPasswordForm = ({
     });
 
     if (resetPasswordResponse.status === StatusCodes.okStatus) {
-      setAlert({
-        message: t("passwordChanged"),
-        severity: "success",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("passwordChanged"),
+          severity: "success",
+          showAlert: true,
+        })
+      );
       // @ts-ignore
       router.push("/");
     } else if (
       resetPasswordResponse.status === StatusCodes.internalServerError
     ) {
-      setAlert({
-        message: t("internalError"),
-        severity: "error",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("internalError"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
     }
   };
 
   return (
-    <>
-      <SnackAlert
-        {...alert}
-        onClose={() => {
-          setAlert((prevState) => ({
-            ...prevState,
-            showAlert: false,
-          }));
-        }}
-      />
-      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <Input
-            name={t("newPassword")}
-            errorText={errors.newPassword?.message}
-            inputProps={{
-              type: "password",
-              disabled: isSubmitting,
-              ...register("newPassword"),
-            }}
-          />
-        </div>
-        <div className="mb-4">
-          <Input
-            name={t("repeatPassword")}
-            errorText={errors.repeatPassword?.message}
-            inputProps={{
-              type: "password",
-              disabled: isSubmitting,
-              ...register("repeatPassword"),
-            }}
-          />
-        </div>
-        <div className={formButtonContainerClassNames}>
-          <Button
-            buttonProps={{
-              disabled: isSubmitting,
-              type: "submit",
-            }}>
-            {t("submit")}
-          </Button>
-        </div>
-      </form>
-    </>
+    <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-4">
+        <Input
+          name={t("newPassword")}
+          errorText={errors.newPassword?.message}
+          inputProps={{
+            type: "password",
+            disabled: isSubmitting,
+            ...register("newPassword"),
+          }}
+        />
+      </div>
+      <div className="mb-4">
+        <Input
+          name={t("repeatPassword")}
+          errorText={errors.repeatPassword?.message}
+          inputProps={{
+            type: "password",
+            disabled: isSubmitting,
+            ...register("repeatPassword"),
+          }}
+        />
+      </div>
+      <div className={formButtonContainerClassNames}>
+        <Button
+          buttonProps={{
+            disabled: isSubmitting,
+            type: "submit",
+          }}>
+          {t("submit")}
+        </Button>
+      </div>
+    </form>
   );
 };
 export default ResetPasswordForm;

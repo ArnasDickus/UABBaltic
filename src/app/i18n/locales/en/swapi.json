@@ -1,0 +1,14 @@
+{
+  "swapi": "SWAPI",
+  "about": "About",
+  "films": "Films",
+  "portfolio": "Portfolio",
+  "episodeId": "Episode ID",
+  "fetchActors": "Fetch Actors",
+  "showActors": "Show Actors",
+  "hideActors": "Hide Actors",
+  "fetchedData": "Fetched {{data}} out of {{amount}} requests",
+  "fetchedAll": "Fetched all {{data}} out of {{data}} requests",
+  "aboutTitle": "Swapi - Star Wars API",
+  "aboutDescription": "The task was orginally designed as a technical task for the interview. After a while, I received the same task from another company. And later from another company. This is how the task of Swapi was formed"
+}

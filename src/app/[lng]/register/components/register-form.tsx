@@ -1,17 +1,14 @@
 "use client";
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
-import LinkButton from "@/components/link-button/link-button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IPageRegisterInputs } from "./interfaces";
 import { apiRoutes } from "@/constants/routes";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
-import { useState } from "react";
 import { StatusCodes } from "@/constants/status-code";
-import { GET_USER } from "@/components/store/modules/user/query";
+
 import client from "../../../../../apollo-client";
 import {
   formButtonContainerClassNames,
@@ -19,14 +16,13 @@ import {
 } from "@/styles/reusable-styles";
 import { isEmailExist } from "@/app/utils/auth-functions";
 import { useTranslation } from "@/app/i18n/client";
+import { GET_USER } from "@/store/modules/user/query";
+import { useAppDispatch } from "@/store/redux-hooks";
+import { showHideAlert } from "@/store/slices/toast-alert-slice";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
-  const [alert, setAlert] = useState<ISnackAlert>({
-    message: "",
-    severity: "success",
-    showAlert: false,
-  });
+  const dispatch = useAppDispatch();
 
   const isUsernameExist = async (username: string) => {
     const isUsernameExist: boolean = await client
@@ -69,20 +65,24 @@ const RegisterForm = ({ language }: { language: string }) => {
     const usernameExist = await isUsernameExist(data.username);
 
     if (emailExist) {
-      setAlert({
-        message: t("emailExist"),
-        severity: "error",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("emailExist"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
       return;
     }
 
     if (usernameExist) {
-      setAlert({
-        message: t("usernameInUse"),
-        severity: "error",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("usernameInUse"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
       return;
     }
 
@@ -91,86 +91,79 @@ const RegisterForm = ({ language }: { language: string }) => {
       body: JSON.stringify({ formData: data, language: language }),
     });
     if (newUser.status === StatusCodes.okStatus) {
-      setAlert({
-        message: t("emailWasSent"),
-        severity: "success",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("emailWasSent"),
+          severity: "success",
+          showAlert: true,
+        })
+      );
     } else if (newUser.status === StatusCodes.internalServerError) {
-      setAlert({
-        message: t("internalError"),
-        severity: "error",
-        showAlert: true,
-      });
+      dispatch(
+        showHideAlert({
+          message: t("internalError"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
     }
   };
   return (
-    <>
-      <SnackAlert
-        {...alert}
-        onClose={() => {
-          setAlert((prevState) => ({
-            ...prevState,
-            showAlert: false,
-          }));
-        }}
-      />
-      <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <Input
-            name={t("name")}
-            errorText={errors.name?.message}
-            inputProps={{
-              type: "text",
-              disabled: isSubmitting,
-              ...register("name"),
-            }}
-          />
-        </div>
-        <div className="mb-4">
-          <Input
-            name={t("username")}
-            errorText={errors.username?.message}
-            inputProps={{
-              type: "text",
-              disabled: isSubmitting,
-              ...register("username"),
-            }}
-          />
-        </div>
-        <div className="mb-4">
-          <Input
-            name={t("email")}
-            errorText={errors.email?.message}
-            inputProps={{
-              type: "text",
-              disabled: isSubmitting,
-              ...register("email"),
-            }}
-          />
-        </div>
-        <div className="mb-6">
-          <Input
-            name={t("password")}
-            errorText={errors.password?.message}
-            inputProps={{
-              type: "password",
-              disabled: isSubmitting,
-              ...register("password"),
-            }}
-          />
-        </div>
-        <div className={formButtonContainerClassNames}>
-          <Button
-            buttonProps={{
-              disabled: isSubmitting,
-              type: "submit",
-            }}>
-            {t("register")}
-          </Button>
-        </div>
-      </form>
-    </>
+    <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-4">
+        <Input
+          name={t("name")}
+          errorText={errors.name?.message}
+          inputProps={{
+            type: "text",
+            disabled: isSubmitting,
+            ...register("name"),
+          }}
+        />
+      </div>
+      <div className="mb-4">
+        <Input
+          name={t("username")}
+          errorText={errors.username?.message}
+          inputProps={{
+            type: "text",
+            disabled: isSubmitting,
+            ...register("username"),
+          }}
+        />
+      </div>
+      <div className="mb-4">
+        <Input
+          name={t("email")}
+          errorText={errors.email?.message}
+          inputProps={{
+            type: "text",
+            disabled: isSubmitting,
+            ...register("email"),
+          }}
+        />
+      </div>
+      <div className="mb-6">
+        <Input
+          name={t("password")}
+          errorText={errors.password?.message}
+          inputProps={{
+            type: "password",
+            disabled: isSubmitting,
+            ...register("password"),
+          }}
+        />
+      </div>
+      <div className={formButtonContainerClassNames}>
+        <Button
+          buttonProps={{
+            disabled: isSubmitting,
+            type: "submit",
+          }}>
+          {t("register")}
+        </Button>
+      </div>
+    </form>
   );
 };
 export default RegisterForm;

@@ -1,0 +1,10 @@
+{
+  "internalError": "Klaida, palaukite kelias minutes prieš bandydami dar kartą",
+  "weatherForecast": "Orų Prognozė",
+  "dayForecast": "Dienos Prognozė",
+  "weekForecast": "Savaitės Prognozė",
+  "location": "Vieta",
+  "search": "Paieška",
+  "done": "Baigti",
+  "weather": "Oras"
+}

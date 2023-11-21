@@ -3,5 +3,11 @@
   "subtitle": "Patyręs Front-end Programuotojas specializuojantis React",
   "aboutIntro": "Sveiki, Aš Arnas. Malonu susipažinti",
   "aboutDescription": "Nuo Balticum Talents baigimo 2018 metais. Dirbau įvairiose įmonėse. Apmokinau kitus specialistus. Esu ambicingas, smalsus bei tobulėjantis.",
-  "companies": "Įmonės, kuriose dirbau"
+  "companies": "Įmonės, kuriose dirbau",
+  "projects": "Projektai kuriuos sukūriau",
+  "swapi": "Swapi",
+  "swapiDescription": "Viena dažniausiai taikoma FE interviu užduotis",
+  "demo": "Gyva versija",
+  "weatherApp": "Orų svetainė",
+  "weatherAppDescription": "Svetainė, skirta parodyti dabartinę orų informaciją"
 }

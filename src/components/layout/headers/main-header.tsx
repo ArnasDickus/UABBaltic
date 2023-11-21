@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
+import { hideMainHeader } from "@/app/utils/hide-main-header-footer";
 
 interface IMainHeader {
   language: string;
@@ -30,11 +31,15 @@ const MainHeader = ({ language }: IMainHeader) => {
     let leftNavItems: INavItems[] = [];
     let rightNavItems: INavItems[] = [];
 
-    if (pathname.includes("portfolio")) {
+    if (pathname === `/${language}/portfolio`) {
       leftNavItems = [
         {
           title: t("home"),
           link: "#hero-section",
+        },
+        {
+          title: t("projects"),
+          link: "#projects-section",
         },
         {
           title: t("experience"),
@@ -89,7 +94,10 @@ const MainHeader = ({ language }: IMainHeader) => {
   };
 
   return (
-    <header className="fixed w-full">
+    <header
+      className={`${
+        hideMainHeader(language, pathname) ? "hidden" : "fixed w-full"
+      }`}>
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
@@ -101,11 +109,11 @@ const MainHeader = ({ language }: IMainHeader) => {
               />
             </div>
             <div className={`${formButtonContainerClassNames} w-full`}>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 items-stretch justify-center sm:items-center sm:justify-start">
                 <Link
                   href={`/${language}`}
                   className="flex flex-shrink-0 items-center">
-                  <LogoIcon />
+                  <LogoIcon width={200} color="#fff" fill="#fff" />
                 </Link>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

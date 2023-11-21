@@ -3,14 +3,14 @@ import acceptLanguage from "accept-language";
 import { fallbackLng, languages, cookieName } from "./app/i18n/settings";
 
 acceptLanguage.languages(languages);
-//  Middleware conventions https://nextjs.org/docs/pages/building-your-application/routing/middleware
+
 export const config = {
   // matcher: '/:lng*'
   matcher: ["/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)"],
 };
 
 export function middleware(req: NextRequest) {
-  let lng;
+  let lng: string | null = null;
   if (req.cookies.has(cookieName)) {
     lng = acceptLanguage.get(req.cookies.get(cookieName)?.value);
   }

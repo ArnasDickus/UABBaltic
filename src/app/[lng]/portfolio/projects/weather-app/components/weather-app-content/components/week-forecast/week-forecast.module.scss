@@ -1,0 +1,35 @@
+@import "/src/styles/components/weather-global-styles.scss";
+
+.titleContainer {
+  background-color: $backgroundColor;
+  padding: 10px $globalSidePadding;
+}
+
+.listContainer {
+  display: flex;
+  background-color: $lighterBackgroundColor;
+  justify-content: space-between;
+  padding: 10px $globalSidePadding 0 $globalSidePadding;
+}
+
+.temperatureContainer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.weatherItem {
+  text-align: center;
+}
+
+.weatherVisual {
+  background-color: $lighterBackgroundColor;
+}
+
+.secondaryTitle {
+  color: $secondaryTitleColor;
+}
+
+.subtitle {
+  color: $subtitleColor;
+}

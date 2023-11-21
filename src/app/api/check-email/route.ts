@@ -1,8 +1,7 @@
-import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
-import { GET_USER } from "@/components/store/modules/user/query";
+import { GET_USER } from "@/store/modules/user/query";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;

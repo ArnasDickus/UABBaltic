@@ -1,18 +1,17 @@
 "use client";
-import SnackAlert, { ISnackAlert } from "@/components/snack-alert/snack-alert";
+import { useTranslation } from "@/app/i18n/client";
 import { IPageParamProps } from "@/constants/interfaces";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
+import { useAppDispatch } from "@/store/redux-hooks";
+import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const ValidateEmail = ({ params, searchParams }: IPageParamProps) => {
+  const { t } = useTranslation({ language: params.lng, ns: "translation" });
   const router = useRouter();
-  const [alert, setAlert] = useState<ISnackAlert>({
-    message: "",
-    severity: "success",
-    showAlert: false,
-  });
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const validateEmail = async () => {
@@ -22,17 +21,21 @@ const ValidateEmail = ({ params, searchParams }: IPageParamProps) => {
       });
 
       if (isEmailValid.status === StatusCodes.okStatus) {
-        setAlert({
-          message: "Email confirmed",
-          severity: "success",
-          showAlert: true,
-        });
+        dispatch(
+          showHideAlert({
+            message: t("confirmEmail"),
+            severity: "success",
+            showAlert: true,
+          })
+        );
       } else if (isEmailValid.status === StatusCodes.internalServerError) {
-        setAlert({
-          message: "Something went wrong, please try again later",
-          severity: "error",
-          showAlert: true,
-        });
+        dispatch(
+          showHideAlert({
+            message: t("confirmEmailFail"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
       }
       setTimeout(() => {
         router.push(`/${params.lng}`);
@@ -44,18 +47,8 @@ const ValidateEmail = ({ params, searchParams }: IPageParamProps) => {
     } else {
       validateEmail();
     }
-  }, [params.lng, router, searchParams.token]);
+  }, [dispatch, params.lng, router, searchParams.token, t]);
 
-  return (
-    <SnackAlert
-      {...alert}
-      onClose={() => {
-        setAlert((prevState) => ({
-          ...prevState,
-          showAlert: false,
-        }));
-      }}
-    />
-  );
+  return <></>;
 };
 export default ValidateEmail;
