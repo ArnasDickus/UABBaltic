@@ -23,7 +23,6 @@ const WeatherVisual = ({
   const options: ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
-
     scales: {
       x: {
         display: false,
@@ -52,6 +51,11 @@ const WeatherVisual = ({
         categoryPercentage: 1,
         barPercentage: 1,
         barThickness: 32,
+
+        borderWidth: {
+          top: 2,
+          bottom: 2,
+        },
       },
     },
   };
@@ -62,14 +66,16 @@ const WeatherVisual = ({
       {
         data: minTemperatures,
         backgroundColor: "#ab8149",
+        borderColor: "#F1961C",
       },
       {
         data: maxTemperatures,
         backgroundColor: "#667899",
+        borderColor: "#6B87BC",
       },
     ],
   };
 
-  return <Bar data={data} options={options} />;
+  return <Bar data={data} height={50} options={options} />;
 };
 export default WeatherVisual;
