@@ -13,11 +13,6 @@
     "prepare": "husky install",
     "validate-commit-msg": "node src/app/utils/validate-commit-msg.ts"
   },
-  "husky": {
-    "hooks": {
-      "commit-msg": "yarn validate-commit-msg"
-    }
-  },
   "dependencies": {
     "@apollo/client": "^3.8.6",
     "@emotion/react": "^11.11.1",
