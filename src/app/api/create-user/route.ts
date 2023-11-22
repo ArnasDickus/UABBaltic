@@ -15,12 +15,7 @@ import { ADD_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
 }
-// NewCreatedId from uabBaltic 75
-// After that new id 77.
-// I have to click 4 times. After that I get check-email Method not allowed
-// Unexpected end of JSON Input
-// Network Latency:
-//
+
 export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NCreateUser.IRequest["body"] = await req.json();
   const saltRounds = 10;
