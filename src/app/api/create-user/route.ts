@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import { generateToken } from "@/app/utils/generate-email-confirmation-token";
 import { ADD_USER } from "@/store/modules/user/query";
 import { ADD_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
+import { AddUserConfirmationMutation, AddUserMutation } from "@/gql/graphql";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -31,7 +32,7 @@ export const POST = async (req: CustomNextApiRequest) => {
       salt,
       async function (error, hash: string) {
         const newUser = await client
-          .mutate({
+          .mutate<AddUserMutation>({
             mutation: ADD_USER,
             variables: {
               addUserObject: {
@@ -43,9 +44,9 @@ export const POST = async (req: CustomNextApiRequest) => {
               },
             },
           })
-          .then((val) => val.data?.insert_user?.returning?.[0]);
+          .then((val) => val.data?.insert_user?.returning[0]);
 
-        await client.mutate({
+        await client.mutate<AddUserConfirmationMutation>({
           mutation: ADD_USER_CONFIRMATION,
           variables: {
             addUserConfirmationObject: {

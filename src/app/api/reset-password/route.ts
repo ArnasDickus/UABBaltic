@@ -6,6 +6,10 @@ import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import { GET_USER_PASSWORD_CHANGE_REQUEST } from "@/store/modules/user-password-change-request/query";
 import { UPDATE_USERS } from "@/store/modules/user/query";
+import {
+  GetUserPasswordChangeRequestQuery,
+  UpdateUsersMutation,
+} from "@/gql/graphql";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
@@ -21,7 +25,7 @@ export const POST = async (req: CustomNextApiRequest) => {
       salt,
       async function (error, hash: string) {
         const userId = await client
-          .query({
+          .query<GetUserPasswordChangeRequestQuery>({
             query: GET_USER_PASSWORD_CHANGE_REQUEST,
             variables: {
               whereUserPasswordChangeRequest: {
@@ -39,7 +43,7 @@ export const POST = async (req: CustomNextApiRequest) => {
             );
           });
         await client
-          .mutate({
+          .mutate<UpdateUsersMutation>({
             mutation: UPDATE_USERS,
             variables: {
               whereUpdateUsers: {
