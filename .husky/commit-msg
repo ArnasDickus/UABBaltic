@@ -10,9 +10,9 @@ then
   echo "-"
   echo "🚨 Wrong commit message! 😕"
   echo "The commit message must have this format:"
-  echo "<verb in imperative mood> <what was done>"
-  echo "Allowed verbs in imperative mood: add, cut, fix, bump, make, start, stop, refactor, reformat, optimise, document, merge"
-  echo "Example: add login button"
+  echo "<Github Issue Number> <what was done>"
+  echo "Allowed verbs in imperative mood: #40 #41 etc"
+  echo "Example: #40-husky-changes"
   echo "-"
   echo "Your commit message was:"
   echo $message
