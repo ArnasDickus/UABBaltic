@@ -5,6 +5,7 @@ import { StatusCodes } from "@/constants/status-code";
 import dayjs from "dayjs";
 import { GET_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
 import { UPDATE_USERS } from "@/store/modules/user/query";
+import { GetUserConfirmationQuery, UpdateUsersMutation } from "@/gql/graphql";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NConfirmEmail.IRequest["body"]>;
@@ -14,7 +15,7 @@ export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NConfirmEmail.IRequest["body"] = await req.json();
 
   const userId = await client
-    .query({
+    .query<GetUserConfirmationQuery>({
       query: GET_USER_CONFIRMATION,
       variables: {
         whereUserConfirmation: {
@@ -23,7 +24,7 @@ export const POST = async (req: CustomNextApiRequest) => {
         },
       },
     })
-    .then((val) => val.data.user_confirmation[0].user_confirmation_id.id)
+    .then((val) => val.data.user_confirmation[0].user_confirmation_id?.id)
     .catch((error) => {
       console.error("USER CONFIRMATION", error);
       return NextResponse.json(
@@ -33,7 +34,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     });
 
   await client
-    .mutate({
+    .mutate<UpdateUsersMutation>({
       mutation: UPDATE_USERS,
       variables: {
         whereUpdateUsers: {

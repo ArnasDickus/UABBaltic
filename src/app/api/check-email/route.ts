@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
+import { GetUserQuery } from "@/gql/graphql";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;
@@ -11,7 +12,7 @@ export const POST = async (req: CustomNextApiRequest) => {
   const requestData: NCheckEmail.IRequest["body"] = await req.json();
 
   const isEmailExist = await client
-    .query({
+    .query<GetUserQuery>({
       query: GET_USER,
       variables: {
         whereUser: {
