@@ -2,6 +2,7 @@ import client from "../../../../apollo-client";
 import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import winston from "winston";
 
 import { transporter } from "@/app/providers/email";
 import { StatusCodes } from "@/constants/status-code";
@@ -15,86 +16,102 @@ import { ADD_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
 }
-
+// NewCreatedId from uabBaltic 75
+// After that new id 77.
+// I have to click 4 times. After that I get check-email Method not allowed
+// Unexpected end of JSON Input
+// Network Latency:
+//
 export const POST = async (req: CustomNextApiRequest) => {
-  try {
-    const requestData: NCreateUser.IRequest["body"] = await req.json();
-    const saltRounds = 10;
-    const confirmationToken = generateToken();
+  const requestData: NCreateUser.IRequest["body"] = await req.json();
+  const saltRounds = 10;
+  const confirmationToken = generateToken();
 
-    const emailLink = `${getBaseUrl()}/${
-      requestData.language
-    }/confirm-email?token=${confirmationToken}`;
+  const logger = winston.createLogger({
+    level: "info",
+    format: winston.format.json(),
+    defaultMeta: { service: "user-service" },
+    transports: [
+      //
+      // - Write all logs with importance level of `error` or less to `error.log`
+      // - Write all logs with importance level of `info` or less to `combined.log`
+      //
+      new winston.transports.File({ filename: "error.log", level: "error" }),
+      new winston.transports.File({ filename: "combined.log" }),
+    ],
+  });
 
-    bcrypt.genSalt(saltRounds, async function (error, salt: string) {
-      try {
-        if (error) {
-          throw error;
-        }
-
-        bcrypt.hash(
-          requestData.formData.password,
-          salt,
-          async function (error, hash: string) {
-            try {
-              if (error) {
-                throw error;
-              }
-
-              const newUser = await client
-                .mutate({
-                  mutation: ADD_USER,
-                  variables: {
-                    addUserObject: {
-                      name: requestData.formData.name,
-                      password: hash,
-                      email: requestData.formData.email,
-                      username: requestData.formData.username,
-                      email_confirmed: false,
-                    },
-                  },
-                })
-                .then((val) => val.data?.insert_user?.returning?.[0]);
-
-              await client.mutate({
-                mutation: ADD_USER_CONFIRMATION,
-                variables: {
-                  addUserConfirmationObject: {
-                    expires_at: dayjs().add(1, "week"),
-                    user_id: newUser?.id,
-                    token: confirmationToken,
-                  },
-                },
-              });
-
-              return NextResponse.json(
-                { message: "User created successfully" },
-                { status: StatusCodes.okStatus }
-              );
-            } catch (hashingError) {
-              console.error("Error hashing password:", hashingError);
-              return NextResponse.json(
-                { error: "Internal Server Error" },
-                { status: StatusCodes.internalServerError }
-              );
-            }
-          }
-        );
-      } catch (saltError) {
-        console.error("Error generating salt:", saltError);
-        return NextResponse.json(
-          { error: "Internal Server Error" },
-          { status: StatusCodes.internalServerError }
-        );
-      }
-    });
-  } catch (jsonError) {
-    console.error("Error parsing JSON:", jsonError);
-    return NextResponse.json(
-      { error: "Bad Request" },
-      { status: StatusCodes.badRequest }
+  //
+  // If we're not in production then log to the `console` with the format:
+  // `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+  //
+  if (process.env.NODE_ENV !== "production") {
+    logger.add(
+      new winston.transports.Console({
+        format: winston.format.simple(),
+      })
     );
   }
+
+  const emailLink = `${getBaseUrl()}/${
+    requestData.language
+  }/confirm-email?token=${confirmationToken}`;
+
+  bcrypt.genSalt(saltRounds, function (error, salt: string) {
+    bcrypt.hash(
+      requestData.formData.password,
+      salt,
+      async function (error, hash: string) {
+        const newUser = await client
+          .mutate({
+            mutation: ADD_USER,
+            variables: {
+              addUserObject: {
+                name: requestData.formData.name,
+                password: hash,
+                email: requestData.formData.email,
+                username: requestData.formData.username,
+                email_confirmed: false,
+              },
+            },
+          })
+          .then((val) => val.data?.insert_user?.returning?.[0]);
+
+        await client.mutate({
+          mutation: ADD_USER_CONFIRMATION,
+          variables: {
+            addUserConfirmationObject: {
+              expires_at: dayjs().add(1, "week"),
+              user_id: newUser?.id,
+              token: confirmationToken,
+            },
+          },
+        });
+
+        await transporter
+          .sendMail({
+            from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
+            to: requestData.formData.email,
+            subject: "UABBaltic email confirmation",
+            html: `<div>
+            <a href=${emailLink}>Confirm Email</a>
+            </div>`,
+          })
+          .catch((error) => {
+            console.error("ADD_USER", error);
+            return NextResponse.json(
+              { error: "Internal Server Error" },
+              { status: StatusCodes.internalServerError }
+            );
+          });
+      }
+    );
+  });
+
+  return NextResponse.json(
+    { error: "User created successfully" },
+    { status: StatusCodes.okStatus }
+  );
 };
 
 export namespace NCreateUser {
