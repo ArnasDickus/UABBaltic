@@ -19,6 +19,7 @@ import { useTranslation } from "@/app/i18n/client";
 import { GET_USER } from "@/store/modules/user/query";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
+import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
@@ -26,7 +27,7 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   const isUsernameExist = async (username: string) => {
     const isUsernameExist: boolean = await client
-      .query({
+      .query<GetUserQuery, GetUserQueryVariables>({
         query: GET_USER,
         variables: {
           whereUser: {

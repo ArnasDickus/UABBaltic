@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import client from "../../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
+import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 
 const handler = NextAuth({
   session: {
@@ -15,6 +16,7 @@ const handler = NextAuth({
         email: {},
         password: {},
       },
+      // TODO add query interface
       async authorize(credentials, req) {
         const user = await client
           .query({
@@ -25,17 +27,17 @@ const handler = NextAuth({
               },
             },
           })
-          .then((val) => val.data.user);
+          .then((val) => val.data.user[0]);
 
         const comparePasswords = await compare(
           credentials?.password || "",
-          user[0].password
+          user.password
         );
 
         if (comparePasswords) {
           return {
-            id: user[0].id,
-            email: user[0].email,
+            id: user.id,
+            email: user.email,
           };
         }
         return null;
