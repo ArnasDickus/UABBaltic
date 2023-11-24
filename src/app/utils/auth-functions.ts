@@ -6,8 +6,13 @@ export const isEmailExist = async (email: string): Promise<boolean> => {
   const isEmail: NCheckEmail.IResponse = await fetch(apiRoutes["check-email"], {
     method: "POST",
     body: JSON.stringify({ email: email }),
-  }).then((emailResult) => {
-    return emailResult.json();
+  }).then(async (emailResult) => {
+    if (!emailResult.ok) {
+      throw new Error(`Failed to fetch. Status: ${emailResult.status}`);
+    }
+
+    const json = await emailResult.json();
+    return json;
   });
   return isEmail.emailExist;
 };
@@ -19,8 +24,12 @@ export const isUsernameExist = async (email: string): Promise<boolean> => {
       method: "POST",
       body: JSON.stringify({ email: email }),
     }
-  ).then((usernameResult) => {
-    return usernameResult.json();
+  ).then(async (usernameResult) => {
+    if (!usernameResult.ok) {
+      throw new Error(`Failed to fetch. Status: ${usernameResult.status}`);
+    }
+    const json = await usernameResult.json();
+    return json;
   });
   return isUsername.usernameExist;
 };
