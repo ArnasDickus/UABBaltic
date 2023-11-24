@@ -14,8 +14,6 @@ import {
   GetUserQuery,
   GetUserQueryVariables,
 } from "@/gql/graphql";
-import logger from "@/services/logger";
-import * as Sentry from "@sentry/nextjs";
 import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {

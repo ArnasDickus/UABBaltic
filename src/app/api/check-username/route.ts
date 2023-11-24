@@ -22,8 +22,8 @@ const checkUsernameExistance = async (username: string) => {
       })
       .then((user) => !!user.data.user.length);
   } catch (error) {
-    errorResponseHandler(error, "FailedToGetUser");
-    throw new Error("Get User check failed");
+    errorResponseHandler(error, "Failed ToGetUser");
+    throw new Error("Failed to get User");
   }
 };
 
@@ -40,7 +40,7 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "FailedToGetUser POST");
+    return errorResponseHandler(error, "Failed ToGetUser POST");
   }
 };
 

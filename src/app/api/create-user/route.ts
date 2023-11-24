@@ -45,13 +45,13 @@ const createUser = async (requestData: NCreateUser.IRequest["body"]) => {
       .then((val) => val.data?.insert_user?.returning[0].id);
 
     if (!newUserId) {
-      throw new Error("Add User Error");
+      throw new Error("Failed Add User");
     } else {
       return newUserId;
     }
   } catch (error) {
-    errorResponseHandler(error, "Add User");
-    throw new Error("Add User failed");
+    errorResponseHandler(error, "Failed Add User");
+    throw new Error("Failed Add User");
   }
 };
 
@@ -74,7 +74,7 @@ const addUserConfirmation = async (
       },
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed to add user confirmation");
+    errorResponseHandler(error, "Failed add user confirmation");
 
     await client.mutate({
       mutation: DELETE_USER,
@@ -84,7 +84,7 @@ const addUserConfirmation = async (
         },
       },
     });
-    throw new Error("Failed to add user confirmation");
+    throw new Error("Failed add user confirmation");
   }
 };
 
@@ -106,8 +106,8 @@ const sendEmail = async (
             </div>`,
     });
   } catch (error) {
-    errorResponseHandler(error, "Error Send Email");
-    throw new Error("Error Send Email");
+    errorResponseHandler(error, "Failed Send Email");
+    throw new Error("Failed Send Email");
   }
 };
 
@@ -124,7 +124,7 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Error Create User POST");
+    return errorResponseHandler(error, "Failed Create User POST");
   }
 };
 

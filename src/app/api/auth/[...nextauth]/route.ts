@@ -3,7 +3,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import client from "../../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
-import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 
 const handler = NextAuth({
   session: {
@@ -16,7 +15,6 @@ const handler = NextAuth({
         email: {},
         password: {},
       },
-      // TODO add query interface
       async authorize(credentials, req) {
         const user = await client
           .query({

@@ -2,6 +2,9 @@ const path = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  sentry: {
+    tunnelRoute: "/en/monitoring-tunnel",
+  },
   images: {
     remotePatterns: [
       {
@@ -49,7 +52,7 @@ module.exports = withSentryConfig(
     transpileClientSDK: true,
 
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
+    tunnelRoute: "/en/monitoring-tunnel",
 
     // Hides source maps from generated client bundles
     hideSourceMaps: true,
