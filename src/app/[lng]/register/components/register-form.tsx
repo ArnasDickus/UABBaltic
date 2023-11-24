@@ -125,12 +125,12 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
     try {
-      if (await checkIfEmailExist(data.email)) {
-        return;
-      }
-      if (await checkIfUsernameExist(data.username)) {
-        return;
-      }
+      // if (await checkIfEmailExist(data.email)) {
+      //   return;
+      // }
+      // if (await checkIfUsernameExist(data.username)) {
+      //   return;
+      // }
 
       await getNewUser(data);
     } catch (error) {
