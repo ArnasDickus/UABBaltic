@@ -4,6 +4,7 @@ import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 import { errorResponseHandler } from "@/app/utils/error-response-handler";
+import { ICheckUsernameApi } from "@/app/[lng]/register/components/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckUsername.IRequest["body"]>;
@@ -11,16 +12,16 @@ interface CustomNextApiRequest extends NextRequest {
 
 const checkUsernameExistance = async (username: string) => {
   try {
-    await client
-      .query<GetUserQuery, GetUserQueryVariables>({
-        query: GET_USER,
-        variables: {
-          whereUser: {
-            username: { _eq: username },
-          },
+    const user = await client.query<GetUserQuery, GetUserQueryVariables>({
+      query: GET_USER,
+      variables: {
+        whereUser: {
+          username: { _eq: username },
         },
-      })
-      .then((user) => !!user.data.user.length);
+      },
+    });
+
+    return !!user.data.user.length;
   } catch (error) {
     errorResponseHandler(error, "Failed ToGetUser");
     throw new Error("Failed to get User");
@@ -50,8 +51,5 @@ export namespace NCheckUsername {
       username: string;
     };
   }
-  export interface IResponse {
-    usernameExist: boolean;
-    message: string;
-  }
+  export interface IResponse extends ICheckUsernameApi {}
 }

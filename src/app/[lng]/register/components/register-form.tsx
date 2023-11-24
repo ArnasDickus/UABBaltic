@@ -13,14 +13,21 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
-import { isEmailExist, isUsernameExist } from "@/app/utils/auth-functions";
+
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
+import {
+  useLazyCheckEmailApiQuery,
+  useLazyCheckUsernameApiQuery,
+} from "@/store/services/auth-api";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
   const dispatch = useAppDispatch();
+
+  const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
+  const [checkUsernameTrigger] = useLazyCheckUsernameApiQuery();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("required")),
@@ -40,13 +47,21 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    const emailExist = await isEmailExist(data.email);
-    const usernameExist = await isUsernameExist(data.username);
+    const emailExistResult = await checkEmailTrigger({
+      email: data.email,
+    })
+      .unwrap()
+      .then((val) => val.emailExist);
+    const userNameExistResult = await checkUsernameTrigger({
+      username: data.username,
+    })
+      .unwrap()
+      .then((val) => val.usernameExist);
 
-    if (emailExist) {
+    if (userNameExistResult) {
       dispatch(
         showHideAlert({
-          message: t("emailExist"),
+          message: t("usernameInUse"),
           severity: "error",
           showAlert: true,
         })
@@ -54,10 +69,10 @@ const RegisterForm = ({ language }: { language: string }) => {
       return;
     }
 
-    if (usernameExist) {
+    if (emailExistResult) {
       dispatch(
         showHideAlert({
-          message: t("usernameInUse"),
+          message: t("emailExist"),
           severity: "error",
           showAlert: true,
         })
