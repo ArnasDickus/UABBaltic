@@ -4,6 +4,7 @@ import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 import { errorResponseHandler } from "@/app/utils/error-response-handler";
+import { ICheckEmailApi } from "@/app/[lng]/register/components/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;
@@ -47,8 +48,5 @@ export namespace NCheckEmail {
       email: string;
     };
   }
-  export interface IResponse {
-    emailExist: boolean;
-    message: string;
-  }
+  export interface IResponse extends ICheckEmailApi {}
 }
