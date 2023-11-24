@@ -10,6 +10,16 @@ export const ADD_USER = gql`
   }
 `;
 
+export const DELETE_USER = gql`
+  mutation DeleteUser($whereDeleteUser: user_bool_exp!) {
+    delete_user(where: $whereDeleteUser) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
 export const UPDATE_USERS = gql`
   mutation UpdateUsers(
     $whereUpdateUsers: user_bool_exp!
@@ -28,6 +38,7 @@ export const GET_USER = gql`
     user(where: $whereUser, limit: 1) {
       id
       username
+      email
       password
     }
   }

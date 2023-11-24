@@ -2,37 +2,43 @@ import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
-import { GetUserQuery } from "@/gql/graphql";
+import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
+import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;
 }
 
-export const POST = async (req: CustomNextApiRequest) => {
-  const requestData: NCheckEmail.IRequest["body"] = await req.json();
-
-  const isEmailExist = await client
-    .query<GetUserQuery>({
+const checkUserExistence = async (email: string): Promise<boolean> => {
+  try {
+    const user = await client.query<GetUserQuery, GetUserQueryVariables>({
       query: GET_USER,
       variables: {
         whereUser: {
-          email: { _eq: requestData.email },
+          email: { _eq: email },
         },
       },
-    })
-    .then((user) => !!user.data.user.length)
-    .catch((error) => {
-      console.error("isEmailExist >", error);
-      return NextResponse.json(
-        { message: "GET_USER Internal Error", emailExist: false },
-        { status: StatusCodes.internalServerError }
-      );
     });
 
-  return NextResponse.json(
-    { message: "Email checked successfully", emailExist: isEmailExist },
-    { status: StatusCodes.okStatus }
-  );
+    return !!user.data.user.length;
+  } catch (error) {
+    errorResponseHandler(error, "Failed to Get User");
+    throw new Error("Failed to Get User");
+  }
+};
+
+export const POST = async (req: CustomNextApiRequest) => {
+  try {
+    const requestData: NCheckEmail.IRequest["body"] = await req.json();
+    const emailExist = await checkUserExistence(requestData.email);
+
+    return NextResponse.json(
+      { message: "User checked", emailExist: emailExist },
+      { status: StatusCodes.okStatus }
+    );
+  } catch (error) {
+    return errorResponseHandler(error, "Failed to get User POST");
+  }
 };
 
 export namespace NCheckEmail {

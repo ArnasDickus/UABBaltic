@@ -18,8 +18,9 @@ const documents = {
     "\n  mutation AddUserPasswordChangeRequest(\n    $addUserPasswordChangeRequestObject: [user_password_change_request_insert_input!]!\n  ) {\n    insert_user_password_change_request(\n      objects: $addUserPasswordChangeRequestObject\n    ) {\n      returning {\n        id\n      }\n    }\n  }\n": types.AddUserPasswordChangeRequestDocument,
     "\n  query GetUserPasswordChangeRequest(\n    $whereUserPasswordChangeRequest: user_password_change_request_bool_exp\n  ) {\n    user_password_change_request(\n      where: $whereUserPasswordChangeRequest\n      limit: 1\n    ) {\n      id\n      user {\n        id\n      }\n    }\n  }\n": types.GetUserPasswordChangeRequestDocument,
     "\n  mutation AddUser($addUserObject: [user_insert_input!]!) {\n    insert_user(objects: $addUserObject) {\n      returning {\n        id\n      }\n    }\n  }\n": types.AddUserDocument,
+    "\n  mutation DeleteUser($whereDeleteUser: user_bool_exp!) {\n    delete_user(where: $whereDeleteUser) {\n      returning {\n        id\n      }\n    }\n  }\n": types.DeleteUserDocument,
     "\n  mutation UpdateUsers(\n    $whereUpdateUsers: user_bool_exp!\n    $setUpdateUsers: user_set_input\n  ) {\n    update_user(where: $whereUpdateUsers, _set: $setUpdateUsers) {\n      returning {\n        id\n      }\n    }\n  }\n": types.UpdateUsersDocument,
-    "\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      password\n    }\n  }\n": types.GetUserDocument,
+    "\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      email\n      password\n    }\n  }\n": types.GetUserDocument,
 };
 
 /**
@@ -59,11 +60,15 @@ export function graphql(source: "\n  mutation AddUser($addUserObject: [user_inse
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  mutation DeleteUser($whereDeleteUser: user_bool_exp!) {\n    delete_user(where: $whereDeleteUser) {\n      returning {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteUser($whereDeleteUser: user_bool_exp!) {\n    delete_user(where: $whereDeleteUser) {\n      returning {\n        id\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  mutation UpdateUsers(\n    $whereUpdateUsers: user_bool_exp!\n    $setUpdateUsers: user_set_input\n  ) {\n    update_user(where: $whereUpdateUsers, _set: $setUpdateUsers) {\n      returning {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateUsers(\n    $whereUpdateUsers: user_bool_exp!\n    $setUpdateUsers: user_set_input\n  ) {\n    update_user(where: $whereUpdateUsers, _set: $setUpdateUsers) {\n      returning {\n        id\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      password\n    }\n  }\n"): (typeof documents)["\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      password\n    }\n  }\n"];
+export function graphql(source: "\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      email\n      password\n    }\n  }\n"): (typeof documents)["\n  query GetUser($whereUser: user_bool_exp) {\n    user(where: $whereUser, limit: 1) {\n      id\n      username\n      email\n      password\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

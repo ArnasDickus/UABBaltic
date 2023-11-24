@@ -10,71 +10,101 @@ import { GET_USER } from "@/store/modules/user/query";
 import { ADD_USER_PASSWORD_CHANGE_REQUEST } from "@/store/modules/user-password-change-request/query";
 import {
   AddUserPasswordChangeRequestMutation,
+  AddUserPasswordChangeRequestMutationVariables,
   GetUserQuery,
+  GetUserQueryVariables,
 } from "@/gql/graphql";
+import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
 }
 
-export const POST = async (req: CustomNextApiRequest) => {
-  const requestData: NForgotPassword.IRequest["body"] = await req.json();
-  const confirmationToken = generateToken();
+const getUser = async (email: string) => {
+  try {
+    const userId = await client
+      .query<GetUserQuery, GetUserQueryVariables>({
+        query: GET_USER,
+        variables: {
+          whereUser: {
+            email: { _eq: email },
+          },
+        },
+      })
+      .then((val) => val.data.user[0].id);
 
-  const userId = await client
-    .query<GetUserQuery>({
-      query: GET_USER,
+    if (!userId) {
+      throw new Error("User not found");
+    } else {
+      return userId;
+    }
+  } catch (error) {
+    errorResponseHandler(error, "Failed Get User");
+    throw new Error("Failed Get User");
+  }
+};
+
+const addUserPasswordChangeRequest = async (
+  userId: number,
+  confirmationToken: string
+) => {
+  try {
+    await client.mutate<
+      AddUserPasswordChangeRequestMutation,
+      AddUserPasswordChangeRequestMutationVariables
+    >({
+      mutation: ADD_USER_PASSWORD_CHANGE_REQUEST,
       variables: {
-        whereUser: {
-          email: { _eq: requestData.email },
+        addUserPasswordChangeRequestObject: {
+          expires_at: dayjs().add(1, "hour"),
+          token: confirmationToken,
+          user_id: userId,
         },
       },
-    })
-    .then((val) => val.data.user[0].id)
-    .catch((error) => {
-      console.error("GET_USER", error);
-      return NextResponse.json(
-        { message: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
     });
+  } catch (error) {
+    errorResponseHandler(error, "Failed Add User Password Change Request");
+    throw new Error("Failed Add User Password Change Request");
+  }
+};
 
-  await client.mutate<AddUserPasswordChangeRequestMutation>({
-    mutation: ADD_USER_PASSWORD_CHANGE_REQUEST,
-    variables: {
-      addUserPasswordChangeRequestObject: {
-        expires_at: dayjs().add(1, "hour"),
-        token: confirmationToken,
-        user_id: userId,
-      },
-    },
-  });
+const sendEmail = async (
+  language: string,
+  confirmationToken: string,
+  email: string
+) => {
+  try {
+    const emailLink = `${getBaseUrl()}/${language}/reset-password?token=${confirmationToken}`;
 
-  const emailLink = `${getBaseUrl()}/${
-    requestData.language
-  }/reset-password?token=${confirmationToken}`;
-
-  await transporter
-    .sendMail({
+    await transporter.sendMail({
       from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-      to: requestData.email,
+      to: email,
       subject: "UABBaltic password reset",
       html: `<div>
             <a href=${emailLink}>Reset password</a>
             </div>`,
-    })
-    .catch((error) => {
-      console.error("ADD_USER", error);
-      return NextResponse.json(
-        { message: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
     });
+  } catch (error) {
+    errorResponseHandler(error, "Failed Send Email");
+    throw new Error("Failed Send Email");
+  }
+};
 
-  return NextResponse.json(
-    { message: "Email sent successfully" },
-    { status: StatusCodes.okStatus }
-  );
+export const POST = async (req: CustomNextApiRequest) => {
+  try {
+    const requestData: NForgotPassword.IRequest["body"] = await req.json();
+    const confirmationToken = generateToken();
+    const userId = await getUser(requestData.email);
+    await addUserPasswordChangeRequest(userId, confirmationToken);
+    await sendEmail(requestData.language, confirmationToken, requestData.email);
+
+    return NextResponse.json(
+      { message: "Email sent successfully" },
+      { status: StatusCodes.okStatus }
+    );
+  } catch (error) {
+    return errorResponseHandler(error, "FAILED forgot password POST");
+  }
 };
 
 export namespace NForgotPassword {
