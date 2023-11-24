@@ -30,12 +30,12 @@ const checkUsernameExistance = async (username: string) => {
 export const POST = async (req: CustomNextApiRequest) => {
   try {
     const requestData: NCheckUsername.IRequest["body"] = await req.json();
-    await checkUsernameExistance(requestData.username);
+    const userNameExist = await checkUsernameExistance(requestData.username);
 
     return NextResponse.json(
       {
         message: "Username checked successfully",
-        usernameExist: true,
+        usernameExist: userNameExist,
       },
       { status: StatusCodes.okStatus }
     );
