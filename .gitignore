@@ -34,4 +34,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.react-email
+
+# Sentry Config File
+.sentryclirc
+
+# Sentry Config File
+.sentryclirc
