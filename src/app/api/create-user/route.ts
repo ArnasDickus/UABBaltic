@@ -9,7 +9,7 @@ import { getBaseUrl } from "@/app/utils/get-base-url";
 
 import dayjs from "dayjs";
 import { generateToken } from "@/app/utils/generate-email-confirmation-token";
-import { ADD_USER } from "@/store/modules/user/query";
+import { ADD_USER, DELETE_USER } from "@/store/modules/user/query";
 import { ADD_USER_CONFIRMATION } from "@/store/modules/user-confirmation/query";
 import {
   AddUserConfirmationMutation,
@@ -17,27 +17,19 @@ import {
   AddUserMutation,
   AddUserMutationVariables,
 } from "@/gql/graphql";
-import logger from "@/services/logger";
-import * as Sentry from "@sentry/nextjs";
+import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
 }
 
-export const POST = async (req: CustomNextApiRequest) => {
+const createUser = async (requestData: NCreateUser.IRequest["body"]) => {
   try {
-    const requestData: NCreateUser.IRequest["body"] = await req.json();
     const saltRounds = 10;
-    const confirmationToken = generateToken();
-
-    const emailLink = `${getBaseUrl()}/${
-      requestData.language
-    }/confirm-email?token=${confirmationToken}`;
-
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(requestData.formData.password, salt);
 
-    const newUser = await client
+    const newUserId = await client
       .mutate<AddUserMutation, AddUserMutationVariables>({
         mutation: ADD_USER,
         variables: {
@@ -50,70 +42,89 @@ export const POST = async (req: CustomNextApiRequest) => {
           },
         },
       })
-      .then((val) => val.data?.insert_user?.returning[0].id)
-      .catch((error) => {
-        logger.error("ADD_USER", { error });
-        Sentry.captureException(error);
-      });
+      .then((val) => val.data?.insert_user?.returning[0].id);
 
-    if (!newUser) {
-      throw new Error("User creation failed");
+    if (!newUserId) {
+      throw new Error("Add User Error");
+    } else {
+      return newUserId;
     }
+  } catch (error) {
+    errorResponseHandler(error, "Add User");
+    throw new Error("Add User failed");
+  }
+};
 
-    const confirmation = await client
-      .mutate<
-        AddUserConfirmationMutation,
-        AddUserConfirmationMutationVariables
-      >({
-        mutation: ADD_USER_CONFIRMATION,
-        variables: {
-          addUserConfirmationObject: {
-            expires_at: dayjs().add(1, "week"),
-            user_id: newUser,
-            token: confirmationToken,
-          },
+const addUserConfirmation = async (
+  newUserId: number,
+  confirmationToken: string
+) => {
+  try {
+    await client.mutate<
+      AddUserConfirmationMutation,
+      AddUserConfirmationMutationVariables
+    >({
+      mutation: ADD_USER_CONFIRMATION,
+      variables: {
+        addUserConfirmationObject: {
+          expires_at: dayjs().add(1, "week"),
+          user_id: newUserId,
+          token: confirmationToken,
         },
-      })
-      .catch((error) => {
-        logger.error("ADD_USER_CONFIRMATION", { error });
-        Sentry.captureException(error);
+      },
+    });
+  } catch (error) {
+    errorResponseHandler(error, "Failed to add user confirmation");
 
-        //
-      });
+    await client.mutate({
+      mutation: DELETE_USER,
+      variables: {
+        whereDeleteUser: {
+          id: { _eq: newUserId },
+        },
+      },
+    });
+    throw new Error("Failed to add user confirmation");
+  }
+};
 
-    if (!confirmation) {
-      throw new Error("Confirmation Failed");
-    }
-    await transporter
-      .sendMail({
-        from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
-        to: requestData.formData.email,
-        subject: "UABBaltic email confirmation",
-        html: `<div>
+const sendEmail = async (
+  requestData: NCreateUser.IRequest["body"],
+  confirmationToken: string
+) => {
+  try {
+    const emailLink = `${getBaseUrl()}/${
+      requestData.language
+    }/confirm-email?token=${confirmationToken}`;
+
+    await transporter.sendMail({
+      from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
+      to: requestData.formData.email,
+      subject: "UABBaltic email confirmation",
+      html: `<div>
             <a href=${emailLink}>Confirm Email</a>
             </div>`,
-      })
-      .catch((error) => {
-        console.error("ADD_USER", error);
-        return NextResponse.json(
-          { error: "Internal Server Error" },
-          { status: StatusCodes.internalServerError }
-        );
-      });
+    });
+  } catch (error) {
+    errorResponseHandler(error, "Error Send Email");
+    throw new Error("Error Send Email");
+  }
+};
 
-    logger.info("User created successfully", { newUser });
+export const POST = async (req: CustomNextApiRequest) => {
+  try {
+    const requestData: NCreateUser.IRequest["body"] = await req.json();
+    const newUserId = await createUser(requestData);
+    const confirmationToken = generateToken();
+    await addUserConfirmation(newUserId, confirmationToken);
+    await sendEmail(requestData, confirmationToken);
 
     return NextResponse.json(
-      { error: "User created successfully" },
+      { message: "User created successfully" },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    logger.error("Error in Registration", error);
-    Sentry.captureException(error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: StatusCodes.internalServerError }
-    );
+    return errorResponseHandler(error, "Error Create User POST");
   }
 };
 

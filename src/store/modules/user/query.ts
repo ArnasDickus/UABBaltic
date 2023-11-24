@@ -10,9 +10,15 @@ export const ADD_USER = gql`
   }
 `;
 
-// export const DELETE_USER = gql`
-//   mutation deleteUser($deleteUserObject: [user_dele])
-// `;
+export const DELETE_USER = gql`
+  mutation DeleteUser($whereDeleteUser: user_bool_exp!) {
+    delete_user(where: $whereDeleteUser) {
+      returning {
+        id
+      }
+    }
+  }
+`;
 
 export const UPDATE_USERS = gql`
   mutation UpdateUsers(

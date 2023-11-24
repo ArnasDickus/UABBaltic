@@ -3,39 +3,45 @@ import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
+import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckUsername.IRequest["body"]>;
 }
 
-export const POST = async (req: CustomNextApiRequest) => {
-  const requestData: NCheckUsername.IRequest["body"] = await req.json();
-
-  const isUsernameExist = await client
-    .query<GetUserQuery, GetUserQueryVariables>({
-      query: GET_USER,
-      variables: {
-        whereUser: {
-          username: { _eq: requestData.username },
+const checkUsernameExistance = async (username: string) => {
+  try {
+    await client
+      .query<GetUserQuery, GetUserQueryVariables>({
+        query: GET_USER,
+        variables: {
+          whereUser: {
+            username: { _eq: username },
+          },
         },
-      },
-    })
-    .then((user) => !!user.data.user.length)
-    .catch((error) => {
-      console.error("isUsernameExist >", error);
-      return NextResponse.json(
-        { message: "GET_USER Internal Error", UsernameExist: false },
-        { status: StatusCodes.internalServerError }
-      );
-    });
+      })
+      .then((user) => !!user.data.user.length);
+  } catch (error) {
+    errorResponseHandler(error, "FailedToGetUser");
+    throw new Error("Get User check failed");
+  }
+};
 
-  return NextResponse.json(
-    {
-      message: "Username checked successfully",
-      usernameExist: isUsernameExist,
-    },
-    { status: StatusCodes.okStatus }
-  );
+export const POST = async (req: CustomNextApiRequest) => {
+  try {
+    const requestData: NCheckUsername.IRequest["body"] = await req.json();
+    await checkUsernameExistance(requestData.username);
+
+    return NextResponse.json(
+      {
+        message: "Username checked successfully",
+        usernameExist: true,
+      },
+      { status: StatusCodes.okStatus }
+    );
+  } catch (error) {
+    return errorResponseHandler(error, "FailedToGetUser POST");
+  }
 };
 
 export namespace NCheckUsername {

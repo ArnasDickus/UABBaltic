@@ -11,36 +11,40 @@ import {
   UpdateUsersMutation,
   UpdateUsersMutationVariables,
 } from "@/gql/graphql";
+import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NConfirmEmail.IRequest["body"]>;
 }
 
-export const POST = async (req: CustomNextApiRequest) => {
-  const requestData: NConfirmEmail.IRequest["body"] = await req.json();
-
-  const userId = await client
-    .query<GetUserConfirmationQuery, GetUserConfirmationQueryVariables>({
-      query: GET_USER_CONFIRMATION,
-      variables: {
-        whereUserConfirmation: {
-          token: { _eq: requestData.token },
-          expires_at: { _gte: dayjs().format() },
+const getUserConfirmation = async (token: string): Promise<number> => {
+  try {
+    const userId = await client
+      .query<GetUserConfirmationQuery, GetUserConfirmationQueryVariables>({
+        query: GET_USER_CONFIRMATION,
+        variables: {
+          whereUserConfirmation: {
+            token: { _eq: token },
+            expires_at: { _gte: dayjs().format() },
+          },
         },
-      },
-    })
-    .then((val) => val.data.user_confirmation[0].user_confirmation_id?.id);
-  // .catch((error) => {
-  //   console.error("USER CONFIRMATION", error);
-  //   return NextResponse.json(
-  //     { error: "Internal Server Error" },
-  //     { status: StatusCodes.internalServerError }
-  //   );
-  // });
+      })
+      .then((user) => user.data.user_confirmation[0].user_confirmation_id?.id);
 
-  // if (userId typeof 'number')
-  await client
-    .mutate<UpdateUsersMutation, UpdateUsersMutationVariables>({
+    if (!userId) {
+      throw new Error("Failed Get User Confirmation");
+    } else {
+      return userId;
+    }
+  } catch (error) {
+    errorResponseHandler(error, "Failed Get User Confirmation");
+    throw new Error("Failed Get User Confirmation");
+  }
+};
+
+const updateUser = async (userId: number): Promise<void> => {
+  try {
+    await client.mutate<UpdateUsersMutation, UpdateUsersMutationVariables>({
       mutation: UPDATE_USERS,
       variables: {
         whereUpdateUsers: {
@@ -50,19 +54,26 @@ export const POST = async (req: CustomNextApiRequest) => {
           email_confirmed: true,
         },
       },
-    })
-    .catch((error) => {
-      console.error("UPDATE USER", error);
-      return NextResponse.json(
-        { error: "Internal Server Error" },
-        { status: StatusCodes.internalServerError }
-      );
     });
+  } catch (error) {
+    errorResponseHandler(error, "Failed to Update User");
+    throw new Error("Failed to Update User");
+  }
+};
 
-  return NextResponse.json(
-    { error: "Email confirmed" },
-    { status: StatusCodes.okStatus }
-  );
+export const POST = async (req: CustomNextApiRequest) => {
+  try {
+    const requestData: NConfirmEmail.IRequest["body"] = await req.json();
+    const userId = await getUserConfirmation(requestData.token);
+    await updateUser(userId);
+
+    return NextResponse.json(
+      { message: "Email confirmed" },
+      { status: StatusCodes.okStatus }
+    );
+  } catch (error) {
+    return errorResponseHandler(error, "Failed to Confirm Email");
+  }
 };
 
 export namespace NConfirmEmail {
