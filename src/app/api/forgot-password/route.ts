@@ -14,7 +14,6 @@ import {
   GetUserQuery,
   GetUserQueryVariables,
 } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
@@ -39,7 +38,6 @@ const getUser = async (email: string) => {
       return userId;
     }
   } catch (error) {
-    errorResponseHandler(error, "Failed Get User");
     throw new Error("Failed Get User");
   }
 };
@@ -63,7 +61,6 @@ const addUserPasswordChangeRequest = async (
       },
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed Add User Password Change Request");
     throw new Error("Failed Add User Password Change Request");
   }
 };
@@ -85,7 +82,6 @@ const sendEmail = async (
             </div>`,
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed Send Email");
     throw new Error("Failed Send Email");
   }
 };
@@ -103,7 +99,10 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "FAILED forgot password POST");
+    return NextResponse.json(
+      { message: "FAILED forgot password POS" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 
