@@ -44,17 +44,6 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.internalServerError }
     );
   }
-  // try {
-  //   const requestData: NCheckEmail.IRequest["body"] = await req.json();
-  //   const emailExist = await checkUserExistence(requestData.email);
-
-  //   return NextResponse.json(
-  //     { message: "User checked", response: { emailExist: emailExist } },
-  //     { status: StatusCodes.okStatus }
-  //   );
-  // } catch (error) {
-  //   return errorResponseHandler(error, "Failed to get User POST");
-  // }
 };
 
 export namespace NCheckEmail {

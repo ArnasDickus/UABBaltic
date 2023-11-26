@@ -11,7 +11,6 @@ import {
   GetUserPasswordChangeRequestQueryVariables,
   UpdateUsersMutation,
 } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
@@ -40,7 +39,6 @@ const getUserPasswordChangeRequest = async (token: string): Promise<number> => {
       return userId;
     }
   } catch (error) {
-    errorResponseHandler(error, "FAILED GET_USER_PASSWORD_CHANGE_REQUEST");
     throw new Error("FAILED GET_USER_PASSWORD_CHANGE_REQUEST failed");
   }
 };
@@ -63,7 +61,6 @@ const updateUser = async (userId: number, password: string) => {
       },
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed UPDATE_USERS");
     throw new Error("Failed UPDATE_USERS");
   }
 };
@@ -79,7 +76,10 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed Reset Password POST");
+    return NextResponse.json(
+      { message: "Failed Reset Password POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 
