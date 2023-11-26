@@ -14,7 +14,7 @@ export const isEmailExist = async (email: string): Promise<boolean> => {
     const json = await emailResult.json();
     return json;
   });
-  return isEmail.emailExist;
+  return isEmail.response.emailExist;
 };
 
 export const isUsernameExist = async (email: string): Promise<boolean> => {
@@ -31,5 +31,5 @@ export const isUsernameExist = async (email: string): Promise<boolean> => {
     const json = await usernameResult.json();
     return json;
   });
-  return isUsername.usernameExist;
+  return isUsername.response.usernameExist;
 };
