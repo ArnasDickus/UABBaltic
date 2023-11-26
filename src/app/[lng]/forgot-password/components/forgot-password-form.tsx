@@ -11,7 +11,7 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
-import { isEmailExist } from "@/app/utils/auth-functions";
+// import { isEmailExist } from "@/app/utils/auth-functions";
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
@@ -33,9 +33,9 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
   });
 
   const onSubmit: SubmitHandler<IForgotPassword> = async (data) => {
-    const emailExist = await isEmailExist(data.email);
-
-    if (!emailExist) {
+    // const emailExist = await isEmailExist(data.email);
+    // TODO Fix this
+    if (true) {
       dispatch(
         showHideAlert({
           message: t("emailNotExist"),
