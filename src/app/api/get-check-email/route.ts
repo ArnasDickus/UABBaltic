@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { StatusCodes } from "@/constants/status-code";
-// import client from "../../../../apollo-client";
-// import { GET_USER } from "@/store/modules/user/query";
-// import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
+import client from "../../../../apollo-client";
+import { GET_USER } from "@/store/modules/user/query";
+import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 // import { errorResponseHandler } from "@/app/utils/error-response-handler";
-// import { ICheckEmailApi } from "@/app/[lng]/register/components/interfaces";
-// import {
-//   ICurrentWeatherApiResponse,
-//   IWeatherApiRequest,
-// } from "@/app/[lng]/portfolio/projects/weather-app/components/interfaces";
 import {
   ICheckEmailApi,
   ICheckUsernameRequest,
@@ -20,14 +15,14 @@ interface CustomNextApiRequest extends NextRequest {
 
 // const checkUserExistence = async (email: string): Promise<boolean> => {
 //   try {
-//     const user = await client.query<GetUserQuery, GetUserQueryVariables>({
-//       query: GET_USER,
-//       variables: {
-//         whereUser: {
-//           email: { _eq: email },
-//         },
-//       },
-//     });
+// const user = await client.query<GetUserQuery, GetUserQueryVariables>({
+//   query: GET_USER,
+//   variables: {
+//     whereUser: {
+//       email: { _eq: email },
+//     },
+//   },
+// });
 
 //     return !!user.data.user.length;
 //   } catch (error) {
@@ -37,9 +32,18 @@ interface CustomNextApiRequest extends NextRequest {
 // };
 
 export const POST = async (req: CustomNextApiRequest) => {
-  // const { email }: NCheckEmail.IRequest["body"] = await req.json();
+  const { email }: NCheckEmail.IRequest["body"] = await req.json();
 
   try {
+    await client.query<GetUserQuery, GetUserQueryVariables>({
+      query: GET_USER,
+      variables: {
+        whereUser: {
+          email: { _eq: email },
+        },
+      },
+    });
+
     return NextResponse.json(
       { message: "Success", response: { emailExist: true } },
       { status: StatusCodes.okStatus }
