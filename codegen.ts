@@ -9,7 +9,7 @@ const config: CodegenConfig = {
   schema: {
     "https://uabbaltic.hasura.app/v1/graphql": {
       headers: {
-        "x-hasura-admin-secret": `${process.env.HASURA_ADMIN_SECRET}`,
+        "x-hasura-admin-secret": `${process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET}`,
       },
     },
   },
