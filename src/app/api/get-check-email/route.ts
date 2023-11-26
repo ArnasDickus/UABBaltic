@@ -42,7 +42,11 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed to get User POST");
+    errorResponseHandler(error, "Failed to get User POST");
+    return NextResponse.json(
+      { message: "Failed to get User POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
   // try {
   //   const requestData: NCheckEmail.IRequest["body"] = await req.json();
