@@ -34,7 +34,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     const emailExist = await checkUserExistence(requestData.email);
 
     return NextResponse.json(
-      { message: "User checked", emailExist: emailExist },
+      { message: "User checked", response: { emailExist: emailExist } },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
