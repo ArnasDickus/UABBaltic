@@ -8,32 +8,13 @@ import {
   ICheckEmailApi,
   ICheckUsernameRequest,
 } from "@/app/[lng]/register/components/interfaces";
+// import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;
 }
 
-// const checkUserExistence = async (email: string): Promise<boolean> => {
-//   try {
-// const user = await client.query<GetUserQuery, GetUserQueryVariables>({
-//   query: GET_USER,
-//   variables: {
-//     whereUser: {
-//       email: { _eq: email },
-//     },
-//   },
-// });
-
-//     return !!user.data.user.length;
-//   } catch (error) {
-//     errorResponseHandler(error, "Failed to Get User");
-//     throw new Error("Failed to Get User");
-//   }
-// };
-
-export const POST = async (req: CustomNextApiRequest) => {
-  const { email }: NCheckEmail.IRequest["body"] = await req.json();
-
+const checkUserExistence = async (email: string): Promise<boolean> => {
   try {
     const user = await client.query<GetUserQuery, GetUserQueryVariables>({
       query: GET_USER,
@@ -44,8 +25,21 @@ export const POST = async (req: CustomNextApiRequest) => {
       },
     });
 
+    return !!user.data.user.length;
+  } catch (error) {
+    // errorResponseHandler(error, "Failed to Get User");
+    throw new Error("Failed to Get User");
+  }
+};
+
+export const POST = async (req: CustomNextApiRequest) => {
+  const { email }: NCheckEmail.IRequest["body"] = await req.json();
+
+  try {
+    const emailExist = await checkUserExistence(email);
+
     return NextResponse.json(
-      { message: "Success", response: { emailExist: !!user.data.user.length } },
+      { message: "Success", response: { emailExist: emailExist } },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
