@@ -30,10 +30,9 @@ const checkUserExistence = async (email: string): Promise<boolean> => {
 };
 
 export const POST = async (req: CustomNextApiRequest) => {
-  const { email }: NCheckEmail.IRequest["body"] = await req.json();
-
   try {
-    const emailExist = await checkUserExistence(email);
+    const requestData: NCheckEmail.IRequest["body"] = await req.json();
+    const emailExist = await checkUserExistence(requestData.email);
 
     return NextResponse.json(
       { message: "Success", response: { emailExist: emailExist } },
