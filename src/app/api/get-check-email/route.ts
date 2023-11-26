@@ -14,31 +14,38 @@ interface CustomNextApiRequest extends NextRequest {
 }
 
 export const POST = async (req: CustomNextApiRequest) => {
-  const checkUserExistence = async (email: string): Promise<boolean> => {
-    try {
-      const user = await client.query<GetUserQuery, GetUserQueryVariables>({
-        query: GET_USER,
-        variables: {
-          whereUser: {
-            email: { _eq: email },
-          },
-        },
-      });
+  // const checkUserExistence = async (email: string): Promise<boolean> => {
+  //   try {
+  //     const user = await client.query<GetUserQuery, GetUserQueryVariables>({
+  //       query: GET_USER,
+  //       variables: {
+  //         whereUser: {
+  //           email: { _eq: email },
+  //         },
+  //       },
+  //     });
 
-      return !!user.data.user.length;
-    } catch (error) {
-      errorResponseHandler(error, "Failed to Get User");
-      throw new Error("Failed to Get User");
-    }
-  };
+  //     return !!user.data.user.length;
+  //   } catch (error) {
+  //     errorResponseHandler(error, "Failed to Get User");
+  //     throw new Error("Failed to Get User");
+  //   }
+  // };
 
   const { email }: NCheckEmail.IRequest["body"] = await req.json();
 
   try {
-    const emailExist = await checkUserExistence(email);
+    const user = await client.query<GetUserQuery, GetUserQueryVariables>({
+      query: GET_USER,
+      variables: {
+        whereUser: {
+          email: { _eq: email },
+        },
+      },
+    });
 
     return NextResponse.json(
-      { message: "Success", response: { emailExist: emailExist } },
+      { message: "Success", response: { emailExist: !!user.data.user.length } },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
