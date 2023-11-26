@@ -1,4 +1,8 @@
 import {
+  ICurrentWeatherApiResponse,
+  IWeatherApiRequest,
+} from "@/app/[lng]/portfolio/projects/weather-app/components/interfaces";
+import {
   ICheckEmailApi,
   ICheckUsernameApi,
 } from "@/app/[lng]/register/components/interfaces";
@@ -10,7 +14,10 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({ baseUrl: getBaseUrl() }),
   endpoints: (builder) => ({
-    checkEmailApi: builder.query<ICheckEmailApi, { email: string }>({
+    checkEmailApi: builder.query<
+      ICurrentWeatherApiResponse,
+      IWeatherApiRequest
+    >({
       query: (data) => {
         return {
           url: apiRoutes["get-check-email"],
