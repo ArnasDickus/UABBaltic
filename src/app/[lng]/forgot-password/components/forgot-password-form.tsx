@@ -11,10 +11,11 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
-// import { isEmailExist } from "@/app/utils/auth-functions";
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
+import { useLazyCheckEmailApiQuery } from "@/store/services/auth-api";
+import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "forgot_password" });
@@ -24,6 +25,8 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     email: Yup.string().required(t("required")).email(t("invalidEmail")),
   });
 
+  const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
+
   const {
     register,
     handleSubmit,
@@ -32,21 +35,34 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<IForgotPassword> = async (data) => {
-    // const emailExist = await isEmailExist(data.email);
-    // TODO Fix this
-    if (true) {
-      dispatch(
-        showHideAlert({
-          message: t("emailNotExist"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
-    } else {
+  const checkIfEmailExist = async (email: string) => {
+    try {
+      const emailExistResult = await checkEmailTrigger({
+        email: email,
+      })
+        .unwrap()
+        .then((val) => val.response.emailExist);
+
+      if (!emailExistResult) {
+        dispatch(
+          showHideAlert({
+            message: t("emailNotExist"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+      return !emailExistResult;
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed Check Email", true);
+    }
+  };
+
+  const forgotPassword = async (email: string) => {
+    try {
       const forgotPassword = await fetch(apiRoutes["forgot-password"], {
         method: "POST",
-        body: JSON.stringify({ email: data.email, language: language }),
+        body: JSON.stringify({ email: email, language: language }),
       });
 
       if (forgotPassword.status === StatusCodes.okStatus) {
@@ -66,6 +82,19 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
           })
         );
       }
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed Forgot Password", true);
+    }
+  };
+
+  const onSubmit: SubmitHandler<IForgotPassword> = async (data) => {
+    try {
+      if (await checkIfEmailExist(data.email)) {
+        return;
+      }
+      await forgotPassword(data.email);
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed OnSubmit", false);
     }
   };
 
