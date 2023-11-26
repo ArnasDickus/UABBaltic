@@ -13,7 +13,7 @@ export const authApi = createApi({
     checkEmailApi: builder.query<ICheckEmailApi, { email: string }>({
       query: (data) => {
         return {
-          url: apiRoutes["check-email"],
+          url: apiRoutes["get-check-email"],
           method: "POST",
           body: { ...data },
         };
@@ -22,7 +22,7 @@ export const authApi = createApi({
     checkUsernameApi: builder.query<ICheckUsernameApi, { username: string }>({
       query: (data) => {
         return {
-          url: apiRoutes["check-username"],
+          url: apiRoutes["get-check-username"],
           method: "POST",
           body: { ...data },
         };

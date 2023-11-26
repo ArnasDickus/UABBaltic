@@ -1,12 +1,15 @@
 import { apiRoutes } from "@/constants/routes";
-import { NCheckEmail } from "../api/check-email/route";
-import { NCheckUsername } from "../api/check-username/route";
+import { NCheckEmail } from "../api/get-check-email/route";
+import { NCheckUsername } from "../api/get-check-username/route";
 
 export const isEmailExist = async (email: string): Promise<boolean> => {
-  const isEmail: NCheckEmail.IResponse = await fetch(apiRoutes["check-email"], {
-    method: "POST",
-    body: JSON.stringify({ email: email }),
-  }).then(async (emailResult) => {
+  const isEmail: NCheckEmail.IResponse = await fetch(
+    apiRoutes["get-check-email"],
+    {
+      method: "POST",
+      body: JSON.stringify({ email: email }),
+    }
+  ).then(async (emailResult) => {
     if (!emailResult.ok) {
       throw new Error(`Failed to fetch. Status: ${emailResult.status}`);
     }
@@ -19,7 +22,7 @@ export const isEmailExist = async (email: string): Promise<boolean> => {
 
 export const isUsernameExist = async (email: string): Promise<boolean> => {
   const isUsername: NCheckUsername.IResponse = await fetch(
-    apiRoutes["check-username"],
+    apiRoutes["get-check-username"],
     {
       method: "POST",
       body: JSON.stringify({ email: email }),
