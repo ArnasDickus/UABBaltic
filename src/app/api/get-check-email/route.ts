@@ -35,6 +35,7 @@ export const POST = async (req: CustomNextApiRequest) => {
   const { email }: NCheckEmail.IRequest["body"] = await req.json();
 
   try {
+    let emailExist = false;
     const user = await client.query<GetUserQuery, GetUserQueryVariables>({
       query: GET_USER,
       variables: {
@@ -44,8 +45,14 @@ export const POST = async (req: CustomNextApiRequest) => {
       },
     });
 
+    if (user.data.user.length) {
+      emailExist = !!user.data.user.length;
+    }
     return NextResponse.json(
-      { message: "Success", response: { emailExist: !!user.data.user.length } },
+      {
+        message: "Success",
+        response: { emailExist: emailExist },
+      },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
