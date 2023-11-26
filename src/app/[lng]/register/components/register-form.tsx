@@ -51,9 +51,7 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   const checkIfEmailExist = async (email: string): Promise<boolean> => {
     await checkEmailTrigger({
-      lat: 54.68916,
-      lon: 25.2798,
-      language,
+      email: email,
     });
     return true;
     // try {
