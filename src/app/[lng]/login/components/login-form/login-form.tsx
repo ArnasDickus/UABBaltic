@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { apiRoutes } from "@/constants/routes";
 import { signIn } from "next-auth/react";
 import {
   formButtonContainerClassNames,
@@ -15,6 +14,7 @@ import { useTranslation } from "@/app/i18n/client";
 import LinkButton from "@/components/link-button/link-button";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
+import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 
 const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
@@ -33,25 +33,33 @@ const LoginForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
-    await fetch(apiRoutes["login-user"], {
-      method: "POST",
-      body: JSON.stringify({ formData: data }),
-    });
-    const response = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+  const signInUser = async (data: ILoginForm) => {
+    try {
+      const response = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-    if (response?.error) {
-      dispatch(
-        showHideAlert({
-          message: t("emailPasswordMatch"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
+      if (response?.error) {
+        dispatch(
+          showHideAlert({
+            message: t("emailPasswordMatch"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed Login", true);
+    }
+  };
+
+  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
+    try {
+      await signInUser(data);
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed Login onSubmit", false);
     }
   };
 
