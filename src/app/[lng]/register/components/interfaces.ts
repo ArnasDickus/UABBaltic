@@ -18,3 +18,7 @@ export interface ICheckUsernameApi {
     usernameExist: boolean;
   };
 }
+
+export interface ICheckUsernameRequest {
+  email: string;
+}
