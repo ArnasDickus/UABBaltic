@@ -7,10 +7,14 @@ export type IPageRegisterInputs = {
 
 export interface ICheckEmailApi {
   message: string;
-  emailExist: boolean;
+  response: {
+    emailExist: boolean;
+  };
 }
 
 export interface ICheckUsernameApi {
-  usernameExist: boolean;
   message: string;
+  response: {
+    usernameExist: boolean;
+  };
 }
