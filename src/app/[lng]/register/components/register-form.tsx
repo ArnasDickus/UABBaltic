@@ -50,31 +50,31 @@ const RegisterForm = ({ language }: { language: string }) => {
   });
 
   const checkIfEmailExist = async (email: string): Promise<boolean> => {
-    await checkEmailTrigger({
-      email: email,
-    });
-    return true;
-    // try {
-    //   const emailExistResult = await checkEmailTrigger({
-    //     email: email,
-    //   })
-    //     .unwrap()
-    //     .then((val) => val.response.emailExist);
+    // await checkEmailTrigger({
+    //   email: email,
+    // });
+    // return true;
+    try {
+      const emailExistResult = await checkEmailTrigger({
+        email: email,
+      })
+        .unwrap()
+        .then((val) => val.response.emailExist);
 
-    //   if (emailExistResult) {
-    //     dispatch(
-    //       showHideAlert({
-    //         message: t("emailExist"),
-    //         severity: "error",
-    //         showAlert: true,
-    //       })
-    //     );
-    //   }
-    //   return emailExistResult;
-    // } catch (error) {
-    //   clientErrorResponseHandler(error, "FailedEmailExist", true);
-    //   return true;
-    // }
+      if (emailExistResult) {
+        dispatch(
+          showHideAlert({
+            message: t("emailExist"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+      return emailExistResult;
+    } catch (error) {
+      clientErrorResponseHandler(error, "FailedEmailExist", true);
+      return true;
+    }
   };
 
   const checkIfUsernameExist = async (username: string): Promise<boolean> => {
