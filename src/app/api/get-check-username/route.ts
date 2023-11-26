@@ -3,7 +3,6 @@ import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
 import { ICheckUsernameApi } from "@/app/[lng]/register/components/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
@@ -23,7 +22,6 @@ const checkUsernameExistance = async (username: string) => {
 
     return !!user.data.user.length;
   } catch (error) {
-    errorResponseHandler(error, "Failed ToGetUser");
     throw new Error("Failed to get User");
   }
 };
@@ -41,7 +39,10 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed ToGetUser POST");
+    return NextResponse.json(
+      { message: "Failed to get User POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 
