@@ -35,7 +35,7 @@ export const POST = async (req: CustomNextApiRequest) => {
   const { email }: NCheckEmail.IRequest["body"] = await req.json();
 
   try {
-    await client.query<GetUserQuery, GetUserQueryVariables>({
+    const user = await client.query<GetUserQuery, GetUserQueryVariables>({
       query: GET_USER,
       variables: {
         whereUser: {
@@ -45,7 +45,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     });
 
     return NextResponse.json(
-      { message: "Success", response: { emailExist: true } },
+      { message: "Success", response: { emailExist: !!user.data.user.length } },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
