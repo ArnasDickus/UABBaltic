@@ -30,13 +30,20 @@ const checkUserExistence = async (email: string): Promise<boolean> => {
 
 export const POST = async (req: CustomNextApiRequest) => {
   try {
-    const requestData: NCheckEmail.IRequest["body"] = await req.json();
-    const emailExist = await checkUserExistence(requestData.email);
+    // const requestData: NCheckEmail.IRequest["body"] = await req.json();
+    // const emailExist = await checkUserExistence(requestData.email);
 
     return NextResponse.json(
-      { message: "User checked", emailExist: emailExist },
+      { message: "User checked", emailExist: true },
       { status: StatusCodes.okStatus }
     );
+    // const requestData: NCheckEmail.IRequest["body"] = await req.json();
+    // const emailExist = await checkUserExistence(requestData.email);
+
+    // return NextResponse.json(
+    //   { message: "User checked", emailExist: emailExist },
+    //   { status: StatusCodes.okStatus }
+    // );
   } catch (error) {
     return errorResponseHandler(error, "Failed to get User POST");
   }
