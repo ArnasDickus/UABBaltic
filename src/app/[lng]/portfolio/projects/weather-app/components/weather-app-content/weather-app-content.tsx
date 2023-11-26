@@ -76,8 +76,12 @@ const WeatherAppContent = ({ language }: { language: string }) => {
         language,
       });
     };
-
-    fetchWeatherData();
+    if (
+      weatherCoordinates.coordinates.latitude &&
+      weatherCoordinates.coordinates.longitude
+    ) {
+      fetchWeatherData();
+    }
   }, [
     currentWeatherTrigger,
     language,

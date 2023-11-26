@@ -22,6 +22,7 @@ import {
   useLazyCheckUsernameApiQuery,
 } from "@/store/services/auth-api";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
+import { useLazyGetCurrentWeatherApiQuery } from "@/store/services/weather-app-api";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
@@ -29,6 +30,7 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
   const [checkUsernameTrigger] = useLazyCheckUsernameApiQuery();
+  const [currentWeatherTrigger] = useLazyGetCurrentWeatherApiQuery();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("required")),
@@ -123,8 +125,25 @@ const RegisterForm = ({ language }: { language: string }) => {
     }
   };
 
+  const checkWeather = async () => {
+    try {
+      await currentWeatherTrigger({
+        lat: 54.6891,
+        lon: 25.2798,
+        language,
+      });
+      return true;
+    } catch (error) {
+      clientErrorResponseHandler(error, "FailedCreateUser", true);
+    }
+  };
+
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
     try {
+      if (await checkWeather()) {
+        return;
+      }
+
       if (await checkIfEmailExist(data.email)) {
         return;
       }
