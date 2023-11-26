@@ -55,7 +55,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         email: email,
       })
         .unwrap()
-        .then((val) => val.emailExist);
+        .then((val) => val.response.emailExist);
 
       if (emailExistResult) {
         dispatch(
@@ -79,7 +79,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         username: username,
       })
         .unwrap()
-        .then((val) => val.usernameExist);
+        .then((val) => val.response.usernameExist);
 
       if (userNameExistResult) {
         dispatch(

@@ -36,7 +36,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     return NextResponse.json(
       {
         message: "Username checked successfully",
-        usernameExist: userNameExist,
+        respnse: { usernameExist: userNameExist },
       },
       { status: StatusCodes.okStatus }
     );
