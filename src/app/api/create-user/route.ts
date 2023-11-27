@@ -17,7 +17,6 @@ import {
   AddUserMutation,
   AddUserMutationVariables,
 } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -50,7 +49,6 @@ const createUser = async (requestData: NCreateUser.IRequest["body"]) => {
       return newUserId;
     }
   } catch (error) {
-    errorResponseHandler(error, "Failed Add User");
     throw new Error("Failed Add User");
   }
 };
@@ -74,8 +72,6 @@ const addUserConfirmation = async (
       },
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed add user confirmation");
-
     await client.mutate({
       mutation: DELETE_USER,
       variables: {
@@ -106,7 +102,6 @@ const sendEmail = async (
             </div>`,
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed Send Email");
     throw new Error("Failed Send Email");
   }
 };
@@ -124,7 +119,10 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed Create User POST");
+    return NextResponse.json(
+      { message: "Failed to Create USER POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 

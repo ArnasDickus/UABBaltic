@@ -13,14 +13,22 @@ import {
   formButtonContainerClassNames,
   formClassNames,
 } from "@/styles/reusable-styles";
-import { isEmailExist, isUsernameExist } from "@/app/utils/auth-functions";
+
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
+import {
+  useLazyCheckEmailApiQuery,
+  useLazyCheckUsernameApiQuery,
+} from "@/store/services/auth-api";
+import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
   const dispatch = useAppDispatch();
+
+  const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
+  const [checkUsernameTrigger] = useLazyCheckUsernameApiQuery();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("required")),
@@ -39,52 +47,94 @@ const RegisterForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
+  const checkIfEmailExist = async (email: string): Promise<boolean> => {
+    try {
+      const emailExistResult = await checkEmailTrigger({
+        email: email,
+      })
+        .unwrap()
+        .then((val) => val.response.emailExist);
+
+      if (emailExistResult) {
+        dispatch(
+          showHideAlert({
+            message: t("emailExist"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+      return emailExistResult;
+    } catch (error) {
+      clientErrorResponseHandler(error, "FailedEmailExist", true);
+      return true;
+    }
+  };
+
+  const checkIfUsernameExist = async (username: string): Promise<boolean> => {
+    try {
+      const userNameExistResult = await checkUsernameTrigger({
+        username: username,
+      })
+        .unwrap()
+        .then((val) => val.response.usernameExist);
+
+      if (userNameExistResult) {
+        dispatch(
+          showHideAlert({
+            message: t("usernameInUse"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+      return userNameExistResult;
+    } catch (error) {
+      clientErrorResponseHandler(error, "FailedUsernameExist", true);
+      return true;
+    }
+  };
+
+  const getNewUser = async (data: IPageRegisterInputs) => {
+    try {
+      const newUser = await fetch(apiRoutes["create-user"], {
+        method: "POST",
+        body: JSON.stringify({ formData: data, language: language }),
+      });
+      if (newUser.status === StatusCodes.okStatus) {
+        dispatch(
+          showHideAlert({
+            message: t("emailWasSent"),
+            severity: "success",
+            showAlert: true,
+          })
+        );
+      } else if (newUser.status === StatusCodes.internalServerError) {
+        dispatch(
+          showHideAlert({
+            message: t("internalError"),
+            severity: "error",
+            showAlert: true,
+          })
+        );
+      }
+    } catch (error) {
+      clientErrorResponseHandler(error, "FailedCreateUser", true);
+    }
+  };
+
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
-    const emailExist = await isEmailExist(data.email);
-    const usernameExist = await isUsernameExist(data.username);
+    try {
+      if (await checkIfEmailExist(data.email)) {
+        return;
+      }
+      if (await checkIfUsernameExist(data.username)) {
+        return;
+      }
 
-    if (emailExist) {
-      dispatch(
-        showHideAlert({
-          message: t("emailExist"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
-      return;
-    }
-
-    if (usernameExist) {
-      dispatch(
-        showHideAlert({
-          message: t("usernameInUse"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
-      return;
-    }
-
-    const newUser = await fetch(apiRoutes["create-user"], {
-      method: "POST",
-      body: JSON.stringify({ formData: data, language: language }),
-    });
-    if (newUser.status === StatusCodes.okStatus) {
-      dispatch(
-        showHideAlert({
-          message: t("emailWasSent"),
-          severity: "success",
-          showAlert: true,
-        })
-      );
-    } else if (newUser.status === StatusCodes.internalServerError) {
-      dispatch(
-        showHideAlert({
-          message: t("internalError"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
+      await getNewUser(data);
+    } catch (error) {
+      clientErrorResponseHandler(error, "Failed OnSubmit", false);
     }
   };
   return (

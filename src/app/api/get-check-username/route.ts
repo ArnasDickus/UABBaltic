@@ -3,52 +3,54 @@ import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
+import { ICheckUsernameApi } from "@/app/[lng]/register/components/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
-  json: () => Promise<NCheckEmail.IRequest["body"]>;
+  json: () => Promise<NCheckUsername.IRequest["body"]>;
 }
 
-const checkUserExistence = async (email: string): Promise<boolean> => {
+const checkUsernameExistance = async (username: string) => {
   try {
     const user = await client.query<GetUserQuery, GetUserQueryVariables>({
       query: GET_USER,
       variables: {
         whereUser: {
-          email: { _eq: email },
+          username: { _eq: username },
         },
       },
     });
 
     return !!user.data.user.length;
   } catch (error) {
-    errorResponseHandler(error, "Failed to Get User");
-    throw new Error("Failed to Get User");
+    throw new Error("Failed to get User");
   }
 };
 
 export const POST = async (req: CustomNextApiRequest) => {
   try {
-    const requestData: NCheckEmail.IRequest["body"] = await req.json();
-    const emailExist = await checkUserExistence(requestData.email);
+    const requestData: NCheckUsername.IRequest["body"] = await req.json();
+    const userNameExist = await checkUsernameExistance(requestData.username);
 
     return NextResponse.json(
-      { message: "User checked", emailExist: emailExist },
+      {
+        message: "Username checked successfully",
+        response: { usernameExist: userNameExist },
+      },
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed to get User POST");
+    return NextResponse.json(
+      { message: "Failed to get User POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 
-export namespace NCheckEmail {
+export namespace NCheckUsername {
   export interface IRequest {
     body: {
-      email: string;
+      username: string;
     };
   }
-  export interface IResponse {
-    emailExist: boolean;
-    message: string;
-  }
+  export interface IResponse extends ICheckUsernameApi {}
 }

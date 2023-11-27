@@ -4,11 +4,13 @@ import swapiFilmsReducer from "./slices/swapi-films-slice";
 import toastAlertReducer from "./slices/toast-alert-slice";
 import { weatherAppApi } from "./services/weather-app-api";
 import weatherSliceReducer from "./slices/weather-slice";
+import { authApi } from "./services/auth-api";
 
 export const store = configureStore({
   reducer: {
     [swapiApi.reducerPath]: swapiApi.reducer,
     [weatherAppApi.reducerPath]: weatherAppApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
 
     swapiFilms: swapiFilmsReducer,
     toastAlert: toastAlertReducer,
@@ -17,7 +19,11 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(swapiApi.middleware, weatherAppApi.middleware),
+    }).concat(
+      swapiApi.middleware,
+      weatherAppApi.middleware,
+      authApi.middleware
+    ),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

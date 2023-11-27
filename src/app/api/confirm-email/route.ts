@@ -11,7 +11,6 @@ import {
   UpdateUsersMutation,
   UpdateUsersMutationVariables,
 } from "@/gql/graphql";
-import { errorResponseHandler } from "@/app/utils/error-response-handler";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NConfirmEmail.IRequest["body"]>;
@@ -37,7 +36,6 @@ const getUserConfirmation = async (token: string): Promise<number> => {
       return userId;
     }
   } catch (error) {
-    errorResponseHandler(error, "Failed Get User Confirmation");
     throw new Error("Failed Get User Confirmation");
   }
 };
@@ -56,7 +54,6 @@ const updateUser = async (userId: number): Promise<void> => {
       },
     });
   } catch (error) {
-    errorResponseHandler(error, "Failed to Update User");
     throw new Error("Failed to Update User");
   }
 };
@@ -72,7 +69,10 @@ export const POST = async (req: CustomNextApiRequest) => {
       { status: StatusCodes.okStatus }
     );
   } catch (error) {
-    return errorResponseHandler(error, "Failed to Confirm Email");
+    return NextResponse.json(
+      { message: "Failed to Confirm Email POST" },
+      { status: StatusCodes.internalServerError }
+    );
   }
 };
 
