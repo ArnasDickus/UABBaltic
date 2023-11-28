@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { ICreateUserResponse, IPageRegisterInputs } from "./interfaces";
+import { IPageRegisterInputs } from "./interfaces";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
 
@@ -19,6 +19,7 @@ import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 import { graphqlErrors } from "@/constants/graphql-errors";
+import { IResponseJSON } from "@/app/utils/generic-interface";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
@@ -88,7 +89,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         body: JSON.stringify({ formData: data, language: language }),
       });
 
-      const newUserJson: ICreateUserResponse = await newUser.json();
+      const newUserJson: IResponseJSON = await newUser.json();
       handleErrors(newUserJson.message, newUser.status);
     } catch (error) {
       clientErrorResponseHandler(error, "FailedCreateUser", true);

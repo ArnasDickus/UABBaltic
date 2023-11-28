@@ -1,8 +1,5 @@
 import client from "../../../../apollo-client";
-import {
-  ICreateUserResponse,
-  IPageRegisterInputs,
-} from "@/app/[lng]/register/components/interfaces";
+import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
@@ -20,6 +17,7 @@ import {
   AddUserMutation,
   AddUserMutationVariables,
 } from "@/gql/graphql";
+import { IResponseJSON } from "@/app/utils/generic-interface";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -142,5 +140,5 @@ export namespace NCreateUser {
       language: string;
     };
   }
-  export interface IResponse extends ICreateUserResponse {}
+  export interface IResponse extends IResponseJSON {}
 }

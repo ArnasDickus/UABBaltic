@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-require("dotenv").config();
 
 Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="nameInput"]').type(name);
@@ -8,6 +7,7 @@ Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="passwordInput"]').type(password);
   cy.get('[data-testid="submitButton"]').click();
 });
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
