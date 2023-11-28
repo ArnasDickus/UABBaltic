@@ -4,13 +4,20 @@ import { ButtonHTMLAttributes, ReactNode } from "react";
 interface IButton {
   children: ReactNode;
   onClick?: () => void;
+  dataTestIdButton?: string;
   buttonProps?: ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
-const Button = ({ onClick, children, buttonProps }: IButton) => {
+const Button = ({
+  onClick,
+  children,
+  buttonProps,
+  dataTestIdButton,
+}: IButton) => {
   return (
     <button
       onClick={onClick}
+      data-testid={dataTestIdButton}
       className={`
         ${
           buttonProps?.disabled

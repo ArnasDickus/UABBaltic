@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { IPageRegisterInputs } from "./interfaces";
+import { ICreateUserResponse, IPageRegisterInputs } from "./interfaces";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
 
@@ -17,18 +17,12 @@ import {
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
-import {
-  useLazyCheckEmailApiQuery,
-  useLazyCheckUsernameApiQuery,
-} from "@/store/services/auth-api";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
+import { graphqlErrors } from "@/constants/graphql-errors";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
   const dispatch = useAppDispatch();
-
-  const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
-  const [checkUsernameTrigger] = useLazyCheckUsernameApiQuery();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(t("required")),
@@ -47,51 +41,43 @@ const RegisterForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const checkIfEmailExist = async (email: string): Promise<boolean> => {
-    try {
-      const emailExistResult = await checkEmailTrigger({
-        email: email,
-      })
-        .unwrap()
-        .then((val) => val.response.emailExist);
-
-      if (emailExistResult) {
-        dispatch(
-          showHideAlert({
-            message: t("emailExist"),
-            severity: "error",
-            showAlert: true,
-          })
-        );
-      }
-      return emailExistResult;
-    } catch (error) {
-      clientErrorResponseHandler(error, "FailedEmailExist", true);
-      return true;
-    }
-  };
-
-  const checkIfUsernameExist = async (username: string): Promise<boolean> => {
-    try {
-      const userNameExistResult = await checkUsernameTrigger({
-        username: username,
-      })
-        .unwrap()
-        .then((val) => val.response.usernameExist);
-
-      if (userNameExistResult) {
-        dispatch(
-          showHideAlert({
-            message: t("usernameInUse"),
-            severity: "error",
-            showAlert: true,
-          })
-        );
-      }
-      return userNameExistResult;
-    } catch (error) {
-      clientErrorResponseHandler(error, "FailedUsernameExist", true);
-      return true;
+  const handleErrors = (message: string, status: number) => {
+    if (message === graphqlErrors.dublicateEmail) {
+      dispatch(
+        showHideAlert({
+          message: t("emailExist"),
+          severity: "error",
+          showAlert: true,
+          alertDataTestId: "emailExistsModal",
+        })
+      );
+    } else if (message === graphqlErrors.dublicateUsername) {
+      dispatch(
+        showHideAlert({
+          message: t("usernameInUse"),
+          severity: "error",
+          showAlert: true,
+          alertDataTestId: "usernameExistsModal",
+        })
+      );
+    } else if (status === StatusCodes.okStatus) {
+      dispatch(
+        showHideAlert({
+          message: t("emailWasSent"),
+          severity: "success",
+          showAlert: true,
+          alertDataTestId: "emailWasSentModal",
+        })
+      );
+    } else {
+      dispatch(
+        showHideAlert({
+          message: t("internalError"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
+      throw new Error("Internal Error");
     }
   };
 
@@ -101,23 +87,9 @@ const RegisterForm = ({ language }: { language: string }) => {
         method: "POST",
         body: JSON.stringify({ formData: data, language: language }),
       });
-      if (newUser.status === StatusCodes.okStatus) {
-        dispatch(
-          showHideAlert({
-            message: t("emailWasSent"),
-            severity: "success",
-            showAlert: true,
-          })
-        );
-      } else if (newUser.status === StatusCodes.internalServerError) {
-        dispatch(
-          showHideAlert({
-            message: t("internalError"),
-            severity: "error",
-            showAlert: true,
-          })
-        );
-      }
+
+      const newUserJson: ICreateUserResponse = await newUser.json();
+      handleErrors(newUserJson.message, newUser.status);
     } catch (error) {
       clientErrorResponseHandler(error, "FailedCreateUser", true);
     }
@@ -125,13 +97,6 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   const onSubmit: SubmitHandler<IPageRegisterInputs> = async (data) => {
     try {
-      if (await checkIfEmailExist(data.email)) {
-        return;
-      }
-      if (await checkIfUsernameExist(data.username)) {
-        return;
-      }
-
       await getNewUser(data);
     } catch (error) {
       clientErrorResponseHandler(error, "Failed OnSubmit", false);
@@ -143,6 +108,7 @@ const RegisterForm = ({ language }: { language: string }) => {
         <Input
           name={t("name")}
           errorText={errors.name?.message}
+          dataTestIdInput="nameInput"
           inputProps={{
             type: "text",
             disabled: isSubmitting,
@@ -153,6 +119,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       <div className="mb-4">
         <Input
           name={t("username")}
+          dataTestIdInput="usernameInput"
           errorText={errors.username?.message}
           inputProps={{
             type: "text",
@@ -164,6 +131,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       <div className="mb-4">
         <Input
           name={t("email")}
+          dataTestIdInput="emailInput"
           errorText={errors.email?.message}
           inputProps={{
             type: "text",
@@ -175,6 +143,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       <div className="mb-6">
         <Input
           name={t("password")}
+          dataTestIdInput="passwordInput"
           errorText={errors.password?.message}
           inputProps={{
             type: "password",
@@ -185,6 +154,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       </div>
       <div className={formButtonContainerClassNames}>
         <Button
+          dataTestIdButton="submitButton"
           buttonProps={{
             disabled: isSubmitting,
             type: "submit",

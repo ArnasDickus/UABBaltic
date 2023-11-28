@@ -22,3 +22,7 @@ export interface ICheckUsernameApi {
 export interface ICheckUsernameRequest {
   email: string;
 }
+
+export interface ICreateUserResponse {
+  message: string;
+}

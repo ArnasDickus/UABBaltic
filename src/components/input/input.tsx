@@ -3,6 +3,7 @@ import { HTMLProps } from "react";
 interface ITailwindInput {
   name: string;
   errorText?: string;
+  dataTestIdInput?: string;
   labelProps?: HTMLProps<HTMLLabelElement>;
   inputProps?: HTMLProps<HTMLInputElement>;
 }
@@ -12,6 +13,7 @@ const TailwindInput = ({
   labelProps,
   inputProps,
   errorText,
+  dataTestIdInput,
 }: ITailwindInput) => {
   return (
     <>
@@ -22,6 +24,7 @@ const TailwindInput = ({
         {name}
       </label>
       <input
+        data-testid={dataTestIdInput}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id={name}
         type="text"

@@ -64,6 +64,7 @@ const SnackAlert = () => {
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         open={alertData.showAlert}
+        data-testid={alertData.alertDataTestId}
         autoHideDuration={6000}
         onClose={handleClose}>
         <Alert onClose={handleClose} severity={alertData.severity}>
