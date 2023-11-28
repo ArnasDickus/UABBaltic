@@ -8,37 +8,6 @@ Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="passwordInput"]').type(password);
   cy.get('[data-testid="submitButton"]').click();
 });
-
-Cypress.Commands.add("deleteDatabaseUser", (email) => {
-  const graphqlEndpoint = Cypress.env(
-    "NEXT_PUBLIC_NEXT_HASURA_PROJECT_ENDPOINT"
-  );
-  const adminSecret = Cypress.env("NEXT_PUBLIC_HASURA_ADMIN_SECRET");
-
-  const mutation = `
-    mutation DeleteUser {
-    delete_user(where: {email: {_eq: "${email}"}})
-    affected_rows
-      returning {
-        id
-      }
-}
-  `;
-
-  const headers = {
-    "Content-Type": "application/json",
-    "x-hasura-admin-secret": adminSecret,
-  };
-
-  cy.request({
-    url: graphqlEndpoint,
-    method: "POST",
-    headers,
-    body: { query: mutation },
-  }).then((response) => {
-    cy.log("Response", response);
-  });
-});
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite

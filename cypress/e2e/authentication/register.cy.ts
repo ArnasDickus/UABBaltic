@@ -8,11 +8,6 @@ describe("Register user", () => {
 
   const emailsString = JSON.stringify(emailsToDelete);
   beforeEach(() => {
-    const graphqlEndpoint: string = Cypress.env(
-      "NEXT_PUBLIC_NEXT_HASURA_PROJECT_ENDPOINT"
-    );
-    const adminSecret: string = Cypress.env("NEXT_PUBLIC_HASURA_ADMIN_SECRET");
-
     const mutation = `
     mutation DeleteUsers {
       delete_user(where: {email: {_in: ${emailsString}}}) {
@@ -26,11 +21,11 @@ describe("Register user", () => {
 
     const headers = {
       "Content-Type": "application/json",
-      "x-hasura-admin-secret": adminSecret,
+      "x-hasura-admin-secret": Cypress.env("NEXT_PUBLIC_HASURA_ADMIN_SECRET"),
     };
 
     cy.request({
-      url: graphqlEndpoint,
+      url: Cypress.env("NEXT_PUBLIC_NEXT_HASURA_PROJECT_ENDPOINT"),
       method: "POST",
       headers,
       body: { query: mutation },
@@ -40,7 +35,7 @@ describe("Register user", () => {
   });
 
   it("displays success message", () => {
-    cy.visit("http://localhost:3000/en/register");
+    cy.visit("en/register");
 
     cy.registerUI(
       "MrUniqueUser",
@@ -55,14 +50,14 @@ describe("Register user", () => {
     cy.get('[data-testid="emailWasSentModal"]').should("be.visible");
   });
   it("displays message for existing username", () => {
-    cy.visit("http://localhost:3000/en/register");
+    cy.visit("en/register");
     cy.registerUI(
       "ExistingUser",
       "ExistingUsername",
       emailsToDelete[1],
       "vbC1UbVWs7Y7VXoBdTrA"
     );
-    cy.visit("http://localhost:3000/en/register");
+    cy.visit("en/register");
 
     cy.registerUI(
       "ExistingUser",
@@ -74,14 +69,14 @@ describe("Register user", () => {
     cy.get('[data-testid="usernameExistsModal"]').should("be.visible");
   });
   it("displays message for existing email", () => {
-    cy.visit("http://localhost:3000/en/register");
+    cy.visit("en/register");
     cy.registerUI(
       "AnotherUser",
       "AnotherUsername",
       emailsToDelete[3],
       "vbC1UbVWs7Y7VXoBdTrA"
     );
-    cy.visit("http://localhost:3000/en/register");
+    cy.visit("en/register");
     cy.registerUI(
       "NewName",
       "NewUsername",

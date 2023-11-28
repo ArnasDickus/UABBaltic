@@ -9,17 +9,6 @@ declare global {
         email: string,
         password: string
       ): Chainable<IPageRegisterInputs>;
-      deleteDatabaseUser(email: string): Chainable<{ email: string }>;
-      //   drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>;
-      //   dismiss(
-      //     subject: string,
-      //     options?: Partial<TypeOptions>
-      //   ): Chainable<Element>;
-      //   visit(
-      //     originalFn: CommandOriginalFn,
-      //     url: string,
-      //     options: Partial<VisitOptions>
-      //   ): Chainable<Element>;
     }
   }
 }

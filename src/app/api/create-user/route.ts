@@ -46,17 +46,12 @@ const createUser = async (requestData: NCreateUser.IRequest["body"]) => {
         },
       },
     });
-    console.log("newUserId", newUserId);
     if (!newUserId) {
       throw new Error("Failed Add User");
     } else {
       return newUserId;
     }
   } catch (error) {
-    //  @ts-ignore
-    // console.log("message", errors.graphQLErrors[0].message);
-    //  @ts-ignore
-    // console.log("extensions", error.graphQLErrors[0].extensions);
     //  @ts-ignore
     throw new Error(error.graphQLErrors[0].message);
   }
