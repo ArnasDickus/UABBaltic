@@ -14,6 +14,7 @@ import {
   GetUserQuery,
   GetUserQueryVariables,
 } from "@/gql/graphql";
+import { customErrors } from "@/constants/custom-errors";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NForgotPassword.IRequest["body"]>;
@@ -21,24 +22,22 @@ interface CustomNextApiRequest extends NextRequest {
 
 const getUser = async (email: string) => {
   try {
-    const userId = await client
-      .query<GetUserQuery, GetUserQueryVariables>({
-        query: GET_USER,
-        variables: {
-          whereUser: {
-            email: { _eq: email },
-          },
+    const user = await client.query<GetUserQuery, GetUserQueryVariables>({
+      query: GET_USER,
+      variables: {
+        whereUser: {
+          email: { _eq: email },
         },
-      })
-      .then((val) => val.data.user[0].id);
+      },
+    });
 
-    if (!userId) {
-      throw new Error("User not found");
+    if (!user.data.user.length) {
+      throw new Error(customErrors.userNotFound);
     } else {
-      return userId;
+      return user.data.user[0].id;
     }
   } catch (error) {
-    throw new Error("Failed Get User");
+    throw new Error(customErrors.userNotFound);
   }
 };
 
@@ -91,6 +90,7 @@ export const POST = async (req: CustomNextApiRequest) => {
     const requestData: NForgotPassword.IRequest["body"] = await req.json();
     const confirmationToken = generateToken();
     const userId = await getUser(requestData.email);
+
     await addUserPasswordChangeRequest(userId, confirmationToken);
     await sendEmail(requestData.language, confirmationToken, requestData.email);
 
@@ -100,7 +100,8 @@ export const POST = async (req: CustomNextApiRequest) => {
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "FAILED forgot password POS" },
+      // @ts-ignore
+      { message: error.message },
       { status: StatusCodes.internalServerError }
     );
   }

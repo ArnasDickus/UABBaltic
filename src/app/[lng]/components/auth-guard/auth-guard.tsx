@@ -1,7 +1,8 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import PageLoader from "../page-loader/page-loader";
 
 const AuthGuard = ({
@@ -13,6 +14,7 @@ const AuthGuard = ({
 }) => {
   const { status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
 
   const publicRoutes = [
     `/${language}/login`,
@@ -27,7 +29,7 @@ const AuthGuard = ({
   }
 
   if (status === "authenticated" && publicRoutes.includes(pathname)) {
-    redirect(`/${language}`);
+    router.push(`/${language}`);
   }
 
   return <>{children}</>;
