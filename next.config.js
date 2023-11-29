@@ -20,6 +20,7 @@ const nextConfig = {
   sentry: {
     tunnelRoute: "/en/monitoring-tunnel",
   },
+  swcMinify: false,
   images: {
     remotePatterns: [
       {

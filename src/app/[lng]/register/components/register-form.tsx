@@ -90,7 +90,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       const newUserJson: IResponseJSON = await newUser.json();
       handleErrors(newUserJson.message, newUser.status);
     } catch (error) {
-      clientErrorResponseHandler(error, "FailedCreateUser", true);
+      clientErrorResponseHandler("FailedCreateUser", true);
     }
   };
 
@@ -98,11 +98,19 @@ const RegisterForm = ({ language }: { language: string }) => {
     try {
       await getNewUser(data);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed OnSubmit", false);
+      clientErrorResponseHandler("Failed OnSubmit", false);
     }
   };
+  // Write unit tests for:
+  // required fields.
+  // Email validation
+  // Password strength
+  // Reset form after submit
+  // Add limits to user type fields.
+  // Display loading indicator
   return (
     <form
+      data-testid="custom-element"
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white px-8 py-8 shadow-md rounded md:bg-inherit md:shadow-none md:px-0 md:py-8">
       <div>

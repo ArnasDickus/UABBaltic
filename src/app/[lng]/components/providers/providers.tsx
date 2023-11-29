@@ -29,4 +29,10 @@ const Providers = ({
     </SessionProvider>
   );
 };
+
+if (window.Cypress) {
+  // @ts-ignore
+  window.store = store;
+}
+
 export default Providers;
