@@ -2,10 +2,12 @@ import { IPageParamProps } from "@/constants/interfaces";
 import { FC } from "react";
 
 import RegisterForm from "./components/register-form";
-import { formContainerClassNames } from "@/styles/reusable-styles";
+
 import PageContainer from "@/styles/components/page-container";
 import { ServerFooter } from "@/components/layout/footer/serverfooter";
 import { Metadata } from "next";
+import Image from "next/image";
+import RegisterBackground from "@/../public/images/register-background.jpg";
 
 export const metadata: Metadata = {
   title: "Register",
@@ -18,8 +20,19 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
     <PageContainer
       language={lng}
       footer={<ServerFooter language={lng} path="/register" />}>
-      <div className={formContainerClassNames}>
-        <RegisterForm language={lng} />
+      <div className="flex w-full h-screen">
+        <div className="w-full h-screen relative md:w-1/2">
+          <Image
+            fill
+            objectFit="cover"
+            className="w-full h-auto"
+            src={RegisterBackground}
+            alt="sea"
+          />
+        </div>
+        <div className="w-full absolute pt-24 pl-10 pr-10 md:static md:w-1/2 sm:pt-20 sm:pl-20">
+          <RegisterForm language={lng} />
+        </div>
       </div>
     </PageContainer>
   );

@@ -9,10 +9,7 @@ import { IPageRegisterInputs } from "./interfaces";
 import { apiRoutes } from "@/constants/routes";
 import { StatusCodes } from "@/constants/status-code";
 
-import {
-  formButtonContainerClassNames,
-  formClassNames,
-} from "@/styles/reusable-styles";
+import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
@@ -20,6 +17,7 @@ import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 import { graphqlErrors } from "@/constants/graphql-errors";
 import { IResponseJSON } from "@/app/utils/generic-interface";
+import Link from "next/link";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
@@ -104,7 +102,25 @@ const RegisterForm = ({ language }: { language: string }) => {
     }
   };
   return (
-    <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="bg-white px-8 py-8 shadow-md rounded md:bg-inherit md:shadow-none md:px-0 md:py-8">
+      <div>
+        <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900  lg:text-4xl dark:text-white">
+          {t("createAccount")}
+        </h2>
+        <div className="flex gap-1">
+          <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
+            {t("alreadyHave")}
+          </p>
+
+          <Link
+            className="underline text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400"
+            href={`/${language}/login`}>
+            {t("login")}
+          </Link>
+        </div>
+      </div>
       <div className="mb-4">
         <Input
           name={t("name")}
