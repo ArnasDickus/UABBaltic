@@ -1,5 +1,4 @@
-import { IPageRegisterInputs } from "@/app/[lng]/register/components/register-form/interfaces";
-
+import { IPageRegisterInputs } from "../../src/app/[lng]/register/components/register-form/interfaces";
 declare global {
   namespace Cypress {
     interface Chainable {
