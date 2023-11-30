@@ -1,6 +1,5 @@
 import RegisterForm from "./register-form";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-// import { expect } from "@jest/globals";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
@@ -12,7 +11,6 @@ describe("Register", () => {
         <RegisterForm language="en" />
       </Provider>
     );
-    // check if all components are rendered
 
     await waitFor(() => {
       expect(screen.getByTestId("custom-element")).toBeInTheDocument();
