@@ -18,20 +18,16 @@ import { clientErrorResponseHandler } from "@/app/utils/client-error-response-ha
 import { graphqlErrors } from "@/constants/graphql-errors";
 import { IResponseJSON } from "@/app/utils/generic-interface";
 import Link from "next/link";
+import { registerValidationSchema } from "@/app/utils/validation-schemas";
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
   const dispatch = useAppDispatch();
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required(t("required")),
-    email: Yup.string().email().required(t("required")),
-    username: Yup.string().required(t("required")),
-    password: Yup.string()
-      .required(t("required"))
-      .min(8, t("passwordTooShort"))
-      .matches(/[a-zA-Z]/, t("passwordLatin")),
+  const validationSchema = registerValidationSchema({
+    t: t,
   });
+
   const {
     register,
     handleSubmit,
@@ -101,13 +97,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       clientErrorResponseHandler("Failed OnSubmit", false);
     }
   };
-  // Write unit tests for:
-  // required fields.
-  // Email validation
-  // Password strength
-  // Reset form after submit
-  // Add limits to user type fields.
-  // Display loading indicator
+
   return (
     <form
       data-testid="custom-element"

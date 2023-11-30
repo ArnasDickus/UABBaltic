@@ -1,7 +1,7 @@
 import { IPageParamProps } from "@/constants/interfaces";
 import { FC } from "react";
 
-import RegisterForm from "./components/register-form";
+import RegisterForm from "./components/register-form/register-form";
 
 import PageContainer from "@/styles/components/page-container";
 import { ServerFooter } from "@/components/layout/footer/serverfooter";
@@ -30,7 +30,7 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
             alt="sea"
           />
         </div>
-        <div className="w-full absolute pt-24 pl-10 pr-10 md:static md:w-1/2 sm:pt-20 sm:pl-20">
+        <div className="w-full absolute pt-10 pl-10 pr-10 md:static md:w-1/2 sm:pt-24 sm:pl-20">
           <RegisterForm language={lng} />
         </div>
       </div>
