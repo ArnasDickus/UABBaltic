@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import "@testing-library/cypress/add-commands";
 
 Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="nameInput"]').type(name);

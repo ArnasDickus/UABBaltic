@@ -45,7 +45,6 @@ const nextConfig = {
     appDir: true,
     typedRoutes: true,
     serverActions: true,
-    swcPlugins: [["swc-plugin-coverage-instrument", {}]],
   },
 };
 
