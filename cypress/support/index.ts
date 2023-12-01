@@ -1,4 +1,5 @@
-import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
+import { IPageRegisterInputs } from "../../src/app/[lng]/register/components/register-form/interfaces";
+import "@cypress/code-coverage/support";
 
 declare global {
   namespace Cypress {

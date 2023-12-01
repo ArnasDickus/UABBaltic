@@ -10,7 +10,7 @@ const ExperienceSection = async ({ language }: { language: string }) => {
   return (
     <section className="pt-10" id="experience-section">
       <h2 className={sectionHeader}>{t("companies")}</h2>
-      <div className="flex justify-center items-center gap-10">
+      <div className="flex justify-center items-center flex-wrap gap-10 px-2">
         <a href="https://www.emendis.io/" target="_blank">
           <Image src={Emendis} width={200} alt="Emendis logo" />
         </a>

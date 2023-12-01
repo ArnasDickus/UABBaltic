@@ -10,5 +10,8 @@
   "name": "Vardas",
   "username": "Vartotojo vadas",
   "email": "El. paštas",
-  "password": "Slaptažodis"
+  "password": "Slaptažodis",
+  "createAccount": "Sukurti paskyrą",
+  "alreadyHave": "Jau turi paskyrą?",
+  "login": "Prisijunk"
 }
