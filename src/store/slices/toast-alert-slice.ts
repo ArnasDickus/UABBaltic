@@ -7,12 +7,14 @@ export interface IToastAlert {
   message: string;
   severity: AlertColor;
   showAlert: boolean;
+  alertDataTestId?: string;
 }
 
 const initialState: IToastAlert = {
   message: "",
   severity: "info",
   showAlert: false,
+  alertDataTestId: "",
 };
 
 const toastAlertSlice = createSlice({
@@ -23,6 +25,7 @@ const toastAlertSlice = createSlice({
       state.message = action.payload.message;
       state.severity = action.payload.severity;
       state.showAlert = action.payload.showAlert;
+      state.alertDataTestId = action.payload.alertDataTestId;
     },
   },
 });

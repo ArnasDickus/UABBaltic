@@ -51,7 +51,7 @@ const LoginForm = ({ language }: { language: string }) => {
         );
       }
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Login", true);
+      clientErrorResponseHandler("Failed Login", true);
     }
   };
 
@@ -59,7 +59,7 @@ const LoginForm = ({ language }: { language: string }) => {
     try {
       await signInUser(data);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Login onSubmit", false);
+      clientErrorResponseHandler("Failed Login onSubmit", false);
     }
   };
 
@@ -69,6 +69,7 @@ const LoginForm = ({ language }: { language: string }) => {
         <Input
           name={t("email")}
           errorText={errors.email?.message}
+          dataTestIdInput="loginEmail"
           inputProps={{
             type: "text",
             disabled: isSubmitting,
@@ -79,6 +80,7 @@ const LoginForm = ({ language }: { language: string }) => {
       <div className="mb-4">
         <Input
           name={t("password")}
+          dataTestIdInput="loginPassword"
           errorText={errors.password?.message}
           inputProps={{
             type: "password",
@@ -89,6 +91,7 @@ const LoginForm = ({ language }: { language: string }) => {
       </div>
       <div className={formButtonContainerClassNames}>
         <Button
+          dataTestIdButton="loginSubmitButton"
           buttonProps={{
             disabled: isSubmitting,
             type: "submit",

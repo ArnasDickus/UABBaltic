@@ -6,7 +6,7 @@ import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
 import {
   ICheckEmailApi,
   ICheckUsernameRequest,
-} from "@/app/[lng]/register/components/interfaces";
+} from "@/app/[lng]/register/components/register-form/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckEmail.IRequest["body"]>;

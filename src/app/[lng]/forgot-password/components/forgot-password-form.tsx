@@ -14,8 +14,8 @@ import {
 import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
-import { useLazyCheckEmailApiQuery } from "@/store/services/auth-api";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
+import { customErrors } from "@/constants/custom-errors";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "forgot_password" });
@@ -25,8 +25,6 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     email: Yup.string().required(t("required")).email(t("invalidEmail")),
   });
 
-  const [checkEmailTrigger] = useLazyCheckEmailApiQuery();
-
   const {
     register,
     handleSubmit,
@@ -35,26 +33,34 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const checkIfEmailExist = async (email: string) => {
-    try {
-      const emailExistResult = await checkEmailTrigger({
-        email: email,
-      })
-        .unwrap()
-        .then((val) => val.response.emailExist);
-
-      if (!emailExistResult) {
-        dispatch(
-          showHideAlert({
-            message: t("emailNotExist"),
-            severity: "error",
-            showAlert: true,
-          })
-        );
-      }
-      return !emailExistResult;
-    } catch (error) {
-      clientErrorResponseHandler(error, "Failed Check Email", true);
+  const displayToastMessage = (status: number, message: string) => {
+    if (message === customErrors.userNotFound) {
+      dispatch(
+        showHideAlert({
+          message: t("emailNotExist"),
+          severity: "error",
+          showAlert: true,
+          alertDataTestId: "forgotPasswordEmailExistModal",
+        })
+      );
+    } else if (status === StatusCodes.okStatus) {
+      dispatch(
+        showHideAlert({
+          message: t("emailSent"),
+          severity: "success",
+          showAlert: true,
+          alertDataTestId: "ForgotPasswordSuccessModal",
+        })
+      );
+    } else {
+      dispatch(
+        showHideAlert({
+          message: t("error"),
+          severity: "error",
+          showAlert: true,
+        })
+      );
+      throw new Error("Internal Error");
     }
   };
 
@@ -64,37 +70,20 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
         method: "POST",
         body: JSON.stringify({ email: email, language: language }),
       });
+      const forgotPasswordJson: { message: string } =
+        await forgotPassword.json();
 
-      if (forgotPassword.status === StatusCodes.okStatus) {
-        dispatch(
-          showHideAlert({
-            message: t("emailSent"),
-            severity: "success",
-            showAlert: true,
-          })
-        );
-      } else if (forgotPassword.status === StatusCodes.internalServerError) {
-        dispatch(
-          showHideAlert({
-            message: t("error"),
-            severity: "error",
-            showAlert: true,
-          })
-        );
-      }
+      displayToastMessage(forgotPassword.status, forgotPasswordJson.message);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Forgot Password", true);
+      clientErrorResponseHandler("Failed Forgot Password", true);
     }
   };
 
   const onSubmit: SubmitHandler<IForgotPassword> = async (data) => {
     try {
-      if (await checkIfEmailExist(data.email)) {
-        return;
-      }
       await forgotPassword(data.email);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed OnSubmit", false);
+      clientErrorResponseHandler("Failed OnSubmit", false);
     }
   };
 
@@ -102,7 +91,8 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
         <Input
-          name="Email"
+          name={t("email")}
+          dataTestIdInput="forgotPasswordEmail"
           errorText={errors.email?.message}
           inputProps={{
             type: "text",
@@ -113,6 +103,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
       </div>
       <div className={formButtonContainerClassNames}>
         <Button
+          dataTestIdButton="forgotPasswordButton"
           buttonProps={{
             disabled: isSubmitting,
             type: "submit",

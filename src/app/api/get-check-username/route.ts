@@ -3,7 +3,7 @@ import { StatusCodes } from "@/constants/status-code";
 import client from "../../../../apollo-client";
 import { GET_USER } from "@/store/modules/user/query";
 import { GetUserQuery, GetUserQueryVariables } from "@/gql/graphql";
-import { ICheckUsernameApi } from "@/app/[lng]/register/components/interfaces";
+import { ICheckUsernameApi } from "@/app/[lng]/register/components/register-form/interfaces";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCheckUsername.IRequest["body"]>;

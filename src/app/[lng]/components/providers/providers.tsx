@@ -29,4 +29,5 @@ const Providers = ({
     </SessionProvider>
   );
 };
+
 export default Providers;

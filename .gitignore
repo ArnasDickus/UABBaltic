@@ -41,3 +41,7 @@ next-env.d.ts
 # Sentry Config File
 .sentryclirc
 logs
+cypress.env.json
+
+# nyc
+.nyc_output

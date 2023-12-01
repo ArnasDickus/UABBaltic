@@ -96,7 +96,7 @@ const MainHeader = ({ language }: IMainHeader) => {
   return (
     <header
       className={`${
-        hideMainHeader(language, pathname) ? "hidden" : "fixed w-full"
+        hideMainHeader(language, pathname) ? "hidden" : "fixed w-full z-10"
       }`}>
       <nav className="bg-gray-800">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

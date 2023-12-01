@@ -1,5 +1,5 @@
 import client from "../../../../apollo-client";
-import { IPageRegisterInputs } from "@/app/[lng]/register/components/interfaces";
+import { IPageRegisterInputs } from "@/app/[lng]/register/components/register-form/interfaces";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
@@ -17,6 +17,7 @@ import {
   AddUserMutation,
   AddUserMutationVariables,
 } from "@/gql/graphql";
+import { IResponseJSON } from "@/app/utils/generic-interface";
 
 interface CustomNextApiRequest extends NextRequest {
   json: () => Promise<NCreateUser.IRequest["body"]>;
@@ -28,28 +29,29 @@ const createUser = async (requestData: NCreateUser.IRequest["body"]) => {
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(requestData.formData.password, salt);
 
-    const newUserId = await client
-      .mutate<AddUserMutation, AddUserMutationVariables>({
-        mutation: ADD_USER,
-        variables: {
-          addUserObject: {
-            name: requestData.formData.name,
-            password: hash,
-            email: requestData.formData.email,
-            username: requestData.formData.username,
-            email_confirmed: false,
-          },
+    const newUserId = await client.mutate<
+      AddUserMutation,
+      AddUserMutationVariables
+    >({
+      mutation: ADD_USER,
+      variables: {
+        addUserObject: {
+          name: requestData.formData.name,
+          password: hash,
+          email: requestData.formData.email,
+          username: requestData.formData.username,
+          email_confirmed: false,
         },
-      })
-      .then((val) => val.data?.insert_user?.returning[0].id);
-
+      },
+    });
     if (!newUserId) {
       throw new Error("Failed Add User");
     } else {
       return newUserId;
     }
   } catch (error) {
-    throw new Error("Failed Add User");
+    //  @ts-ignore
+    throw new Error(error.graphQLErrors[0].message);
   }
 };
 
@@ -110,8 +112,12 @@ export const POST = async (req: CustomNextApiRequest) => {
   try {
     const requestData: NCreateUser.IRequest["body"] = await req.json();
     const newUserId = await createUser(requestData);
+
     const confirmationToken = generateToken();
-    await addUserConfirmation(newUserId, confirmationToken);
+    await addUserConfirmation(
+      newUserId.data?.insert_user?.returning[0].id || 0,
+      confirmationToken
+    );
     await sendEmail(requestData, confirmationToken);
 
     return NextResponse.json(
@@ -120,7 +126,8 @@ export const POST = async (req: CustomNextApiRequest) => {
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Failed to Create USER POST" },
+      // @ts-ignore
+      { message: error.message },
       { status: StatusCodes.internalServerError }
     );
   }
@@ -133,5 +140,5 @@ export namespace NCreateUser {
       language: string;
     };
   }
-  export interface IResponse {}
+  export interface IResponse extends IResponseJSON {}
 }

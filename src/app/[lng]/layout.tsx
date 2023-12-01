@@ -1,4 +1,3 @@
-import { Inter } from "next/font/google";
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
 import "@/styles/global.css";
@@ -12,8 +11,6 @@ import MainHeader from "@/components/layout/headers/main-header";
 import Providers from "./components/providers/providers";
 import { Metadata } from "next";
 import SnackAlert from "./components/snack-alert/snack-alert";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export async function generateStaticParams() {
   return languages.map((lng) => ({ lng }));
@@ -53,7 +50,7 @@ export default function RootLayout({
 }: IPageParamsLayout) {
   return (
     <html className="scroll-smooth" lang={lng} dir={dir(lng)}>
-      <body className={inter.className}>
+      <body>
         <Providers language={lng}>
           <MainHeader language={lng} />
           <SnackAlert />
