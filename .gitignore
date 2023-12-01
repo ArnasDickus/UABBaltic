@@ -42,3 +42,6 @@ next-env.d.ts
 .sentryclirc
 logs
 cypress.env.json
+
+# nyc
+.nyc_output
