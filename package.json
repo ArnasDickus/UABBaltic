@@ -10,7 +10,6 @@
     "testOnce": "jest --passWithNoTests",
     "test": "jest --watch",
     "test-jest-coverage": "jest --coverage",
-    "test-cypress-coverage": "nyc instrument --compact=false src instrumented",
     "docker-dev": "docker-compose up --build --force-recreate",
     "prepare": "husky install",
     "validate-commit-msg": "node src/app/utils/validate-commit-msg.ts",
