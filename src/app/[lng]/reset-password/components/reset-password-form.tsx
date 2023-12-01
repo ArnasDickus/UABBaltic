@@ -75,7 +75,7 @@ const ResetPasswordForm = ({
         );
       }
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Reset Password OnSubmit", true);
+      clientErrorResponseHandler("Failed Reset Password OnSubmit", true);
     }
   };
 
@@ -83,11 +83,7 @@ const ResetPasswordForm = ({
     try {
       await resetPassword(data.newPassword);
     } catch (error) {
-      clientErrorResponseHandler(
-        error,
-        "Failed Reset Password OnSubmit",
-        false
-      );
+      clientErrorResponseHandler("Failed Reset Password OnSubmit", false);
     }
   };
 

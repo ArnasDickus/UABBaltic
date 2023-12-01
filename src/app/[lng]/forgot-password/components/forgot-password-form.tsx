@@ -75,7 +75,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
 
       displayToastMessage(forgotPassword.status, forgotPasswordJson.message);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Forgot Password", true);
+      clientErrorResponseHandler("Failed Forgot Password", true);
     }
   };
 
@@ -83,7 +83,7 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
     try {
       await forgotPassword(data.email);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed OnSubmit", false);
+      clientErrorResponseHandler("Failed OnSubmit", false);
     }
   };
 

@@ -51,7 +51,7 @@ const LoginForm = ({ language }: { language: string }) => {
         );
       }
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Login", true);
+      clientErrorResponseHandler("Failed Login", true);
     }
   };
 
@@ -59,7 +59,7 @@ const LoginForm = ({ language }: { language: string }) => {
     try {
       await signInUser(data);
     } catch (error) {
-      clientErrorResponseHandler(error, "Failed Login onSubmit", false);
+      clientErrorResponseHandler("Failed Login onSubmit", false);
     }
   };
 
