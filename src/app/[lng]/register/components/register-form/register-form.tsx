@@ -2,7 +2,6 @@
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
 import { useForm, SubmitHandler } from "react-hook-form";
-import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IPageRegisterInputs } from "./interfaces";

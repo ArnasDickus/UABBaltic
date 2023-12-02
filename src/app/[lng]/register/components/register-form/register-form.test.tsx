@@ -19,7 +19,7 @@ describe("Register", () => {
 
     const registerValidationSchemaData = registerValidationSchema();
 
-    // expect(registerValidationSchemaData.isValidSync(validData)).toBe(true);
+    expect(registerValidationSchemaData.isValidSync(validData)).toBe(true);
     // expect(validationSchema.isValidSync(invalidData)).toBe(false);
   });
   it("Render registration form", async () => {
@@ -28,5 +28,8 @@ describe("Register", () => {
         <RegisterForm language="en" />
       </Provider>
     );
+  });
+  it("Throws invalid error", async () => {
+    //
   });
 });
