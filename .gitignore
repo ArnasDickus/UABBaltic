@@ -48,3 +48,6 @@ cypress.env.json
 
 # JEST
 jest-coverage
+
+# CYPRESS
+cypress-coverage
