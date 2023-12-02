@@ -21,6 +21,7 @@ export default defineConfig({
     defaultCommandTimeout: 6000,
     env: {
       codeCoverage: {
+        exclude: ["node_modules"],
         // At end of run, call this endpoint to retrieve code coverage info from the backend
         // and combine with coverage info from frontend code executed in the browser
         url: "http://localhost:3000/api/__coverage__",
