@@ -45,3 +45,9 @@ cypress.env.json
 
 # nyc
 .nyc_output
+
+# JEST
+jest-coverage
+
+# CYPRESS
+cypress-coverage

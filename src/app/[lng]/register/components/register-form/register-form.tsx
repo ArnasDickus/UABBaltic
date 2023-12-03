@@ -2,7 +2,6 @@
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
 import { useForm, SubmitHandler } from "react-hook-form";
-import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { IPageRegisterInputs } from "./interfaces";
@@ -19,6 +18,59 @@ import { graphqlErrors } from "@/constants/graphql-errors";
 import { IResponseJSON } from "@/app/utils/generic-interface";
 import Link from "next/link";
 import { registerValidationSchema } from "@/app/utils/validation-schemas";
+import { AppDispatch } from "@/store/store";
+
+interface IHandleErrors {
+  message: string;
+  status: number;
+  dispatch: AppDispatch;
+  t: (key: string) => string;
+}
+
+export const handleErrors = ({
+  message,
+  dispatch,
+  status,
+  t,
+}: IHandleErrors) => {
+  if (message === graphqlErrors.dublicateEmail) {
+    dispatch(
+      showHideAlert({
+        message: t("emailExist"),
+        severity: "error",
+        showAlert: true,
+        alertDataTestId: "emailExistsModal",
+      })
+    );
+  } else if (message === graphqlErrors.dublicateUsername) {
+    dispatch(
+      showHideAlert({
+        message: t("usernameInUse"),
+        severity: "error",
+        showAlert: true,
+        alertDataTestId: "usernameExistsModal",
+      })
+    );
+  } else if (status === StatusCodes.okStatus) {
+    dispatch(
+      showHideAlert({
+        message: t("emailWasSent"),
+        severity: "success",
+        showAlert: true,
+        alertDataTestId: "emailWasSentModal",
+      })
+    );
+  } else {
+    dispatch(
+      showHideAlert({
+        message: t("internalError"),
+        severity: "error",
+        showAlert: true,
+      })
+    );
+    throw new Error("Internal Error");
+  }
+};
 
 const RegisterForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "register" });
@@ -36,46 +88,6 @@ const RegisterForm = ({ language }: { language: string }) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const handleErrors = (message: string, status: number) => {
-    if (message === graphqlErrors.dublicateEmail) {
-      dispatch(
-        showHideAlert({
-          message: t("emailExist"),
-          severity: "error",
-          showAlert: true,
-          alertDataTestId: "emailExistsModal",
-        })
-      );
-    } else if (message === graphqlErrors.dublicateUsername) {
-      dispatch(
-        showHideAlert({
-          message: t("usernameInUse"),
-          severity: "error",
-          showAlert: true,
-          alertDataTestId: "usernameExistsModal",
-        })
-      );
-    } else if (status === StatusCodes.okStatus) {
-      dispatch(
-        showHideAlert({
-          message: t("emailWasSent"),
-          severity: "success",
-          showAlert: true,
-          alertDataTestId: "emailWasSentModal",
-        })
-      );
-    } else {
-      dispatch(
-        showHideAlert({
-          message: t("internalError"),
-          severity: "error",
-          showAlert: true,
-        })
-      );
-      throw new Error("Internal Error");
-    }
-  };
-
   const getNewUser = async (data: IPageRegisterInputs) => {
     try {
       const newUser = await fetch(apiRoutes["create-user"], {
@@ -84,7 +96,12 @@ const RegisterForm = ({ language }: { language: string }) => {
       });
 
       const newUserJson: IResponseJSON = await newUser.json();
-      handleErrors(newUserJson.message, newUser.status);
+      handleErrors({
+        dispatch,
+        message: newUserJson.message,
+        status: newUser.status,
+        t,
+      });
     } catch (error) {
       clientErrorResponseHandler("FailedCreateUser", true);
     }
