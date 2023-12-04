@@ -117,7 +117,6 @@ const RegisterForm = ({ language }: { language: string }) => {
 
   return (
     <form
-      data-testid="custom-element"
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white px-8 py-8 shadow-md rounded md:bg-inherit md:shadow-none md:px-0 md:py-8">
       <div>
