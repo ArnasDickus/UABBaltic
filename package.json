@@ -7,16 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "testOnce": "jest --passWithNoTests",
-    "test": "jest --watch",
-    "test-jest-coverage": "jest --coverage",
+    "jest:test": "jest --watch",
+    "cypress:open": "cypress open",
+    "generate-coverage": "npx cypress run --browser chrome && jest && tsx ./src/scripts/merge-coverage.ts",
     "docker-dev": "docker-compose up --build --force-recreate",
     "prepare": "husky install",
     "validate-commit-msg": "node src/app/utils/validate-commit-msg.ts",
-    "codegen": "graphql-codegen --config codegen.ts",
-    "cypress:open": "cypress open",
-    "merge": "nyc merge",
-    "merge-coverage": "tsx ./src/scripts/merge-coverage.ts"
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
