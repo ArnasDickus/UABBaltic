@@ -46,7 +46,7 @@ jest-coverage
 cypress-coverage
 .nyc_output
 
-coverage/icon-report
+
 # SWC 
 .swc
 
