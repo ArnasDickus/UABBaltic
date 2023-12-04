@@ -45,7 +45,7 @@ cypress.env.json
 jest-coverage
 cypress-coverage
 .nyc_output
-
+coverage
 
 # SWC 
 .swc

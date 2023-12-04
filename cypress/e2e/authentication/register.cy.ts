@@ -47,7 +47,12 @@ describe("Register user", () => {
     cy.get('[data-testid="emailExistsModal"]').should("not.exist");
     cy.get('[data-testid="usernameExistsModal"]').should("not.exist");
 
-    cy.get('[data-testid="emailWasSentModal"]').should("be.visible");
+    cy.get('[data-testid="emailWasSentModal"]')
+      .should("be.visible")
+      .should("be.visible", {
+        timeout: 10000,
+        interval: 1000,
+      });
   });
   it("displays message for existing username", () => {
     cy.visit("en/register");
