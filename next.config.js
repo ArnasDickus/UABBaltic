@@ -17,9 +17,9 @@ const nextConfig = {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     WEATHER_API_KEY: process.env.WEATHER_API_KEY,
   },
-  sentry: {
-    tunnelRoute: "/en/monitoring-tunnel",
-  },
+  // sentry: {
+  //   tunnelRoute: "/en/monitoring-tunnel",
+  // },
   swcMinify: false,
   images: {
     remotePatterns: [
