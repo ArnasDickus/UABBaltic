@@ -15,8 +15,7 @@
     "validate-commit-msg": "node src/app/utils/validate-commit-msg.ts",
     "codegen": "graphql-codegen --config codegen.ts",
     "cypress:open": "cypress open",
-    "merge": "nyc merge",
-    "merge-coverage": "tsx ./src/scripts/merge-coverage.ts"
+    "merge": "nyc merge"
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
@@ -86,7 +85,6 @@
     "server-only": "^0.0.1",
     "swc-plugin-coverage-instrument": "^0.0.20",
     "tailwindcss": "^3.3.3",
-    "tsx": "^4.6.2",
     "winston-daily-rotate-file": "^4.7.1"
   }
 }
