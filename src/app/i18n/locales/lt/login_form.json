@@ -4,5 +4,7 @@
   "login": "Prisijungti",
   "email": "El. paštas",
   "password": "Slaptažodis",
-  "forgotPassword": "Pamiršai slaptažodį?"
+  "forgotPassword": "Pamiršai slaptažodį?",
+  "alreadyHave": "Neturi paskyros?",
+  "signUp": "Registruotis"
 }

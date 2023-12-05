@@ -4,5 +4,7 @@
   "login": "Login",
   "email": "Email",
   "password": "Password",
-  "forgotPassword": "Forgot Password?"
+  "forgotPassword": "Forgot Password?",
+  "alreadyHave": "Don't have an account?",
+  "signUp": "Sign up"
 }

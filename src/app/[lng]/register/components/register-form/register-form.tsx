@@ -19,6 +19,9 @@ import { IResponseJSON } from "@/app/utils/generic-interface";
 import Link from "next/link";
 import { registerValidationSchema } from "@/app/utils/validation-schemas";
 import { AppDispatch } from "@/store/store";
+import Title from "@/components/typography/title";
+import Subtitle from "@/components/typography/subtitle";
+import CustomLink from "@/components/typography/custom-link";
 
 interface IHandleErrors {
   message: string;
@@ -120,19 +123,10 @@ const RegisterForm = ({ language }: { language: string }) => {
       onSubmit={handleSubmit(onSubmit)}
       className="bg-white px-8 py-8 shadow-md rounded md:bg-inherit md:shadow-none md:px-0 md:py-8">
       <div>
-        <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900  lg:text-4xl dark:text-white">
-          {t("createAccount")}
-        </h2>
+        <Title>{t("createAccount")}</Title>
         <div className="flex gap-1">
-          <p className="mb-6 text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400">
-            {t("alreadyHave")}
-          </p>
-
-          <Link
-            className="underline text-lg font-normal text-gray-500 lg:text-xl  dark:text-gray-400"
-            href={`/${language}/login`}>
-            {t("login")}
-          </Link>
+          <Subtitle> {t("alreadyHave")}</Subtitle>
+          <CustomLink href={`/${language}/login`}> {t("login")}</CustomLink>
         </div>
       </div>
       <div className="mb-4">
