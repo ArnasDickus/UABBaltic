@@ -40,7 +40,6 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: true,
-    swcPlugins: [["swc-plugin-coverage-instrument", {}]],
   },
 };
 
