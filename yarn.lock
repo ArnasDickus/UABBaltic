@@ -10565,6 +10565,11 @@ swap-case@^2.0.2:
   dependencies:
     tslib "^2.0.3"
 
+swc-plugin-coverage-instrument@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/swc-plugin-coverage-instrument/-/swc-plugin-coverage-instrument-0.0.20.tgz#fdbd4b176e405c826c0e5146453ac7a6f1ba1cfa"
+  integrity sha512-WXTGILCZE2hW61yrmxi6doN/UB4RT2K1JJSQVPn9JMJ6X4WJpZsesHi4lHy6qRKVsNIlHZvTWofkpuRi/WQUig==
+
 symbol-observable@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/symbol-observable/-/symbol-observable-4.0.0.tgz"
