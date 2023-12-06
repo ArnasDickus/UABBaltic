@@ -20,7 +20,6 @@ const nextConfig = {
   sentry: {
     tunnelRoute: "/en/monitoring-tunnel",
   },
-  swcMinify: false,
   images: {
     remotePatterns: [
       {
@@ -42,9 +41,7 @@ const nextConfig = {
     return config;
   },
   experimental: {
-    appDir: true,
     typedRoutes: true,
-    serverActions: true,
     swcPlugins: [["swc-plugin-coverage-instrument", {}]],
   },
 };

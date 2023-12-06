@@ -1,11 +1,11 @@
 "use client";
-import CloudOutlinedIcon from "@mui/icons-material/CloudOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { useTranslation } from "@/app/i18n/client";
 import classes from "./weather-header.module.scss";
 import { roundToNoDecimals } from "@/app/utils/round-values";
 import { useState } from "react";
 import CitySearch from "../city-search/city-search";
+import SettingsIcon from "@/styles/icons/settings-icon";
+import CloudPlusIcon from "@/styles/icons/cloud-plus-icon";
 
 interface IWeatherHeader {
   maxTemperature: number;
@@ -39,7 +39,7 @@ const WeatherHeader = ({
     <div className={classes.headerContainer}>
       <div className={classes.flexContainer}>
         {!searchMenu.isOpen ? (
-          <CloudOutlinedIcon className={classes.svg} />
+          <SettingsIcon className={classes.svg} width={24} height={24} />
         ) : (
           <button
             className={classes.doneButton}
@@ -60,7 +60,7 @@ const WeatherHeader = ({
         </div>
         {!searchMenu.isOpen ? (
           <div onClick={openSearchMenu}>
-            <SettingsOutlinedIcon className={classes.svg} />
+            <CloudPlusIcon className={classes.svg} width={24} height={24} />
           </div>
         ) : (
           <span className={classes.emptyIcon} />

@@ -8,7 +8,7 @@
     "noEmit": true,
     "types": ["node", "jest", "cypress", "@testing-library/jest-dom"],
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     // Changed from Bundler to Node fix Cypress startup issue https://github.com/cypress-io/cypress/issues/26308
     "moduleResolution": "Node",
     "resolveJsonModule": true,
