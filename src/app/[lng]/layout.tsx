@@ -10,6 +10,7 @@ import { IPageParamsLayout } from "@/constants/interfaces";
 import MainHeader from "@/components/layout/headers/main-header";
 import Providers from "./components/providers/providers";
 import { Metadata } from "next";
+
 import SnackAlert from "./components/snack-alert/snack-alert";
 
 export async function generateStaticParams() {
@@ -40,7 +41,6 @@ export const metadata: Metadata = {
     title,
     description,
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
 };
 
