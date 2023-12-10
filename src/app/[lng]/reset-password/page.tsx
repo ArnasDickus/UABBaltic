@@ -4,6 +4,10 @@ import { IPageParamProps } from "@/constants/interfaces";
 import PageContainer from "@/styles/components/page-container";
 import { ServerFooter } from "@/components/layout/footer/serverfooter";
 import { Metadata } from "next";
+import Image from "next/image";
+import ResetPasswordBackground from "@/../public/images/reset-password-background.jpg";
+import ContentCenterImageContainer from "@/styles/components/content-center-image-container/content-center-image-container";
+import { useTranslation } from "@/app/i18n";
 
 export const metadata: Metadata = {
   title: "Reset password",
@@ -11,16 +15,32 @@ export const metadata: Metadata = {
   keywords: ["Reset"],
 };
 
-const PageResetPassword = ({ params, searchParams }: IPageParamProps) => {
+const PageResetPassword = async ({ params, searchParams }: IPageParamProps) => {
+  const { t } = await useTranslation({
+    language: params.lng,
+    ns: "reset_password",
+  });
+
   return (
     <PageContainer
       language={params.lng}
       footer={<ServerFooter language={params.lng} path="/reset-password" />}>
-      <div className={formContainerClassNames}>
-        <ResetPasswordForm
-          language={params.lng}
-          token={searchParams.token as string}
-        />
+      <div className="relative h-screen">
+        <div className={formContainerClassNames}>
+          <Image
+            src={ResetPasswordBackground}
+            objectFit="cover"
+            fill
+            priority
+            alt={t("village")}
+          />
+          <ContentCenterImageContainer>
+            <ResetPasswordForm
+              language={params.lng}
+              token={searchParams.token as string}
+            />
+          </ContentCenterImageContainer>
+        </div>
       </div>
     </PageContainer>
   );

@@ -8,6 +8,7 @@ import { ServerFooter } from "@/components/layout/footer/serverfooter";
 import { Metadata } from "next";
 import Image from "next/image";
 import RegisterBackground from "@/../public/images/register-background.jpg";
+import { useTranslation } from "@/app/i18n";
 
 export const metadata: Metadata = {
   title: "Register",
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
 };
 
 const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
+  const { t } = await useTranslation({
+    language: lng,
+    ns: "register",
+  });
   return (
     <PageContainer
       language={lng}
@@ -27,7 +32,7 @@ const PageRegister: FC<IPageParamProps> = async ({ params: { lng } }) => {
             objectFit="cover"
             className="w-full h-auto"
             src={RegisterBackground}
-            alt="sea"
+            alt={t("sea")}
           />
         </div>
         <div className="w-full absolute pt-10 pl-10 pr-10 md:static md:w-1/2 sm:pt-24 sm:pl-20">

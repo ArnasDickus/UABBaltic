@@ -11,7 +11,7 @@ interface ILinkButton {
 const LinkButton = ({ linkProps, children, dataTestId }: ILinkButton) => {
   return (
     <Link
-      data-testId={dataTestId}
+      data-testid={dataTestId}
       className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
       {...linkProps}>
       {children}

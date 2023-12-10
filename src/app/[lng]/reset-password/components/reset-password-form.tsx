@@ -16,6 +16,8 @@ import { useTranslation } from "@/app/i18n/client";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
+import Title from "@/components/typography/title";
+import Subtitle from "@/components/typography/subtitle";
 
 const ResetPasswordForm = ({
   language,
@@ -89,6 +91,10 @@ const ResetPasswordForm = ({
 
   return (
     <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-5">
+        <Title>{t("resetPassword")}</Title>
+        <Subtitle> {t("subtitle")}</Subtitle>
+      </div>
       <div className="mb-4">
         <Input
           name={t("newPassword")}

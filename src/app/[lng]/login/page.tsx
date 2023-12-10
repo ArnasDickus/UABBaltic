@@ -6,7 +6,8 @@ import { IPageParamProps } from "@/constants/interfaces";
 import { Metadata } from "next";
 import Image from "next/image";
 import LoginBackground from "@/../public/images/login-background.jpg";
-import classes from "./login.module.css";
+import ContentCenterImageContainer from "@/styles/components/content-center-image-container/content-center-image-container";
+import { useTranslation } from "@/app/i18n";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -15,15 +16,25 @@ export const metadata: Metadata = {
 };
 
 const PageLogin: FC<IPageParamProps> = async ({ params: { lng } }) => {
+  const { t } = await useTranslation({
+    language: lng,
+    ns: "login_form",
+  });
   return (
     <PageContainer
       language={lng}
       footer={<ServerFooter language={lng} path="/login" />}>
       <div className="relative h-screen">
-        <Image src={LoginBackground} fill priority alt="sea" />
-        <div className={classes.loginForm}>
+        <Image
+          src={LoginBackground}
+          objectFit="cover"
+          fill
+          priority
+          alt={t("wood")}
+        />
+        <ContentCenterImageContainer>
           <LoginForm language={lng} />
-        </div>
+        </ContentCenterImageContainer>
       </div>
     </PageContainer>
   );
