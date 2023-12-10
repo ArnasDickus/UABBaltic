@@ -72,6 +72,13 @@ const MainHeader = ({ language }: IMainHeader) => {
           },
         ];
       } else if (session) {
+        leftNavItems = [
+          ...leftNavItems,
+          {
+            title: t("chess"),
+            link: `/${language}/chess`,
+          },
+        ];
         rightNavItems = [
           {
             title: t("logout"),
