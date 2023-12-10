@@ -1,10 +1,12 @@
 import LoginForm from "./components/login-form/login-form";
-import { formContainerClassNames } from "@/styles/reusable-styles";
 import PageContainer from "@/styles/components/page-container";
 import { ServerFooter } from "@/components/layout/footer/serverfooter";
 import { FC } from "react";
 import { IPageParamProps } from "@/constants/interfaces";
 import { Metadata } from "next";
+import Image from "next/image";
+import LoginBackground from "@/../public/images/login-background.jpg";
+import classes from "./login.module.css";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -17,8 +19,11 @@ const PageLogin: FC<IPageParamProps> = async ({ params: { lng } }) => {
     <PageContainer
       language={lng}
       footer={<ServerFooter language={lng} path="/login" />}>
-      <div className={formContainerClassNames}>
-        <LoginForm language={lng} />
+      <div className="relative h-screen">
+        <Image src={LoginBackground} fill priority alt="sea" />
+        <div className={classes.loginForm}>
+          <LoginForm language={lng} />
+        </div>
       </div>
     </PageContainer>
   );

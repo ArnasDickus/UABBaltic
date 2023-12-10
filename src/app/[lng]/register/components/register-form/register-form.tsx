@@ -16,7 +16,6 @@ import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 import { graphqlErrors } from "@/constants/graphql-errors";
 import { IResponseJSON } from "@/app/utils/generic-interface";
-import Link from "next/link";
 import { registerValidationSchema } from "@/app/utils/validation-schemas";
 import { AppDispatch } from "@/store/store";
 import Title from "@/components/typography/title";
