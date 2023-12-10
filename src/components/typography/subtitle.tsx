@@ -6,7 +6,7 @@ interface ISubtitle {
 
 const Subtitle = ({ children }: ISubtitle) => {
   return (
-    <p className="mb-6 text-lg text-gray-500 lg:text-xl  dark:text-gray-400">
+    <p className="text-lg text-gray-500 lg:text-xl  dark:text-gray-400">
       {children}
     </p>
   );

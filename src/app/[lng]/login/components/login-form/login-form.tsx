@@ -6,10 +6,7 @@ import * as Yup from "yup";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { signIn } from "next-auth/react";
-import {
-  formButtonContainerClassNames,
-  formClassNames,
-} from "@/styles/reusable-styles";
+import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
 import LinkButton from "@/components/link-button/link-button";
 import { useAppDispatch } from "@/store/redux-hooks";
@@ -17,7 +14,6 @@ import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 import Title from "@/components/typography/title";
 import Subtitle from "@/components/typography/subtitle";
-import Link from "next/link";
 import CustomLink from "@/components/typography/custom-link";
 
 const LoginForm = ({ language }: { language: string }) => {
@@ -69,10 +65,10 @@ const LoginForm = ({ language }: { language: string }) => {
 
   return (
     <form
-      className="bg-white shadow-md rounded p-20 pb-8 mb-4"
+      className="bg-white shadow-md rounded p-10 mb-4 sm:p-20"
       onSubmit={handleSubmit(onSubmit)}>
       <Title>{t("login")}</Title>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap pb-6">
         <Subtitle> {t("alreadyHave")}</Subtitle>
         <CustomLink href={`/${language}/register`}> {t("signUp")}</CustomLink>
       </div>

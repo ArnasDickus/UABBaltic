@@ -123,7 +123,7 @@ const RegisterForm = ({ language }: { language: string }) => {
       className="bg-white px-8 py-8 shadow-md rounded md:bg-inherit md:shadow-none md:px-0 md:py-8">
       <div>
         <Title>{t("createAccount")}</Title>
-        <div className="flex gap-1">
+        <div className="flex gap-1 pb-6">
           <Subtitle> {t("alreadyHave")}</Subtitle>
           <CustomLink href={`/${language}/login`}> {t("login")}</CustomLink>
         </div>
