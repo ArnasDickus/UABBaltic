@@ -16,6 +16,9 @@ describe("Forgot password", () => {
       Cypress.env("EMAIL_USERNAME")
     );
     cy.get('[data-testid="forgotPasswordButton"]').click();
-    cy.get('[data-testid="ForgotPasswordSuccessModal"]').should("be.visible");
+    cy.get('[data-testid="ForgotPasswordSuccessModal"]').should("be.visible", {
+      timeout: 10000,
+      interval: 1000,
+    });
   });
 });

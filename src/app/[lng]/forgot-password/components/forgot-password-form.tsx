@@ -16,6 +16,8 @@ import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
 import { customErrors } from "@/constants/custom-errors";
+import Title from "@/components/typography/title";
+import Subtitle from "@/components/typography/subtitle";
 
 const ForgotPasswordForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "forgot_password" });
@@ -88,7 +90,14 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
   };
 
   return (
-    <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={formClassNames}
+      data-testid="forgotPasswordFormId"
+      onSubmit={handleSubmit(onSubmit)}>
+      <div className="pb-5">
+        <Title>{t("forgotPassword")}</Title>
+        <Subtitle>{t("subtitle")}</Subtitle>
+      </div>
       <div className="mb-4">
         <Input
           name={t("email")}

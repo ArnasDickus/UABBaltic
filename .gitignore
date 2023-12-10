@@ -5,8 +5,6 @@
 /.pnp
 .pnp.js
 
-# testing
-
 
 # next.js
 /.next/
@@ -45,11 +43,12 @@ next-env.d.ts
 logs
 cypress.env.json
 
-# nyc
-.nyc_output
-
-# JEST
+# TESTING
 jest-coverage
-
-# CYPRESS
 cypress-coverage
+.nyc_output
+coverage
+
+# SWC 
+.swc
+

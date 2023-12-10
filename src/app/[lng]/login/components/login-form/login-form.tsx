@@ -15,6 +15,9 @@ import LinkButton from "@/components/link-button/link-button";
 import { useAppDispatch } from "@/store/redux-hooks";
 import { showHideAlert } from "@/store/slices/toast-alert-slice";
 import { clientErrorResponseHandler } from "@/app/utils/client-error-response-handler";
+import Title from "@/components/typography/title";
+import Subtitle from "@/components/typography/subtitle";
+import CustomLink from "@/components/typography/custom-link";
 
 const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
@@ -65,6 +68,11 @@ const LoginForm = ({ language }: { language: string }) => {
 
   return (
     <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+      <Title>{t("login")}</Title>
+      <div className="flex gap-2 flex-wrap pb-6">
+        <Subtitle> {t("alreadyHave")}</Subtitle>
+        <CustomLink href={`/${language}/register`}> {t("signUp")}</CustomLink>
+      </div>
       <div className="mb-4">
         <Input
           name={t("email")}
@@ -99,6 +107,7 @@ const LoginForm = ({ language }: { language: string }) => {
           {t("login")}
         </Button>
         <LinkButton
+          dataTestId="loginForgotPasswordLink"
           linkProps={{
             // @ts-ignore
             href: `/${language}/forgot-password`,

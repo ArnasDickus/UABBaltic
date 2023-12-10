@@ -95,14 +95,16 @@ const sendEmail = async (
       requestData.language
     }/confirm-email?token=${confirmationToken}`;
 
-    await transporter.sendMail({
+    const emailText = {
       from: `UAB Baltic <${process.env.EMAIL_USERNAME}>`,
       to: requestData.formData.email,
       subject: "UABBaltic email confirmation",
       html: `<div>
             <a href=${emailLink}>Confirm Email</a>
             </div>`,
-    });
+    };
+
+    await transporter.sendMail(emailText);
   } catch (error) {
     throw new Error("Failed Send Email");
   }
