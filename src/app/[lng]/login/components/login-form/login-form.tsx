@@ -106,6 +106,7 @@ const LoginForm = ({ language }: { language: string }) => {
           {t("login")}
         </Button>
         <LinkButton
+          dataTestId="loginForgotPasswordLink"
           linkProps={{
             // @ts-ignore
             href: `/${language}/forgot-password`,

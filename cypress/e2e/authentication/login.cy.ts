@@ -8,4 +8,10 @@ describe("Login User and redirect to home page", () => {
     cy.get('[data-testid="loginPassword"]').type(Cypress.env("EMAIL_PASSWORD"));
     cy.get('[data-testid="loginSubmitButton"]').click();
   });
+
+  it("Visit Sign In Page", () => {
+    cy.visit("en/login");
+    cy.get('[data-testid="loginForgotPasswordLink"]').click();
+    cy.get('[data-testid="forgotPasswordFormId"]');
+  });
 });

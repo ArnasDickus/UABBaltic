@@ -88,7 +88,10 @@ const ForgotPasswordForm = ({ language }: { language: string }) => {
   };
 
   return (
-    <form className={formClassNames} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      data-testId="forgotPasswordFormId"
+      className={formClassNames}
+      onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
         <Input
           name={t("email")}
