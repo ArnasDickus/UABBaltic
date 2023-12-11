@@ -1,6 +1,6 @@
 const PagePlayChess = () => {
   return (
-    <div>
+    <div data-testid="pagePlayChessId">
       <p>PagePlayChess</p>
     </div>
   );

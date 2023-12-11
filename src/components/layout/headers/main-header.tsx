@@ -146,7 +146,10 @@ const MainHeader = ({ language }: IMainHeader) => {
                   {navigationItems.rightNavItems.map((item) => {
                     if (session) {
                       return (
-                        <Button key={item.title} onClick={() => signOut()}>
+                        <Button
+                          data-testid="signOutButtonId"
+                          key={item.title}
+                          onClick={() => signOut()}>
                           {item.title}
                         </Button>
                       );

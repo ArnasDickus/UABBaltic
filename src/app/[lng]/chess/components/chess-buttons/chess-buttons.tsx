@@ -11,7 +11,7 @@ const ChessButtons = async ({ language }: { language: string }) => {
   return (
     <div>
       <Button
-        dataTestIdButton="loginSubmitButton"
+        dataTestIdButton="playChessLinkButton"
         buttonProps={{
           type: "button",
         }}>

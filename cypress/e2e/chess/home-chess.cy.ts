@@ -4,8 +4,10 @@ describe("check Chess redirection", () => {
   });
 
   it("Visit Sign In Page", () => {
-    cy.visit("en/login");
-    cy.get('[data-testid="loginForgotPasswordLink"]').click();
-    cy.get('[data-testid="forgotPasswordFormId"]');
+    cy.loginPR(Cypress.env("EMAIL_USERNAME"), Cypress.env("EMAIL_PASSWORD"));
+
+    cy.visit("en/chess");
+    cy.get('[data-testid="playChessLinkButton"]').click();
+    cy.get('[data-testid="pagePlayChessId"]');
   });
 });

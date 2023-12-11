@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 /// <reference types="cypress" />
 
 Cypress.Commands.add("registerUI", (name, username, email, password) => {
@@ -6,6 +7,16 @@ Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="emailInput"]').type(email);
   cy.get('[data-testid="passwordInput"]').type(password);
   cy.get('[data-testid="submitButton"]').click();
+});
+
+Cypress.Commands.add("loginPR", async (email, password) => {
+  const response = await signIn("credentials", {
+    email: email,
+    password: password,
+    redirect: false,
+  });
+  console.log("response", response);
+  cy.get('[data-testid="signOutButtonId"]');
 });
 
 // ***********************************************
