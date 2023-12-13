@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import {
   formButtonContainerClassNames,
   formClassNames,
@@ -22,7 +22,8 @@ import CustomLink from "@/components/typography/custom-link";
 const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
   const dispatch = useAppDispatch();
-
+  const { data: session } = useSession();
+  console.log("session", session);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required(t("required")),
     password: Yup.string().required(t("required")),

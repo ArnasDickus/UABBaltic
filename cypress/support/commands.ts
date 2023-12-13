@@ -10,12 +10,34 @@ Cypress.Commands.add("registerUI", (name, username, email, password) => {
 });
 
 Cypress.Commands.add("loginPR", async (email, password) => {
-  const response = await signIn("credentials", {
-    email: email,
-    password: password,
-    redirect: false,
+  cy.request({
+    method: "POST",
+    url: "/api/auth/callback/credentials", // replace with your actual authentication endpoint
+    body: {
+      email,
+      password,
+    },
+    failOnStatusCode: false,
+  }).then((response) => {
+    // Check if login was successful
+    if (response.status === 200) {
+      return response.body;
+    } else {
+      throw new Error("Login failed");
+    }
   });
-  console.log("response", response);
+
+  // const response = await signIn("credentials", {
+  //   email: email,
+  //   password: password,
+  //   redirect: false,
+  // });
+
+  // cy.origin()
+
+  // console.log("response", response);
+
+  cy.visit("/en");
   cy.get('[data-testid="signOutButtonId"]');
 });
 
