@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 /// <reference types="cypress" />
 
 Cypress.Commands.add("registerUI", (name, username, email, password) => {
@@ -9,36 +8,11 @@ Cypress.Commands.add("registerUI", (name, username, email, password) => {
   cy.get('[data-testid="submitButton"]').click();
 });
 
-Cypress.Commands.add("loginPR", async (email, password) => {
-  cy.request({
-    method: "POST",
-    url: "/api/auth/callback/credentials", // replace with your actual authentication endpoint
-    body: {
-      email,
-      password,
-    },
-    failOnStatusCode: false,
-  }).then((response) => {
-    // Check if login was successful
-    if (response.status === 200) {
-      return response.body;
-    } else {
-      throw new Error("Login failed");
-    }
-  });
-
-  // const response = await signIn("credentials", {
-  //   email: email,
-  //   password: password,
-  //   redirect: false,
-  // });
-
-  // cy.origin()
-
-  // console.log("response", response);
-
-  cy.visit("/en");
-  cy.get('[data-testid="signOutButtonId"]');
+Cypress.Commands.add("loginUI", () => {
+  cy.visit("en/login");
+  cy.get('[data-testid="loginEmail"]').type(Cypress.env("EMAIL_USERNAME"));
+  cy.get('[data-testid="loginPassword"]').type(Cypress.env("EMAIL_PASSWORD"));
+  cy.get('[data-testid="loginSubmitButton"]').click();
 });
 
 // ***********************************************

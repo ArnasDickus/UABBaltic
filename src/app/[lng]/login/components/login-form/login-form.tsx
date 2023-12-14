@@ -23,7 +23,6 @@ const LoginForm = ({ language }: { language: string }) => {
   const { t } = useTranslation({ language, ns: "login_form" });
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
-  console.log("session", session);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required(t("required")),
     password: Yup.string().required(t("required")),

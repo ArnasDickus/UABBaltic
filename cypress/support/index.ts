@@ -9,7 +9,10 @@ declare global {
         email: string,
         password: string
       ): Chainable<IPageRegisterInputs>;
-      loginPR(email: string, password: string): void;
+      loginUI(
+        email: string,
+        password: string
+      ): Chainable<Pick<IPageRegisterInputs, "email" | "password">>;
     }
   }
 }
