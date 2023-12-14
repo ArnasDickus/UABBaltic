@@ -147,7 +147,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                     if (session) {
                       return (
                         <Button
-                          data-testid="signOutButtonId"
+                          dataTestIdButton="logoutButtonId"
                           key={item.title}
                           onClick={() => signOut()}>
                           {item.title}
@@ -180,7 +180,10 @@ const MainHeader = ({ language }: IMainHeader) => {
                 .map((item) => {
                   if (session) {
                     return (
-                      <Button key={item.title} onClick={() => signOut()}>
+                      <Button
+                        dataTestIdButton="logoutButtonId"
+                        key={item.title}
+                        onClick={() => signOut()}>
                         {item.title}
                       </Button>
                     );

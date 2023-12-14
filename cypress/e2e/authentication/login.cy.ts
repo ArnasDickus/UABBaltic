@@ -7,11 +7,7 @@ describe("Login User and redirect to home page", () => {
     cy.get('[data-testid="loginEmail"]').type(Cypress.env("EMAIL_USERNAME"));
     cy.get('[data-testid="loginPassword"]').type(Cypress.env("EMAIL_PASSWORD"));
     cy.get('[data-testid="loginSubmitButton"]').click();
-    cy.get('[data-testid="loggedInUser"]');
-    cy.reload();
-    // cy.get('[data-testid="loginEmail"]').type(Cypress.env("EMAIL_USERNAME"));
-    // cy.get('[data-testid="loginPassword"]').type(Cypress.env("EMAIL_PASSWORD"));
-    // cy.get('[data-testid="loginSubmitButton"]').click();
+    cy.get('[data-testid="logoutButtonId"]');
   });
 
   it("Visit Sign In Page", () => {
