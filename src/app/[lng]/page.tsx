@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 
 const Home: FC<IPageParamProps> = async ({ params: { lng } }) => {
   return (
-    <PageContainer
-      language={lng}
-      footer={<ServerFooter language={lng} path="/" />}>
-      <HeroSection language={lng} />
-    </PageContainer>
+    <div data-testid="homePageId">
+      <PageContainer
+        language={lng}
+        footer={<ServerFooter language={lng} path="/" />}>
+        <HeroSection language={lng} />
+      </PageContainer>
+    </div>
   );
 };
 
