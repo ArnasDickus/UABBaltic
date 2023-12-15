@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 /// <reference types="cypress" />
 
 Cypress.Commands.add("registerUI", (name, username, email, password) => {
