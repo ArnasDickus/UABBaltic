@@ -9,7 +9,7 @@ const ChessGame = () => {
         <Draggable />
         <Droppable />
       </DndContext>
-      <p>ChessGame</p>
+      <p>ChessGamess</p>
     </div>
   );
 };
