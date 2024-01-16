@@ -9,14 +9,6 @@ declare global {
         email: string,
         password: string
       ): Chainable<IPageRegisterInputs>;
-      loginUI(
-        email: string,
-        password: string
-      ): Chainable<Pick<IPageRegisterInputs, "email" | "password">>;
-      loginPR(
-        email: string,
-        password: string
-      ): Chainable<Pick<IPageRegisterInputs, "email" | "password">>;
     }
   }
 }

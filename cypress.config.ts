@@ -2,7 +2,6 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   projectId: "q8jzd3",
-  chromeWebSecurity: false,
   component: {
     devServer: {
       framework: "next",

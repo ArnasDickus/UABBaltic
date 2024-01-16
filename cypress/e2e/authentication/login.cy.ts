@@ -4,8 +4,9 @@ describe("Login User and redirect to home page", () => {
   });
 
   it("Login user", () => {
-    cy.loginUI(Cypress.env("TEST_USERNAME"), Cypress.env("TEST_PASSWORD"));
-    cy.get('[data-testid="logoutButtonId"]');
+    cy.get('[data-testid="loginEmail"]').type(Cypress.env("EMAIL_USERNAME"));
+    cy.get('[data-testid="loginPassword"]').type(Cypress.env("EMAIL_PASSWORD"));
+    cy.get('[data-testid="loginSubmitButton"]').click();
   });
 
   it("Visit Sign In Page", () => {

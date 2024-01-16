@@ -10,7 +10,6 @@ import Button from "@/components/button/button";
 import { formButtonContainerClassNames } from "@/styles/reusable-styles";
 import { useTranslation } from "@/app/i18n/client";
 import { hideMainHeader } from "@/app/utils/hide-main-header-footer";
-import NavbarWrapper from "@/styles/components/navbar-wrapper/navbar-wrapper";
 
 interface IMainHeader {
   language: string;
@@ -73,13 +72,6 @@ const MainHeader = ({ language }: IMainHeader) => {
           },
         ];
       } else if (session) {
-        leftNavItems = [
-          ...leftNavItems,
-          {
-            title: t("chess"),
-            link: `/${language}/chess`,
-          },
-        ];
         rightNavItems = [
           {
             title: t("logout"),
@@ -107,7 +99,7 @@ const MainHeader = ({ language }: IMainHeader) => {
         hideMainHeader(language, pathname) ? "hidden" : "fixed w-full z-10"
       }`}>
       <nav className="bg-gray-800">
-        <NavbarWrapper>
+        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               <HamburgerButton
@@ -146,10 +138,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                   {navigationItems.rightNavItems.map((item) => {
                     if (session) {
                       return (
-                        <Button
-                          dataTestIdButton="logoutButtonId"
-                          key={item.title}
-                          onClick={() => signOut()}>
+                        <Button key={item.title} onClick={() => signOut()}>
                           {item.title}
                         </Button>
                       );
@@ -171,7 +160,7 @@ const MainHeader = ({ language }: IMainHeader) => {
               </div>
             </div>
           </div>
-        </NavbarWrapper>
+        </div>
         {isMenuOpen && (
           <div className="sm:hidden" id="mobile-menu">
             <div className="space-y-1 px-2 pb-3 pt-2">
@@ -180,10 +169,7 @@ const MainHeader = ({ language }: IMainHeader) => {
                 .map((item) => {
                   if (session) {
                     return (
-                      <Button
-                        dataTestIdButton="logoutButtonId"
-                        key={item.title}
-                        onClick={() => signOut()}>
+                      <Button key={item.title} onClick={() => signOut()}>
                         {item.title}
                       </Button>
                     );
