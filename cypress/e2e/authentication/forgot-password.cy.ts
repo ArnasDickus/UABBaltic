@@ -13,7 +13,7 @@ describe("Forgot password", () => {
   it("Display Reset Email Modal", () => {
     cy.visit("en/forgot-password");
     cy.get('[data-testid="forgotPasswordEmail"]').type(
-      Cypress.env("EMAIL_USERNAME")
+      Cypress.env("TEST_USERNAME")
     );
     cy.get('[data-testid="forgotPasswordButton"]').click();
     cy.get('[data-testid="ForgotPasswordSuccessModal"]').should("be.visible", {
