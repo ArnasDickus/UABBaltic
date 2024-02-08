@@ -41,11 +41,9 @@ next-env.d.ts
 
 
 logs
-cypress.env.json
 
 # TESTING
 jest-coverage
-cypress-coverage
 .nyc_output
 coverage
 

@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "types": ["cypress", "mocha"]
-  },
-  "include": ["../node_modules/cypress", "./**/*.ts", "../cypress.config.ts"],
-  "exclude": ["src/*.test.ts"]
-}
