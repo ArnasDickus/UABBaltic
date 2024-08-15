@@ -14,7 +14,7 @@ const runFunction = (commands: string[]) => {
     execSync(command, { stdio: "inherit" })
   );
 };
-
+// TODO DELETE CYPRESS LOGIC
 // Create the reports folder and move the reports from cypress and jest inside it
 fs.emptyDirSync(REPORTS_FOLDER);
 fs.copyFileSync(

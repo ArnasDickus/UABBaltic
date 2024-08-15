@@ -24,6 +24,8 @@ const AuthGuard = ({
     `/${language}/reset-password`,
   ];
 
+  const privateRoutes = [`/${language}/chess`, `/${language}/chess/play-chess`];
+
   if (status === "loading") {
     return <PageLoader />;
   }
@@ -32,6 +34,9 @@ const AuthGuard = ({
     router.push(`/${language}`);
   }
 
+  if (status === "unauthenticated" && privateRoutes.includes(pathname)) {
+    router.push(`/${language}`);
+  }
   return <>{children}</>;
 };
 export default AuthGuard;

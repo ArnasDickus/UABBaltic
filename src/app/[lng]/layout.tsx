@@ -1,4 +1,5 @@
 import { dir } from "i18next";
+require("dotenv").config();
 import { languages } from "../i18n/settings";
 import "@/styles/global.css";
 
