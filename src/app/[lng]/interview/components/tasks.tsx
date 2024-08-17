@@ -1,5 +1,7 @@
 'use client'
 import { useEffect } from "react";
+import AllPlants from "./context-task/components/all-plants";
+import ContextTask from "./context-task/context-task";
 
 {/* Task: Write a functiona called same, which accepts two arrays. The function should return true if every value in the array has 
                 it's corresponding value squared in the second array. The frequency of values must be the same.
@@ -97,13 +99,16 @@ export const Tasks = () => {
 
     useEffect(() => {
 
-        countUniqueValues([1,1,1,1,1,2]) // 2
+        // countUniqueValues([1,1,1,1,1,2]) // 2
         // countUniqueValues([1,2,3,4,4,4,7,7,12,12,13]) // 7
         // countUniqueValues([]) // 0
         // countUniqueValues([-2,-1,-1,0,1]) // 4
     })
     
     return (
+        <>
         <p>This are Tasks</p>
+        <ContextTask />
+        </>
     )
 }
