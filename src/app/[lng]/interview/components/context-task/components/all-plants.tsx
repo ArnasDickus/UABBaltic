@@ -25,13 +25,14 @@ const AllPlants = () => {
       const aDate = a?.features?.[0]?.next;
       const bDate = b?.features?.[0]?.next;
       if (event.target.value === "earliest" && aDate) {
-        return aDate.diff(bDate);
+        return aDate.diff(bDate) || 0;
       }
       if (event?.target?.value === "latest" && bDate) {
-        return bDate.diff(aDate);
+        return bDate.diff(aDate) || 0;
       }
       return 0;
     }
+    return 0
   });
   console.log("sortedPlans", sortedPlans);
   setPlants(sortedPlans);
