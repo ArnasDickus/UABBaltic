@@ -11,7 +11,7 @@ const GlobalError = ({
   reset: () => void;
 }) => {
   useEffect(() => {
-    // 
+    console.error('GLOBAL Error', error);
   }, [error]);
 
   return (
