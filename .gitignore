@@ -33,12 +33,6 @@ yarn-error.log*
 next-env.d.ts
 .swc
 
-# Sentry Config File
-.sentryclirc
-
-# Sentry Config File
-.sentryclirc
-
 
 logs
 
