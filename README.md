@@ -1,6 +1,6 @@
 [![codecov](https://codecov.io/gh/ArnasDickus/UABBaltic/graph/badge.svg?token=SEE1BBJV65)](https://codecov.io/gh/ArnasDickus/UABBaltic)
 
-This is a [UAB Baltic](www.uabbaltic.lt/lt) developer sandbox and portfolio.
+This is a UAB Baltic developer sandbox and portfolio.
 
 ## Getting Started
 
