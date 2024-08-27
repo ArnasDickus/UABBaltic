@@ -26,7 +26,6 @@
     "@hookform/resolvers": "^3.3.2",
     "@mui/material": "^5.14.9",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sentry/nextjs": "^7.86.0",
     "accept-language": "^3.0.18",
     "bcrypt": "^5.1.1",
     "chart.js": "^4.4.0",
